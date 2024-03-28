@@ -8,6 +8,8 @@
 <hr>
 <h3> Para rodar o servidor: </h3>
 
-<p><b> Na pasta servidor/ : </b></p>
+<p><b> Na primeira vez, navegar até a pasta servidor/ e digitar: </b></p>
 <p> npm install </p>
+<p> npx ts-node ./src/index.ts <p>
+<p><b> Nas próximas vezes, pra rodar em modo de desenvolvimento: </b></p>
 <p> nodemon ./src/index.ts </p>
