@@ -176,7 +176,7 @@ export function SignUp() {
                             setSenha(text);
                             onChange(text)
                         }}
-
+                        secureTextEntry
                         value={senha}
                         placeholder="Senha"
 
