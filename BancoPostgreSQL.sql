@@ -55,14 +55,14 @@ CREATE TABLE Bonificacoes(
 CREATE TABLE ConteudosProva(
 	conteudo_prova_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	conteudo_prova_nome DESC100 NOT NULL,
-	id_prova UUID NULL,
+	id_prova UUID NOT NULL,
 	FOREIGN KEY (id_prova) REFERENCES Provas(prova_id)
 );
 
 CREATE TABLE ConteudosCurso(
 	conteudo_curso_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	conteudo_curso_nome DESC100 NOT NULL,
-	id_curso UUID NULL,
+	id_curso UUID NOT NULL,
 	FOREIGN KEY (id_curso) REFERENCES Cursos(curso_id)
 );
 
@@ -76,7 +76,7 @@ CREATE TABLE ConteudosAtividades(
 CREATE TABLE ParceirosProvas (
 	parceiro_prova_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	parceiro_prova_progressao DESC100 NULL,
-	parceiro_prova_nota DESC100 NOT NULL,
+	parceiro_prova_nota DESC100 NULL,
 	id_prova UUID NOT NULL,
 	id_parceiro UUID NOT NULL,
 	id_curso UUID NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE ParceirosProvas (
 CREATE TABLE ParceirosAtividades (
 	parceiro_atividade_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	parceiro_atividade_progressao DESC100 NULL,
-	parceiro_atividade_nota DESC100 NOT NULL,
+	parceiro_atividade_nota DESC100 NULL,
 	id_atividade UUID NOT NULL,
 	id_parceiro UUID NOT NULL,
 	id_curso UUID NOT NULL,
@@ -99,8 +99,8 @@ CREATE TABLE ParceirosAtividades (
 
 CREATE TABLE ParceirosCursos (
 	parceiro_curso_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-	parceiro_curso_progressao DESC100 NULL,
-	parceiro_curso_nota DESC100 NOT NULL,
+	parceiro_curso_progressao DESC100 NOT NULL,
+	parceiro_curso_nota DESC100 NULL,
 	id_curso UUID NOT NULL,
 	id_parceiro UUID NOT NULL,
 	id_bonificacao UUID NULL,
