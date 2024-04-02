@@ -14,7 +14,7 @@ app.use(cors());
 
 //Conexão com o Banco
 const DB = new Pool({
-  connectionString: "postgres://tyvxzqms:zQdu8MFv51gwNiw2e9AD8A4hvuw8GkRo@isabelle.db.elephantsql.com/tyvxzqms"
+  connectionString: "postgres://zxlcvmuw:JtPHWHscDxfxRIR9wSHhAjOcH6JoahFK@raja.db.elephantsql.com/zxlcvmuw"
   // user: 'postgres',       //user PostgreSQL padrão = postgres
   // host: 'localhost',
   // database: '',       // Sua database
