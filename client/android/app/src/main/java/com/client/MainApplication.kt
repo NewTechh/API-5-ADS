@@ -1,4 +1,4 @@
-package com.codigosdoapi
+package com.client
 
 import android.app.Application
 import com.facebook.react.PackageList
