@@ -2,8 +2,11 @@
 
 <h2> Para Rodar o Projeto: </h2>
 
-<p><b> Estar com um emulador de celular rodando, ou com o celular no modo depuração conectado via cabo USB. </p></b>
+<p><b> Estar com um emulador de celular rodando, com o celular no modo depuração conectado via cabo USB ou Análisar o QRCODE com o Expo Go. </p></b>
+<p><b> Digitar: npm install ou npx expo install </p></b>
 <p><b> Digitar: npx expo </p></b>
+<p><b> Caso nao rode, instalar o Expo no PC: </p></b>
+<p><b> Abra o CMD e digite: npm install -g expo-cli </p></b>
 
 <hr>
 <h3> Para rodar o servidor: </h3>
