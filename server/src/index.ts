@@ -6,6 +6,7 @@ import ListarParceiroID from './User/GetUser';
 import EdicaoDeParceiros from './User/PutUser';
 import CadastroDeAdmin from './Admin/PostAdmin';
 import ListarTodosUsuarios from './Admin/GetAdmin';
+import Login from './Authentication/Login';
 
 
 
@@ -25,8 +26,10 @@ app.listen(port, () => {
 
 
 
-
 // AUTHENTICATION
+
+app.use('/Auth', Login());
+
 
 
 
