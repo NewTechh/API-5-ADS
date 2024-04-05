@@ -7,6 +7,7 @@ import EdicaoDeParceiros from './User/PutUser';
 import CadastroDeAdmin from './Admin/PostAdmin';
 import ListarTodosUsuarios from './Admin/GetAdmin';
 import Login from './Authentication/Login';
+import CadastroDeParceirosAdmin from './Admin/PostAdmin';
 
 
 
@@ -56,3 +57,6 @@ app.use('/PostAdmin', CadastroDeAdmin())
 
 //Listagem dos Parceiros
 app.use('/GetAdmin', ListarTodosUsuarios())
+
+//Cadastro de Parceiros pelo Admin
+app.use('/CadastroDeParceirosAdmin', CadastroDeParceirosAdmin())
