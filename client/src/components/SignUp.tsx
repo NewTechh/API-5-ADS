@@ -4,60 +4,126 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import React, { useState } from "react";
 import { styles } from '../styles/estilos'
+import { TextInputMask } from "react-native-masked-text";
+import { showMessage } from 'react-native-flash-message';
+import FlashMessage from "react-native-flash-message"
 
 
 type FormDataProps = {
-    nome: string;
-    endereco: string;
-    selectedOption: string;
-    cnpj: string;
-    email: string;
-    senha: string;
+    parceiro_nome: string;
+    parceiro_email: string;
+    parceiro_cnpj_cpf: string;
+    parceiro_telefone: string;
+    parceiro_expertises: string;
+    parceiro_logradouro: string;
+    parceiro_logradouro_numero: string;
+    parceiro_bairro: string;
+    parceiro_cep: string;
+    parceiro_cidade: string;
+    parceiro_estado: string;
+    parceiro_senha: string;
 }
 
+const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+const telefoneRegex = /^\([1-9]{2}\) 9?[0-9]{4}-[0-9]{4}$/;
+const cepRegex = /^\d{5}-\d{3}$/;
+
 const signUpSchema = yup.object().shape({
-    nome: yup.string().required('Informe o Nome'),
-    endereco: yup.string().required('Informe o Endereço'),
-    selectedOption: yup.string().required('Selecione uma expertise'),
-    cnpj: yup.string().required('Informe o CNPJ'),
-    email: yup.string().required('Informe o E-mail').email('Informe um email válido'),
-    senha: yup.string().required('Informe a Senha').min(6, 'A senha deve ter no mínimo 6 caracteres'),
-})
+    parceiro_nome: yup.string().required("Informe o Nome"),
+    parceiro_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
+    parceiro_cnpj_cpf: yup.string().matches(cpfRegex, "CPF inválido").required("Informe o CPF/CNPJ"),
+    parceiro_telefone: yup.string().matches(telefoneRegex, "Telefone inválido").required("Informe o número de telefone"),
+    parceiro_expertises: yup.string().required("Selecione uma expertise"),
+    parceiro_logradouro: yup.string().required("Informe o logradouro"),
+    parceiro_logradouro_numero: yup.string().required("Informe o número do logradouro"),
+    parceiro_bairro: yup.string().required("Informe o bairro"),
+    parceiro_cep: yup.string().matches(cepRegex, "CEP inválido").required("Informe o CEP"),
+    parceiro_cidade: yup.string().required("Informe a cidade"),
+    parceiro_estado: yup.string().required("Informe o estado"),
+    parceiro_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
+});
+  
 
 export function SignUp() {
+
+    const showSuccessMessage = () => {
+        showMessage({
+          message: "Parceiro cadastrado com sucesso",
+          type: "success",
+        });
+    };
+
     const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema)
     });
 
     const [usernameValue, setUsernameValue] = useState('');
-    const [endereco, setEndereco] = useState('');
-    const [showOptions, setShowOptions] = useState(false);
-    const [cnpj, setCnpj] = useState('');
     const [email, setEmail] = useState('');
+    const [cnpj, setCnpj] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [showOptions, setShowOptions] = useState(false);
+    const [logradouro, setLogradouro] = useState('');
+    const [logradouro_numero, setLogradouro_numero] = useState('');
+    const [bairro, setBairro] = useState('');
+    const [cep, setCep] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [estado, setEstado] = useState('');
     const [senha, setSenha] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
+    async function handleSignDados(data: FormDataProps) {
 
+        function resetFields() {
+            setUsernameValue('');
+            setEmail('');
+            setCnpj('');
+            setTelefone('');
+            setLogradouro('');
+            setLogradouro_numero('');
+            setBairro('');
+            setCep('');
+            setCidade('');
+            setEstado('');
+            setSenha('');
+            reset();
+        }
 
-    function handleSignIn(data: FormDataProps) {
-        console.log(data);
-        setUsernameValue('');
-        setEndereco('');
-        setCnpj('');
-        setEmail('');
-        setSenha('');
+        try {
+            const response = await fetch('http://192.168.15.8:3001/PostUser/CadastroParceiros', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                showSuccessMessage();
+                setErrorMessage('');
+                resetFields()
+            } else {
+                const errorMessage = await response.text();
+                console.error('Erro ao cadastrar parceiro:', errorMessage);
+                setErrorMessage(errorMessage);
+            }
+        } catch (error: any) {
+            console.error('Erro ao cadastrar parceiro:', error.message);
+            setErrorMessage('Erro ao cadastrar parceiro. Por favor, tente novamente.');
+        }
+
         reset();
     }
-
 
     const options = ['IaaS & PaaS', 'CX', 'Industries', 'License & Hardware'];
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Sign Up partners</Text>
+            <FlashMessage position="top" />
+            <Text style={styles.title}>Cadastro de Parceiros</Text>
 
             <Controller
                 control={control}
-                name='nome'
+                name='parceiro_nome'
                 render={({ field: { onChange } }) => (
                     <TextInput
                         style={styles.input}
@@ -72,30 +138,71 @@ export function SignUp() {
                     />
                 )}
             />
-            {errors.nome && <Text style={styles.labelError}>{errors.nome?.message}</Text>}
+            {errors.parceiro_nome && <Text style={styles.labelError}>{errors.parceiro_nome?.message}</Text>}
 
             <Controller
                 control={control}
-                name='endereco'
+                name='parceiro_email'
                 render={({ field: { onChange } }) => (
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => {
-                            setEndereco(text);
+                            setEmail(text);
                             onChange(text)
                         }}
 
-                        value={endereco}
-                        placeholder="Endereço"
+                        value={email}
+                        placeholder="E-mail"
 
                     />
                 )}
             />
-            {errors.endereco && <Text style={styles.labelError}>{errors.endereco?.message}</Text>}
+            {errors.parceiro_email && <Text style={styles.labelError}>{errors.parceiro_email?.message}</Text>}
 
             <Controller
                 control={control}
-                name='selectedOption'
+                name="parceiro_cnpj_cpf"
+                render={({ field: { onChange, value } }) => (
+                    <TextInputMask
+                    style={styles.input}
+                    onChangeText={(text) => {
+                         setCnpj(text)
+                         onChange(text)
+                        }}
+                    value={cnpj}
+                    placeholder="CPF/CNPJ"
+                    type={"cpf"}
+                    />
+                )}
+            />
+            {errors.parceiro_cnpj_cpf && <Text style={styles.labelError}>{errors.parceiro_cnpj_cpf?.message}</Text>}
+
+            <Controller
+                control={control}
+                name="parceiro_telefone"
+                render={({ field: { onChange, value } }) => (
+                    <TextInputMask
+                    style={styles.input}
+                    onChangeText={(text) => {
+                        setTelefone(text);
+                        onChange(text)
+                    }}
+                    value={telefone}
+                    placeholder="Telefone"
+                    type={"cel-phone"}
+                    options={{
+                        maskType: "BRL",
+                        withDDD: true,
+                        dddMask: "(99) ",
+                    }}
+                    />
+                )}
+            />
+            {errors.parceiro_telefone && <Text style={styles.labelError}>{errors.parceiro_telefone?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='parceiro_expertises'
                 render={({ field: { onChange, value } }) => (
                     <>
                         <TouchableOpacity
@@ -123,52 +230,123 @@ export function SignUp() {
                     </>
                 )}
             />
-            {errors.selectedOption && <Text style={styles.labelError}>{errors.selectedOption?.message}</Text>}
-
+            {errors.parceiro_expertises && <Text style={styles.labelError}>{errors.parceiro_expertises?.message}</Text>}
 
             <Controller
                 control={control}
-                name='cnpj'
+                name='parceiro_logradouro'
                 render={({ field: { onChange } }) => (
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => {
-                            setCnpj(text);
+                            setLogradouro(text);
                             onChange(text)
                         }}
 
-                        value={cnpj}
-                        placeholder="CNPJ"
+                        value={logradouro}
+                        placeholder="Logradouro"
 
                     />
                 )}
             />
-            {errors.cnpj && <Text style={styles.labelError}>{errors.cnpj?.message}</Text>}
-
+            {errors.parceiro_logradouro && <Text style={styles.labelError}>{errors.parceiro_logradouro?.message}</Text>}
 
             <Controller
                 control={control}
-                name='email'
+                name='parceiro_logradouro_numero'
+                render={({ field: { onChange } }) => (
+                    <TextInputMask
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setLogradouro_numero(text);
+                            onChange(text)
+                        }}
+                        value={logradouro_numero}
+                        placeholder="Número do Logradouro"
+                        type={"only-numbers"}
+                    />
+                )}
+            />
+            {errors.parceiro_logradouro_numero && <Text style={styles.labelError}>{errors.parceiro_logradouro_numero?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='parceiro_bairro'
                 render={({ field: { onChange } }) => (
                     <TextInput
                         style={styles.input}
                         onChangeText={(text) => {
-                            setEmail(text);
+                            setBairro(text);
                             onChange(text)
                         }}
 
-                        value={email}
-                        placeholder="E-mail"
+                        value={bairro}
+                        placeholder="Bairro"
 
                     />
                 )}
             />
-            {errors.email && <Text style={styles.labelError}>{errors.email?.message}</Text>}
-
+            {errors.parceiro_bairro && <Text style={styles.labelError}>{errors.parceiro_bairro?.message}</Text>}
 
             <Controller
                 control={control}
-                name='senha'
+                name="parceiro_cep"
+                render={({ field: { onChange, value } }) => (
+                    <TextInputMask
+                    style={styles.input}
+                    onChangeText={(text) => {
+                        setCep(text);
+                        onChange(text)
+                    }}
+                    value={cep}
+                    placeholder="CEP"
+                    type={"zip-code"}
+                    />
+                )}
+            />
+            {errors.parceiro_cep && <Text style={styles.labelError}>{errors.parceiro_cep?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='parceiro_cidade'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setCidade(text);
+                            onChange(text)
+                        }}
+
+                        value={cidade}
+                        placeholder="Cidade"
+
+                    />
+                )}
+            />
+            {errors.parceiro_cidade && <Text style={styles.labelError}>{errors.parceiro_cidade?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='parceiro_estado'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setEstado(text);
+                            onChange(text)
+                        }}
+
+                        value={estado}
+                        placeholder="Estado"
+
+                    />
+                )}
+            />
+            {errors.parceiro_estado && <Text style={styles.labelError}>{errors.parceiro_estado?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='parceiro_senha'
                 render={({ field: { onChange } }) => (
                     <TextInput
                         style={styles.input}
@@ -183,10 +361,10 @@ export function SignUp() {
                     />
                 )}
             />
-            {errors.senha && <Text style={styles.labelError}>{errors.senha?.message}</Text>}
+            {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
 
-
-            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleSignIn)}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleSignDados)}>
+                {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Cadastrar</Text>
             </TouchableOpacity>
         </View>

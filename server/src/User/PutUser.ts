@@ -21,7 +21,6 @@ function EdicaoDeParceiros(): express.Router {
         parceiro_cep,
         parceiro_cidade,
         parceiro_estado,
-        parceiro_pais,
         parceiro_senha
     } = req.body;
 
@@ -38,7 +37,6 @@ function EdicaoDeParceiros(): express.Router {
     if (parceiro_cep !== undefined) updatedFields.parceiro_cep = parceiro_cep;
     if (parceiro_cidade !== undefined) updatedFields.parceiro_cidade = parceiro_cidade;
     if (parceiro_estado !== undefined) updatedFields.parceiro_estado = parceiro_estado;
-    if (parceiro_pais !== undefined) updatedFields.parceiro_pais = parceiro_pais;
     if (parceiro_senha !== undefined) {
         const hashedPassword = await bcrypt.hash(parceiro_senha, 10);
         updatedFields.parceiro_senha = hashedPassword;

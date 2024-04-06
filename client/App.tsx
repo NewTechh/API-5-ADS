@@ -14,11 +14,12 @@ const App = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <SignUp />
+            {/* <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <DashboardPartner />
             </ScrollView>
             <Footer onPressMenu={toggleSideMenu} />
-            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />}
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />} */}
         </View>
     );
 };

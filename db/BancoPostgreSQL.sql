@@ -15,7 +15,6 @@ CREATE TABLE Parceiros (
 	parceiro_cep DESC100 NOT NULL,
 	parceiro_cidade DESC100 NOT NULL,
 	parceiro_estado DESC100 NOT NULL,
-	parceiro_pais DESC100 NOT NULL,
 	parceiro_senha DESC100 NOT NULL
 );
 

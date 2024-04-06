@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.listen(port, () => {
-  console.log(`Servidor inicializado em http://localhost:${port}/`);
+  console.log(`Servidor inicializado em http://192.168.15.8:${port}/`);
 });
 
 
