@@ -14,7 +14,6 @@ function EdicaoDeParceiros(): express.Router {
         parceiro_email,
         parceiro_cnpj_cpf,
         parceiro_telefone,
-        parceiro_expertises,
         parceiro_logradouro,
         parceiro_logradouro_numero,
         parceiro_bairro,
@@ -30,7 +29,6 @@ function EdicaoDeParceiros(): express.Router {
     if (parceiro_email !== undefined) updatedFields.parceiro_email = parceiro_email;
     if (parceiro_cnpj_cpf !== undefined) updatedFields.parceiro_cnpj_cpf = parceiro_cnpj_cpf;
     if (parceiro_telefone !== undefined) updatedFields.parceiro_telefone = parceiro_telefone;
-    if (parceiro_expertises !== undefined) updatedFields.parceiro_expertises = parceiro_expertises;
     if (parceiro_logradouro !== undefined) updatedFields.parceiro_logradouro = parceiro_logradouro;
     if (parceiro_logradouro_numero !== undefined) updatedFields.parceiro_logradouro_numero = parceiro_logradouro_numero;
     if (parceiro_bairro !== undefined) updatedFields.parceiro_bairro = parceiro_bairro;

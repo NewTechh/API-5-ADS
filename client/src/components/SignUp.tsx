@@ -14,7 +14,6 @@ type FormDataProps = {
     parceiro_email: string;
     parceiro_cnpj_cpf: string;
     parceiro_telefone: string;
-    parceiro_expertises: string;
     parceiro_logradouro: string;
     parceiro_logradouro_numero: string;
     parceiro_bairro: string;
@@ -33,7 +32,6 @@ const signUpSchema = yup.object().shape({
     parceiro_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
     parceiro_cnpj_cpf: yup.string().matches(cpfRegex, "CPF inválido").required("Informe o CPF/CNPJ"),
     parceiro_telefone: yup.string().matches(telefoneRegex, "Telefone inválido").required("Informe o número de telefone"),
-    parceiro_expertises: yup.string().required("Selecione uma expertise"),
     parceiro_logradouro: yup.string().required("Informe o logradouro"),
     parceiro_logradouro_numero: yup.string().required("Informe o número do logradouro"),
     parceiro_bairro: yup.string().required("Informe o bairro"),
@@ -61,7 +59,6 @@ export function SignUp() {
     const [email, setEmail] = useState('');
     const [cnpj, setCnpj] = useState('');
     const [telefone, setTelefone] = useState('');
-    const [showOptions, setShowOptions] = useState(false);
     const [logradouro, setLogradouro] = useState('');
     const [logradouro_numero, setLogradouro_numero] = useState('');
     const [bairro, setBairro] = useState('');
@@ -113,8 +110,6 @@ export function SignUp() {
 
         reset();
     }
-
-    const options = ['IaaS & PaaS', 'CX', 'Industries', 'License & Hardware'];
 
     return (
         <View style={styles.container}>
@@ -199,38 +194,6 @@ export function SignUp() {
                 )}
             />
             {errors.parceiro_telefone && <Text style={styles.labelError}>{errors.parceiro_telefone?.message}</Text>}
-
-            <Controller
-                control={control}
-                name='parceiro_expertises'
-                render={({ field: { onChange, value } }) => (
-                    <>
-                        <TouchableOpacity
-                            style={styles.customSelect}
-                            onPress={() => setShowOptions(!showOptions)}
-                        >
-                            <Text style={styles.selectText}>{value || 'Clique e selecione uma expertise'}</Text>
-                        </TouchableOpacity>
-                        {showOptions && (
-                            <View style={styles.optionsContainer}>
-                                {options.map((option, index) => (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={styles.option}
-                                        onPress={() => {
-                                            onChange(option);
-                                            setShowOptions(false);
-                                        }}
-                                    >
-                                        <Text style={styles.optionText}>{option}</Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                        )}
-                    </>
-                )}
-            />
-            {errors.parceiro_expertises && <Text style={styles.labelError}>{errors.parceiro_expertises?.message}</Text>}
 
             <Controller
                 control={control}

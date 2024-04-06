@@ -8,7 +8,6 @@ CREATE TABLE Parceiros (
 	parceiro_email DESC100 NOT NULL,
 	parceiro_cnpj_cpf VARCHAR(18) NOT NULL,
 	parceiro_telefone DESC100 NOT NULL,
-	parceiro_expertises DESC100 NULL,
 	parceiro_logradouro DESC100 NOT NULL,
 	parceiro_logradouro_numero DESC100 NOT NULL,
 	parceiro_bairro DESC100 NOT NULL,
