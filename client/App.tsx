@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Footer from './src/components/Footer';
 import SideMenu from './src/components/SideMenu';
 import { SignUp } from './src/components/SignUp';
@@ -14,7 +14,9 @@ const App = () => {
 
     return (
         <View style={styles.container}>
-            <DashboardPartner/>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <DashboardPartner />
+            </ScrollView>
             <Footer onPressMenu={toggleSideMenu} />
             {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />}
         </View>
@@ -24,6 +26,10 @@ const App = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        paddingBottom: 1,
     },
 });
 

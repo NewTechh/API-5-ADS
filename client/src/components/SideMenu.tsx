@@ -45,7 +45,11 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem}>
                         <Ionicons name="apps-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Dashboard/Cursos</Text>
+                        <Text style={styles.menuText}>Dashboard</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Ionicons name="book-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Cursos</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.menuItem}>
                         <Ionicons name="people-outline" size={24} color="black" />
