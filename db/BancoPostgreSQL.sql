@@ -32,6 +32,16 @@ CREATE TABLE Cursos(
 	curso_expertise DESC100 NOT NULL
 );
 
+CREATE TABLE CursosConteudo(
+	curso_conteudo_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
+	curso_conteudo_nome DESC100 NOT NULL,
+	curso_conteudo_arquivo DESC100 NULL,
+	curso_conteudo_link DESC100 NULL,
+	curso_conteudo_tipo DESC100 NOT NULL,
+	id_curso UUID NOT NULL,
+	FOREIGN KEY (id_curso) REFERENCES Cursos(curso_id)
+);
+
 CREATE TABLE Provas(
 	prova_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	prova_nome DESC100 NOT NULL,
