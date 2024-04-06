@@ -135,8 +135,8 @@ CREATE TABLE AcoesAdministrativas (
 
 CREATE TABLE CursosVinculados(
 	curso_vinculados_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-	id_parceiro UUID NULL, DESC100 NOT NULL,
-	id_curso UUID NULL,
+	id_parceiro UUID NOT NULL,
+	id_curso UUID NOT NULL,
 	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id),
 	FOREIGN KEY (id_curso) REFERENCES Cursos(curso_id)
 );
