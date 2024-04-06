@@ -67,13 +67,6 @@ CREATE TABLE ConteudosProva(
 	FOREIGN KEY (id_prova) REFERENCES Provas(prova_id)
 );
 
-CREATE TABLE ConteudosCurso(
-	conteudo_curso_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-	conteudo_curso_nome DESC100 NOT NULL,
-	id_curso UUID NOT NULL,
-	FOREIGN KEY (id_curso) REFERENCES Cursos(curso_id)
-);
-
 CREATE TABLE ConteudosAtividades(
 	conteudo_atividade_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	conteudo_atividade_nome DESC100 NOT NULL,
@@ -126,7 +119,7 @@ CREATE TABLE AcoesAdministrativas (
 	id_curso UUID NULL,
 	id_atividade UUID NULL,
 	id_bonificacao UUID NULL,
-	id_conteudo_curso UUID NULL,
+	id_curso_conteudo UUID NULL,
 	id_conteudo_prova UUID NULL,
 	id_conteudo_atividade UUID NULL,
 	FOREIGN KEY (id_administrador) REFERENCES Administradores (administrador_id),
@@ -135,7 +128,15 @@ CREATE TABLE AcoesAdministrativas (
 	FOREIGN KEY (id_curso) REFERENCES Cursos(curso_id),
 	FOREIGN KEY (id_atividade) REFERENCES Atividades(atividade_id),
 	FOREIGN KEY (id_bonificacao) REFERENCES Bonificacoes(bonificacao_id),
-	FOREIGN KEY (id_conteudo_curso) REFERENCES ConteudosCurso(conteudo_curso_id),
+	FOREIGN KEY (id_curso_conteudo) REFERENCES CursosConteudo(curso_conteudo_id),
 	FOREIGN KEY (id_conteudo_prova) REFERENCES ConteudosProva(conteudo_prova_id),
 	FOREIGN KEY (id_conteudo_atividade) REFERENCES ConteudosAtividades(conteudo_atividade_id)
+);
+
+CREATE TABLE CursosVinculados(
+	curso_vinculados_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
+	id_parceiro UUID NULL, DESC100 NOT NULL,
+	id_curso UUID NULL,
+	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id),
+	FOREIGN KEY (id_curso) REFERENCES Cursos(curso_id)
 );
