@@ -7,6 +7,7 @@
 <p><b> Digitar: npx expo </p></b>
 <p><b> Caso nao rode, instalar o Expo no PC: </p></b>
 <p><b> Abra o CMD e digite: npm install -g expo-cli </p></b>
+<p><b> UTILIZAR O npm install --legacy-peer-deps ATÉ ARRUMAR O ERRO DE DEPÊNDENCIAS OU npm install --legacy-peer-deps "Biblioteca" para o download de bibliotecas.</p></b>
 
 <hr>
 <h3> Para rodar o servidor: </h3>
