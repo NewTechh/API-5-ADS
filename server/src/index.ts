@@ -59,4 +59,4 @@ app.use('/PostAdmin', CadastroDeAdmin())
 app.use('/GetAdmin', ListarTodosUsuarios())
 
 //Cadastro de Parceiros pelo Admin
-app.use('/CadastroDeParceirosAdmin', CadastroDeParceirosAdmin())
+app.use('/PostAdminParceiros', CadastroDeParceirosAdmin())
