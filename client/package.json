@@ -26,6 +26,7 @@
     "react-native-svg": "^15.1.0",
     "react-native-web": "~0.19.6",
     "victory-native": "^40.1.0",
+    "yarn": "^1.22.22",
     "yup": "^1.4.0"
   },
   "devDependencies": {
