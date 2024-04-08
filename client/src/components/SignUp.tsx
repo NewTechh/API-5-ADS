@@ -77,7 +77,7 @@ export function SignUp() {
         }
 
         try {
-            const response = await fetch('http://192.168.42.16:3001/PostUser/CadastroParceiros', {
+            const response = await fetch('http://192.168.15.8:3001/PostUser/CadastroParceiros', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground, NativeModules } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Network from "expo-network"
+import axios from "axios"
+import Constants from 'expo-constants';
+
 
 
 type FormDataPropsLogin = {
@@ -11,19 +15,20 @@ type FormDataPropsLogin = {
 }
 
 type RootStackParamList = {
-  Dashboard: undefined;
+  Cursos: undefined;
   Cadastro: undefined;
   RecSenha: undefined;
+  ListPartner: undefined;
 };
 
-type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
 
 
 
 const LoginScreen = () => {
   const [parceiro_email, setParceiroEmail] = useState('');
   const [parceiro_senha, setParceiroSenha] = useState('');
-  const navigation = useNavigation<DashboardScreenNavigationProp>();
+  const navigation = useNavigation<CursosScreenNavigationProp>();
 
   const handleCadastroPress = () => {
     navigation.navigate('Cadastro');
@@ -45,7 +50,7 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await fetch('http://192.168.42.16:3001/Auth/login', {
+      const response = await fetch(`http://192.168.15.8:3001/Auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,11 +61,23 @@ const LoginScreen = () => {
       if (response.ok) {
         const responseData = await response.json(); // Converter a resposta para JSON
         const userId = responseData.userId;
-        await AsyncStorage.setItem('parceiro_id', userId);
-        console.log(AsyncStorage.getItem('parceiro_id'))
+        const userType = responseData.userType;
+
+        await AsyncStorage.setItem('usuario_id', userId);
+        await AsyncStorage.setItem('usuario_tipo', userType);
+
+        console.log(userId)
+        console.log(userType)
+
         alert('Login Realizado!')
         resetFields()
-        navigation.navigate('Dashboard')
+
+        if (userType === 'Parceiro') {
+          navigation.navigate('Cursos')
+        } else if (userType === 'Administrador') {
+          navigation.navigate('ListPartner')
+        }
+        
       } else {
         const errorMessage = await response.text();
         console.log('Erro ao fazer login', errorMessage);
@@ -78,7 +95,7 @@ const LoginScreen = () => {
 
         source={require('../../assets/oracle.png')}
       />
-      <Text style={styles.title}>Log In</Text>
+      <Text style={styles.title}>Login</Text>
 
       <TextInput
         style={styles.input}
@@ -180,3 +197,7 @@ const styles = StyleSheet.create({
 
 
 export default LoginScreen;
+function localIpUrl() {
+  throw new Error('Function not implemented.');
+}
+
