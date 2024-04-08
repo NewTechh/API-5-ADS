@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,6 +19,7 @@ type RootStackParamList = {
 type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 
+
 const LoginScreen = () => {
   const [parceiro_email, setParceiroEmail] = useState('');
   const [parceiro_senha, setParceiroSenha] = useState('');
@@ -32,7 +33,7 @@ const LoginScreen = () => {
     navigation.navigate('RecSenha');
   };
 
-  async function handleLogin () {
+  async function handleLogin() {
     const data: FormDataPropsLogin = {
       parceiro_email: parceiro_email,
       parceiro_senha: parceiro_senha
@@ -44,42 +45,48 @@ const LoginScreen = () => {
     }
 
     try {
-        const response = await fetch('http://192.168.42.16:3001/Auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
+      const response = await fetch('http://192.168.42.16:3001/Auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-        if (response.ok) {
-          const responseData = await response.json(); // Converter a resposta para JSON
-          const userId = responseData.userId;
-          await AsyncStorage.setItem('parceiro_id', userId);
-          console.log(AsyncStorage.getItem('parceiro_id'))
-          alert('Login Realizado!')
-            resetFields()
-            navigation.navigate('Dashboard')
-        } else {
-            const errorMessage = await response.text();
-            console.log('Erro ao fazer login', errorMessage);
-            alert("Credenciais inválidas")
-        }
+      if (response.ok) {
+        const responseData = await response.json(); // Converter a resposta para JSON
+        const userId = responseData.userId;
+        await AsyncStorage.setItem('parceiro_id', userId);
+        console.log(AsyncStorage.getItem('parceiro_id'))
+        alert('Login Realizado!')
+        resetFields()
+        navigation.navigate('Dashboard')
+      } else {
+        const errorMessage = await response.text();
+        console.log('Erro ao fazer login', errorMessage);
+        alert("Credenciais inválidas")
+      }
     } catch (error: any) {
-        console.log('Erro ao fazer login', error.message);
+      console.log('Erro ao fazer login', error.message);
     }
-}
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Email:</Text>
+      <ImageBackground
+        style={styles.image}
+
+        source={require('../../assets/oracle.png')}
+      />
+      <Text style={styles.title}>Log In</Text>
+
       <TextInput
         style={styles.input}
         value={parceiro_email}
         onChangeText={setParceiroEmail}
         placeholder="Digite seu email"
       />
-      <Text style={styles.label}>Senha:</Text>
+
       <TextInput
         style={styles.input}
         value={parceiro_senha}
@@ -87,54 +94,89 @@ const LoginScreen = () => {
         placeholder="Digite sua senha"
         secureTextEntry={true}
       />
-      <Button title="Login" onPress={handleLogin} />
-      
-      <View style={styles.linksContainer}>
-        <TouchableOpacity onPress={handleRecSenha}>
-          <Text style={[styles.link, styles.linkMargin, styles.signupLink]}>Esqueceu a senha?</Text>
-        </TouchableOpacity>
-          <Text style={styles.link}>Não tem um cadastro?</Text>
-        <TouchableOpacity onPress={handleCadastroPress}>
-          <Text style={styles.signupLink}>Cadastre-se</Text>
-        </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} >
+        <Text onPress={handleLogin} style={styles.buttonText}>Cadastrar</Text>
+      </TouchableOpacity>
+
+
+      <View style={styles.content}>
+
+        <Text style={[styles.text]} onPress={handleRecSenha}>Esqueceu a senha?</Text>
+
+        <Text style={styles.text} onPress={handleCadastroPress}>Não tem uma conta? Crie uma!</Text>
+
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  text: {
+    color: '#FFFFFF',
+    paddingTop: 20,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+  },
+
+  content: {
+    paddingTop: 10,
+    gap: 5,
+  },
+
+  title: {
+    fontSize: 34,
+    marginBottom: 100,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+
+  input: {
+    width: '100%',
+    height: 40,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 8,
+    marginBottom: 20,
+    borderRadius: 10,
+    fontWeight: 'bold',
+
+  },
+  image: {
+    height: 60,
+    width: 90,
+    paddingVertical: 10,
+    marginTop: 150,
+  },
+
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    backgroundColor: '#272424',
+    paddingHorizontal: 16,
+    paddingBottom: 150,
+    paddingTop: 50,
   },
-  label: {
-    fontSize: 18,
-    marginBottom: 5,
-  },
-  input: {
+
+
+
+  button: {
     width: '100%',
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  linksContainer: {
-    marginTop: 20,
+    height: 50,
+    backgroundColor: '#C74634',
+    borderRadius: 100,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20
   },
-  link: {
-    fontSize: 16,
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 18,
   },
-  linkMargin: {
-    marginBottom: 5,
-  },
-  signupLink: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-  },
-});
+
+})
+
 
 export default LoginScreen;
