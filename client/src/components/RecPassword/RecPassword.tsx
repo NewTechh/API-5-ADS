@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Pressable } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -65,15 +65,15 @@ export function RecPassword() {
             />
             {errors.email && <Text style={styles.labelError}>{errors.email?.message}</Text>}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleEnviarCodigo)}>
+            <Pressable style={styles.button} onPress={handleSubmit(handleEnviarCodigo)}>
                 {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Enviar código</Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity style={styles.backToLogin} onPress={handleLogin}>
+            <Pressable style={styles.backToLogin} onPress={handleLogin}>
                 <Text style={{ color: "white" }}>Voltar para a página de </Text>
                 <Text style={styles.TxtBackLogin}>Login</Text>
-            </TouchableOpacity>
+            </Pressable>
         </View>
     )
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable } from 'react-native';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 
 const ListPartner = () => {
 
@@ -8,6 +8,15 @@ const ListPartner = () => {
         <View style={styles.container}>
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Parceiros Cadastrados</Text>
+            <Pressable style={styles.iconPlus}>
+                <AntDesign
+                    name={'pluscircleo'}
+                    size={35}
+                    color='white'
+                    
+                    // onPress={}
+                />
+            </Pressable>
             <View style={styles.tableContainer}>
                 <View style={styles.headerRow}>
                     <Text style={styles.header}>Nome</Text>
@@ -108,9 +117,12 @@ const styles = StyleSheet.create({
     inactive: {
         color: 'black',
     },
-
     icon: {
         marginRight: 10,
+    },
+    iconPlus: {
+        marginLeft: 330,
+        marginBottom: 7,
     }
 });
 
