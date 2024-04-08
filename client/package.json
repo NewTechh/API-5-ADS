@@ -21,12 +21,10 @@
     "react-hook-form": "^7.51.2",
     "react-native": "0.73.6",
     "react-native-chart-kit": "^6.12.0",
-    "react-native-flash-message": "^0.4.2",
     "react-native-masked-text": "^1.13.0",
     "react-native-progress": "^5.0.1",
     "react-native-svg": "^15.1.0",
     "react-native-web": "~0.19.6",
-    "react-router-dom": "^6.22.3",
     "victory-native": "^40.1.0",
     "yup": "^1.4.0"
   },

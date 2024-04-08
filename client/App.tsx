@@ -4,6 +4,8 @@ import Footer from './src/components/Footer';
 import SideMenu from './src/components/SideMenu';
 import { SignUp } from './src/components/SignUp';
 import DashboardPartner from './src/components/DashboardPartner';
+import LoginScreen from './src/components/LoginScreen';
+import Rotas from './routes/Rotas';
 
 const App = () => {
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
@@ -14,12 +16,12 @@ const App = () => {
 
     return (
         <View style={styles.container}>
-            {/* <SignUp /> */}
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <Rotas />
+            {/* <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <DashboardPartner />
             </ScrollView>
             <Footer onPressMenu={toggleSideMenu} />
-            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />}
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />} */}
         </View>
     );
 };

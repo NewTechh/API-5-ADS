@@ -5,9 +5,6 @@ import * as yup from 'yup';
 import React, { useState } from "react";
 import { styles } from '../styles/estilos'
 import { TextInputMask } from "react-native-masked-text";
-import { showMessage } from 'react-native-flash-message';
-import FlashMessage from "react-native-flash-message"
-
 
 type FormDataProps = {
     parceiro_nome: string;
@@ -44,13 +41,6 @@ const signUpSchema = yup.object().shape({
 
 export function SignUp() {
 
-    const showSuccessMessage = () => {
-        showMessage({
-          message: "Parceiro cadastrado com sucesso",
-          type: "success",
-        });
-    };
-
     const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema)
     });
@@ -86,7 +76,7 @@ export function SignUp() {
         }
 
         try {
-            const response = await fetch('http://192.168.15.8:3001/PostUser/CadastroParceiros', {
+            const response = await fetch('http://192.168.42.16:3001/PostUser/CadastroParceiros', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,7 +85,7 @@ export function SignUp() {
             });
 
             if (response.ok) {
-                showSuccessMessage();
+                alert('Cadastro realizado!')
                 setErrorMessage('');
                 resetFields()
             } else {
@@ -113,7 +103,6 @@ export function SignUp() {
 
     return (
         <View style={styles.container}>
-            <FlashMessage position="top" />
             <Text style={styles.title}>Cadastro de Parceiros</Text>
 
             <Controller
