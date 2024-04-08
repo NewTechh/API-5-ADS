@@ -15,15 +15,15 @@ const Stack = createStackNavigator();
 const Rotas = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Cadastro" component={SignUp} />
-        <Stack.Screen name="RecSenha" component={RecPassword} />
-        <Stack.Screen name="NovaSenha" component={NewPassword} />
-        <Stack.Screen name="Dashboard" component={DashboardPartner} />
-        <Stack.Screen name="Cursos" component={Cursos} />
-        <Stack.Screen name="DetailsCurse" component={DetailsCurse} />
-        <Stack.Screen name="ListPartner" component={ListPartner} />
+      <Stack.Navigator initialRouteName='Login'>
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Cadastro" component={SignUp} options={{ headerShown: false }}/>
+        <Stack.Screen name="RecSenha" component={RecPassword} options={{ headerShown: false }}/>
+        <Stack.Screen name="NovaSenha" component={NewPassword} options={{ headerShown: false }}/>
+        <Stack.Screen name="Dashboard" component={DashboardPartner} options={{ headerShown: false }}/>
+        <Stack.Screen name="Cursos" component={Cursos} options={{ headerShown: false }}/>
+        <Stack.Screen name="DetailsCurse" component={DetailsCurse} options={{ headerShown: false }}/>
+        <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
