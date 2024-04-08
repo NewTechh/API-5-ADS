@@ -79,7 +79,7 @@ const DashboardPartner = () => {
               <Text style={styles.data}>{partner.progress}%</Text>
             </View>
             <View style={styles.progressBar}>
-              <View style={[styles.progress, { width: `${partner.progress}%` }]} />
+            <View style={[styles.progress, { width: `${partner.progress}%` }]} />
             </View>
             <View style={styles.separator} />
           </View>

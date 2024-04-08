@@ -4,6 +4,9 @@ import Footer from './src/components/Footer';
 import SideMenu from './src/components/SideMenu';
 import { SignUp } from './src/components/SignUp';
 import DashboardPartner from './src/components/DashboardPartner';
+import { Cursos } from "./src/components/Curse";
+import ListPartner from './src/components/ListPartner';
+import { DetailsCurse } from './src/components/DetailsCurse';
 
 const App = () => {
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
