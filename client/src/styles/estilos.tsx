@@ -8,11 +8,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#272424',
         paddingHorizontal: 16,
-
     },
     title: {
         fontSize: 34,
-        marginBottom: 100,
+        marginBottom: 50,
+        marginTop: 50,
         color: '#FFFFFF',
         fontWeight: 'bold'
     },
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20
+        marginTop: 20,
+        marginBottom: 30
     },
     buttonText: {
         color: '#FFFFFF',

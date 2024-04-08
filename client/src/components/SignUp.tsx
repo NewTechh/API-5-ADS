@@ -1,10 +1,11 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity,ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import React, { useState } from "react";
 import { styles } from '../styles/estilos'
 import { TextInputMask } from "react-native-masked-text";
+
 
 type FormDataProps = {
     parceiro_nome: string;
@@ -102,7 +103,10 @@ export function SignUp() {
     }
 
     return (
+    
+   
         <View style={styles.container}>
+             <ScrollView>
             <Text style={styles.title}>Cadastro de Parceiros</Text>
 
             <Controller
@@ -319,6 +323,7 @@ export function SignUp() {
                 {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Cadastrar</Text>
             </TouchableOpacity>
-        </View>
+          </ScrollView> 
+        </View>  
     )
 }
