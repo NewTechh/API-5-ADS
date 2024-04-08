@@ -25,6 +25,24 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: 'bold',
     },
+    passwordInputContainer: {
+        width: '100%',
+        height: 40,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 8,
+        marginBottom: 8,
+        borderRadius: 8,
+    },
+    inputPass: {
+        flex: 1,
+        fontWeight: 'bold',
+    },
+    iconEye: {
+        marginLeft: 10, 
+    },
     button: {
         width: '100%',
         height: 40,

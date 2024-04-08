@@ -1,8 +1,13 @@
-import { View, Text, TextInput, TouchableOpacity, Pressable } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
-import React, { useState } from "react";
+
 import { styles } from './styles'
 
 
@@ -10,7 +15,15 @@ type FormDataProps = {
     email: string;
 }
 
-const recPasswordSchema = yup.object().shape({
+type RootStackParamList = {
+    RecPassword: undefined;
+    Login: undefined;
+    NovaSenha: undefined;
+}
+
+type RecPasswordScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RecPassword'>;
+
+const Schema = yup.object().shape({
     email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
 });
 
@@ -18,11 +31,20 @@ const recPasswordSchema = yup.object().shape({
 export function RecPassword() {
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
-        resolver: yupResolver(recPasswordSchema)
+        resolver: yupResolver(Schema)
     });
 
-    const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const navigation = useNavigation<RecPasswordScreenNavigationProp>();
+
+    const handleLogin = () => {
+        navigation.navigate('Login');
+    };
+
+    const handleEnviarCodigo = (data: FormDataProps) => {
+        console.log(data)
+        navigation.navigate('NovaSenha');
+    };
 
     return (
         <View style={styles.container}>
@@ -30,16 +52,12 @@ export function RecPassword() {
 
             <Controller
                 control={control}
-                name='email'
-                render={({ field: { onChange } }) => (
+                name='email' //Aqui já cria a variável, caso queira é só trocar
+                render={({ field: { onChange, value } }) => (
                     <TextInput
                         style={styles.input}
-                        onChangeText={(text) => {
-                            setEmail(text);
-                            onChange(text)
-                        }}
-
-                        value={email}
+                        onChangeText={onChange}
+                        value={value} 
                         placeholder="Insira um e-mail para recuperação"
 
                     />
@@ -47,12 +65,12 @@ export function RecPassword() {
             />
             {errors.email && <Text style={styles.labelError}>{errors.email?.message}</Text>}
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleEnviarCodigo)}>
                 {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Enviar código</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.backToLogin}>
+            <TouchableOpacity style={styles.backToLogin} onPress={handleLogin}>
                 <Text style={{ color: "white" }}>Voltar para a página de </Text>
                 <Text style={styles.TxtBackLogin}>Login</Text>
             </TouchableOpacity>
