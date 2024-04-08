@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 type FormDataPropsLogin = {
@@ -21,7 +22,6 @@ type DashboardScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Da
 const LoginScreen = () => {
   const [parceiro_email, setParceiroEmail] = useState('');
   const [parceiro_senha, setParceiroSenha] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const navigation = useNavigation<DashboardScreenNavigationProp>();
 
   const handleCadastroPress = () => {
@@ -53,6 +53,10 @@ const LoginScreen = () => {
         });
 
         if (response.ok) {
+          const responseData = await response.json(); // Converter a resposta para JSON
+          const userId = responseData.userId;
+          await AsyncStorage.setItem('parceiro_id', userId);
+          console.log(AsyncStorage.getItem('parceiro_id'))
           alert('Login Realizado!')
             resetFields()
             navigation.navigate('Dashboard')

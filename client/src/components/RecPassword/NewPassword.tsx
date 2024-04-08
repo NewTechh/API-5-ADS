@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import React, { useState } from "react";
 import { styles } from './styles'
-import FlashMessage from "react-native-flash-message"
 
 
 type FormDataProps = {
@@ -35,7 +34,6 @@ export function NewPassword() {
 
     return (
         <View style={styles.container}>
-            <FlashMessage position="top" />
             <Text style={styles.title}>Nova Senha</Text>
 
             <Controller
