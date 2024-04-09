@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
-import { styles } from '../styles/curse';
 import * as Progress from 'react-native-progress';
+
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+import { styles } from '../styles/curse';
 import { AntDesign } from "@expo/vector-icons";
+
+type RootStackParamList = {
+    Cursos: undefined;
+    AddCurse: undefined;
+}
+
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
 
 export function Cursos() {
     const [progress, setProgress] = useState(0.5);
+    const navigation = useNavigation<ScreenNavigationProp>();
+
+    const handleAddCurses = () => {
+        navigation.navigate('AddCurse');
+    };
 
     const handlePress = () => {
         console.log("Botão pressionado!");
@@ -14,7 +30,7 @@ export function Cursos() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Cursos e Treinamentos</Text>
-            <Pressable style={styles.iconPlus}>
+            <Pressable style={styles.iconPlus} onPress={handleAddCurses}>
                 <AntDesign
                     name={'pluscircleo'}
                     size={35}
