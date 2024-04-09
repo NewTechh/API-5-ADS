@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import React, { useState } from "react";
 import { styles } from '../styles/estilos'
 import { TextInputMask } from "react-native-masked-text";
+import getIpAddress from '../../services/IPAddress';
 
 
 type FormDataProps = {
@@ -77,7 +78,7 @@ export function SignUp() {
         }
 
         try {
-            const response = await fetch('http://192.168.15.8:3001/PostUser/CadastroParceiros', {
+            const response = await fetch(`http://${getIpAddress()}:3001/PostUser/CadastroParceiros`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
