@@ -9,6 +9,8 @@ import { NewPassword } from '../src/components/RecPassword/NewPassword';
 import { Cursos } from '../src/components/Cursos';
 import { DetailsCurse } from '../src/components/DetailsCurse';
 import ListPartner from '../src/components/ListPartner';
+import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
+
 
 const Stack = createStackNavigator();
 
@@ -24,6 +26,7 @@ const Rotas = () => {
         <Stack.Screen name="Cursos" component={Cursos} options={{ headerShown: false }} />
         <Stack.Screen name="DetailsCurse" component={DetailsCurse} options={{ headerShown: false }} />
         <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }} />
+        <Stack.Screen name="SignUpAdm" component={SignUpAdm} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

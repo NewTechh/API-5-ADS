@@ -1,22 +1,66 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 
+type RootStackParamList = {
+    CadAdm: undefined;
+    Cadastro: undefined;
+}
+
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CadAdm'>;
+
 const ListPartner = () => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const navigation = useNavigation<ScreenNavigationProp>();
+
+    const handleSignUp = () => {
+        navigation.navigate('Cadastro');
+        setModalVisible(false);
+    };
+
+    const handleAdm = () => {
+        navigation.navigate('CadAdm');
+        setModalVisible(false);
+    };
 
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Parceiros Cadastrados</Text>
-            <Pressable style={styles.iconPlus}>
+
+            <Pressable style={styles.iconPlus} onPress={() => setModalVisible(true)}>
                 <AntDesign
                     name={'pluscircleo'}
                     size={35}
                     color='white'
-                    
-                    // onPress={}
+                // onPress={}
                 />
             </Pressable>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Pressable onPress={handleSignUp} style={styles.modalButton}>
+                            <Text style={[styles.modalText, { color: 'blue' }]}>Parceiro</Text>
+                        </Pressable>
+                        <Pressable onPress={handleAdm} style={styles.modalButton}>
+                            <Text style={[styles.modalText, { color: 'blue' }]}>Administrador</Text>
+                        </Pressable>
+                        <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                            <Text style={[styles.modalText, { color: 'red' }]}>Cancelar</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+
             <View style={styles.tableContainer}>
                 <View style={styles.headerRow}>
                     <Text style={styles.header}>Nome</Text>
@@ -123,7 +167,38 @@ const styles = StyleSheet.create({
     iconPlus: {
         marginLeft: 330,
         marginBottom: 7,
-    }
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalView: {
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        padding: 15,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 4,
+        shadowRadius: 4,
+        elevation: 5,
+        borderWidth: 1, // Adicionando borda
+        borderColor: 'black', // Cor da borda
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+        fontSize: 18,
+    },
+    modalButton: {
+        width: 150,
+        padding: 10,
+    },
 });
 
 export default ListPartner;
