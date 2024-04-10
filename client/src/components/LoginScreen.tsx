@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Network from "expo-network"
 import axios from "axios"
 import Constants from 'expo-constants';
+import getIpAddress from '../../services/IPAddress';
 
 
 
@@ -50,7 +51,7 @@ const LoginScreen = () => {
     }
 
     try {
-      const response = await fetch(`http://192.168.15.8:3001/Auth/login`, {
+      const response = await fetch(`http://${getIpAddress()}:3001/Auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
