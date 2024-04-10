@@ -113,7 +113,7 @@ const LoginScreen = () => {
       />
 
       <TouchableOpacity style={styles.button} >
-        <Text onPress={handleLogin} style={styles.buttonText}>Cadastrar</Text>
+        <Text onPress={handleLogin} style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
 
 
