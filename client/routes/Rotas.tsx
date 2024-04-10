@@ -10,6 +10,7 @@ import { Cursos } from '../src/components/Cursos';
 import { DetailsCurse } from '../src/components/DetailsCurse';
 import ListPartner from '../src/components/ListPartner';
 import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
+import ListAdm from '../src/components/ListAdministrador';
 
 
 const Stack = createStackNavigator();
@@ -25,6 +26,7 @@ const Rotas = () => {
         <Stack.Screen name="Dashboard" component={DashboardPartner} options={{ headerShown: false }} />
         <Stack.Screen name="Cursos" component={Cursos} options={{ headerShown: false }} />
         <Stack.Screen name="DetailsCurse" component={DetailsCurse} options={{ headerShown: false }} />
+        <Stack.Screen name="ListAdm" component={ListAdm} options={{ headerShown: false }} />
         <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpAdm" component={SignUpAdm} options={{ headerShown: false }} />
       </Stack.Navigator>

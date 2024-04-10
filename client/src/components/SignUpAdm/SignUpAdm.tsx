@@ -10,13 +10,23 @@ import { styles } from './styles'
 
 
 type FormDataProps = {
-    email: string;
-    senha: string;
+    adm_nome: string;
+    adm_email: string;
+    adm_funcao: string;
+    adm_setor: string;
+    adm_matricula: string;
+    adm_senha: string;
 }
 
 const Schema = yup.object().shape({
-    senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
-    email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
+    adm_nome: yup.string().required("Informe o Nome"),
+    adm_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
+    adm_funcao: yup.string().required("Informe a Função"),
+    adm_setor: yup.string().required("Informe o Setor"),
+    adm_matricula: yup.string().required("Informe a Matricula"),
+
+    adm_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
+
 });
 
 
@@ -56,7 +66,23 @@ export function SignUpAdm() {
 
             <Controller
                 control={control}
-                name='email'
+                name='adm_nome'
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={onChange}
+
+                        value={value}
+                        placeholder="Nome"
+
+                    />
+                )}
+            />
+            {errors.adm_email && <Text style={styles.labelError}>{errors.adm_email?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='adm_email'
                 render={({ field: { onChange, value } }) => (
                     <TextInput
                         style={styles.input}
@@ -68,12 +94,62 @@ export function SignUpAdm() {
                     />
                 )}
             />
-            {errors.email && <Text style={styles.labelError}>{errors.email?.message}</Text>}
+            {errors.adm_email && <Text style={styles.labelError}>{errors.adm_email?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='adm_funcao'
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={onChange}
+
+                        value={value}
+                        placeholder="Função"
+
+                    />
+                )}
+            />
+            {errors.adm_funcao && <Text style={styles.labelError}>{errors.adm_funcao?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='adm_setor'
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={onChange}
+
+                        value={value}
+                        placeholder="Setor"
+
+                    />
+                )}
+            />
+            {errors.adm_setor && <Text style={styles.labelError}>{errors.adm_setor?.message}</Text>}
+
+            <Controller
+                control={control}
+                name='adm_matricula'
+                render={({ field: { onChange, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={onChange}
+
+                        value={value}
+                        placeholder="Matrícula"
+
+                    />
+                )}
+            />
+            {errors.adm_matricula && <Text style={styles.labelError}>{errors.adm_matricula?.message}</Text>}
+
+            
 
             <View style={styles.passwordInputContainer}>
                 <Controller
                     control={control}
-                    name='senha' //Aqui já cria a variável, caso queira é só trocar
+                    name='adm_senha' //Aqui já cria a variável, caso queira é só trocar
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             style={styles.inputPass}
@@ -93,7 +169,7 @@ export function SignUpAdm() {
                 />
             </View>
 
-            {errors.senha && <Text style={styles.labelError}>{errors.senha?.message}</Text>}
+            {errors.adm_senha && <Text style={styles.labelError}>{errors.adm_senha?.message}</Text>}
 
 
             <Pressable style={styles.button} onPress={handleSubmit(handleNewPassword)}>
