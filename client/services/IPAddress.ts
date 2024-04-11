@@ -1,5 +1,5 @@
 function getIpAddress() {
-    const ip = '192.168.223.16'
+    const ip = ''
 
     return ip
 }

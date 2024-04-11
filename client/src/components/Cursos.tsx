@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import * as Progress from 'react-native-progress';
 
@@ -6,55 +6,62 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { styles } from '../styles/curse';
-import { AntDesign } from "@expo/vector-icons";
+import getIpAddress from "../../services/IPAddress";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type RootStackParamList = {
     Cursos: undefined;
-    AddCurse: undefined;
+    DetailsCurse: undefined;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
 
 export function Cursos() {
     const [progress, setProgress] = useState(0.5);
+    const [trilhas, setTrilhas] = useState([]);
     const navigation = useNavigation<ScreenNavigationProp>();
 
-    const handleAddCurses = () => {
-        navigation.navigate('AddCurse');
+    const handlePress = async (item: any) => {
+        
+        try{
+            await AsyncStorage.setItem('trilha_id', item.trilha_id);
+            await AsyncStorage.setItem('trilha_nome', item.trilha_nome);
+            navigation.navigate('DetailsCurse');
+        } catch (error){
+            console.error("Erro ao salvar dados da trilha: ", error);
+        }
+
+
+        
     };
 
-    const handlePress = () => {
-        console.log("Botão pressionado!");
-    };
+    useEffect(() => {
+        fetch(`http://${getIpAddress()}:3001/Tracks/listar`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setTrilhas(data)
+            })
+            .catch((error) => console.log(error))
+    }, []);
+
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Cursos e Treinamentos</Text>
-            <Pressable style={styles.iconPlus} onPress={handleAddCurses}>
-                <AntDesign
-                    name={'pluscircleo'}
-                    size={35}
-                    color='white'
-                    
-                    // onPress={}
-                />
-            </Pressable>
-            <Pressable onPress={handlePress} style={styles.button}>
-                <Text style={styles.buttonText}>IaaS & PaaS</Text>
+            <Text style={styles.title}>Trilhas de Especializações</Text>
+            {trilhas.map((item: any) => (
+                <Pressable 
+                key={item.trilha_id} 
+                onPress = { () => handlePress(item)}
+                style={styles.button}>
+                <Text style={styles.buttonText}>{item.trilha_nome}</Text>
                 <Progress.Bar progress={progress} width={380} color={'#17E753'} />
-            </Pressable>
-            <Pressable onPress={handlePress} style={[styles.button]}>
-                <Text style={styles.buttonText}>CX</Text>
-                <Progress.Bar progress={progress} width={380} color={'#17E753'} />
-            </Pressable>
-            <Pressable onPress={handlePress} style={[styles.button]}>
-                <Text style={styles.buttonText}>Industries</Text>
-                <Progress.Bar progress={progress} width={380} color={'#17E753'} />
-            </Pressable>
-            <Pressable onPress={handlePress} style={[styles.button]}>
-                <Text style={styles.buttonText}>License & Hardware</Text>
-                <Progress.Bar progress={progress} width={380} color={'#17E753'} />
-            </Pressable>
+                </Pressable>
+            ))}
         </View>
     )
 }

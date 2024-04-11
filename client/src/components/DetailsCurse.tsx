@@ -1,53 +1,48 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StatusBar, Pressable } from "react-native";
 import { styles } from '../styles/detailscurse';
-import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import getIpAddress from "../../services/IPAddress";
 
 export function DetailsCurse() {
+    const [trilhaNome, setTrilhaNome] = useState<string | null>('')
+    const [espec, setEspec] = useState([]);
 
-    const handlePress = () => {
-        console.log("Botão pressionado!");
+    useEffect(() => {
+        fetchData();
+      }, []);
+    
+      const fetchData = async () => {
+        try {
+            const trilha_nome = await AsyncStorage.getItem('trilha_nome');
+            setTrilhaNome(trilha_nome);
+            const trilha_id = await AsyncStorage.getItem('trilha_id');
+            fetch(`http://${getIpAddress()}:3001/Tracks/Expertises/${trilha_id}`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setEspec(data)
+            })
+            .catch((error) => console.log(error))
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
         <View style={styles.container}>
-            <Ionicons name="arrow-back" size={24} color="white" style={{ position: 'absolute', left: 10, top: 10 }} />
-
-            <Text style={styles.title}>IaaS & PaaS</Text>
-
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Ionicons name="play-circle" size={40} color="black" />
-                <Text style={styles.buttonText}>Oracle Cloud</Text>
-                <Ionicons name="checkmark-circle" size={24} color="green" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Ionicons name="play-circle" size={40} color="black" />
-                <Text style={styles.buttonText}>Business Analytics</Text>
-                <Ionicons name="checkmark-circle" size={24} color="green" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Ionicons name="play-circle" size={40} color="black" />
-                <Text style={styles.buttonText}>Oracle Database</Text>
-                <Ionicons name="close-circle" size={24} color="red" />
-            </TouchableOpacity>
-
-            <Text style={styles.title}>Atividades/Provas</Text>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Text style={styles.buttonText}>IaaS & PaaS</Text>
-                <Ionicons name="checkmark-circle" size={24} color="green" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Text style={styles.buttonText}>CX</Text>
-                <Ionicons name="close-circle" size={24} color="red" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Text style={styles.buttonText}>Industries</Text>
-                <Ionicons name="lock-closed" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Text style={styles.buttonText}>License & Hardware</Text>
-                <Ionicons name="lock-closed" size={24} color="black" />
-            </TouchableOpacity>
+            <Text style={styles.title}>{trilhaNome}</Text>
+            {espec.map((item: any) => (
+                <Pressable 
+                key={item.especializacao_id} 
+                style={styles.button}>
+                <Text style={styles.buttonText}>{item.especializacao_nome}</Text>
+                </Pressable>
+            ))}
         </View>
     )
 }
