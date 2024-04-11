@@ -7,6 +7,8 @@ import EdicaoDeParceiros from './User/PutUser';
 import CadastroDeAdmin from './Admin/PostAdmin';
 import ListarTodosUsuarios from './Admin/GetAdmin';
 import Login from './Authentication/Login';
+import GetTrack from './Expertise/GetTrack';
+import ListarExpertiseByTrackID from './Expertise/ExpByTrack';
 
 
 
@@ -56,3 +58,8 @@ app.use('/PostAdmin', CadastroDeAdmin())
 
 //Listagem dos Parceiros
 app.use('/GetAdmin', ListarTodosUsuarios())
+
+
+// Trilhas de especialização
+app.use('/Tracks', GetTrack())
+app.use('/Tracks', ListarExpertiseByTrackID())

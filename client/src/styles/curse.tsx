@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
         fontSize: 33,
         marginBottom: 40,
         color: '#FFFFFF',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
 
     button: {
