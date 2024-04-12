@@ -8,23 +8,15 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
-    Cadastro: undefined;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
 const ListAdm = () => {
-    const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
-
-    const handleSignUp = () => {
-        navigation.navigate('Cadastro');
-        setModalVisible(false);
-    };
 
     const handleSignUpAdm = () => {
         navigation.navigate('SignUpAdm');
-        setModalVisible(false);
     };
 
     return (
@@ -32,34 +24,13 @@ const ListAdm = () => {
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Administradores Cadastrados</Text>
 
-            <Pressable style={styles.iconPlus} onPress={() => setModalVisible(true)}>
+            <Pressable style={styles.iconPlus} onPress={handleSignUpAdm}>
                 <AntDesign
                     name={'pluscircleo'}
                     size={35}
                     color='white'
-                // onPress={}
                 />
             </Pressable>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Pressable onPress={handleSignUp} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'blue' }]}>Parceiro</Text>
-                        </Pressable>
-                        <Pressable onPress={handleSignUpAdm} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'blue' }]}>Administrador</Text>
-                        </Pressable>
-                        <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'red' }]}>Cancelar</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
 
             <View style={styles.tableContainer}>
                 <View style={styles.headerRow}>

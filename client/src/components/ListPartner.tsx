@@ -8,7 +8,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 
 type RootStackParamList = {
-    SignUpAdm: undefined;
     Cadastro: undefined;
 }
 
@@ -17,21 +16,14 @@ type Parceiro = {
     parceiro_cnpj_cpf: string;
 }
 
-type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cadastro'>;
 
 const ListPartner = () => {
-    const [modalVisible, setModalVisible] = useState(false);
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
     const navigation = useNavigation<ScreenNavigationProp>();
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
-        setModalVisible(false);
-    };
-
-    const handleSignUpAdm = () => {
-        navigation.navigate('SignUpAdm');
-        setModalVisible(false);
     };
 
     useEffect(() => {
@@ -59,7 +51,7 @@ const ListPartner = () => {
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Parceiros Cadastrados</Text>
 
-            <Pressable style={styles.iconPlus} onPress={() => setModalVisible(true)}>
+            <Pressable style={styles.iconPlus} onPress={handleSignUp}>
                 <AntDesign
                     name={'pluscircleo'}
                     size={35}
@@ -67,26 +59,6 @@ const ListPartner = () => {
                 // onPress={}
                 />
             </Pressable>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Pressable onPress={handleSignUp} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'blue' }]}>Parceiro</Text>
-                        </Pressable>
-                        <Pressable onPress={handleSignUpAdm} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'blue' }]}>Administrador</Text>
-                        </Pressable>
-                        <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'red' }]}>Cancelar</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
 
             <View style={styles.tableContainer}>
                 <View style={styles.headerRow}>
