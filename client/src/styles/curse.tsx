@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    scrollView: {
+        flexGrow: 1, 
+        alignItems: 'center', 
         paddingTop: 60,
-        alignItems: 'center',
         backgroundColor: '#272424',
         paddingHorizontal: 16,
-    },
+      },
 
     title: {
         fontSize: 33,

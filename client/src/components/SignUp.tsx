@@ -130,231 +130,229 @@ export function SignUp() {
     return (
 
 
-        <View style={styles.container}>
-            <ScrollView>
-                <Text style={styles.title}>Cadastro de Parceiros</Text>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+            <Text style={styles.title}>Cadastro de Parceiros</Text>
 
-                <Controller
-                    control={control}
-                    name='parceiro_nome'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setUsernameValue(text);
-                                onChange(text)
-                            }}
+            <Controller
+                control={control}
+                name='parceiro_nome'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setUsernameValue(text);
+                            onChange(text)
+                        }}
 
-                            value={usernameValue}
-                            placeholder="Nome"
+                        value={usernameValue}
+                        placeholder="Nome"
 
-                        />
-                    )}
-                />
-                {errors.parceiro_nome && <Text style={styles.labelError}>{errors.parceiro_nome?.message}</Text>}
+                    />
+                )}
+            />
+            {errors.parceiro_nome && <Text style={styles.labelError}>{errors.parceiro_nome?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name='parceiro_email'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setEmail(text);
-                                onChange(text)
-                            }}
+            <Controller
+                control={control}
+                name='parceiro_email'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                            onChange(text)
+                        }}
 
-                            value={email}
-                            placeholder="E-mail"
+                        value={email}
+                        placeholder="E-mail"
 
-                        />
-                    )}
-                />
-                {errors.parceiro_email && <Text style={styles.labelError}>{errors.parceiro_email?.message}</Text>}
+                    />
+                )}
+            />
+            {errors.parceiro_email && <Text style={styles.labelError}>{errors.parceiro_email?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name="parceiro_cnpj_cpf"
-                    render={({ field: { onChange, value } }) => (
-                        <TextInputMask
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setCnpj(text)
-                                onChange(text)
-                            }}
-                            value={cnpj}
-                            placeholder="CPF/CNPJ"
-                            type={"cpf"}
-                        />
-                    )}
-                />
-                {errors.parceiro_cnpj_cpf && <Text style={styles.labelError}>{errors.parceiro_cnpj_cpf?.message}</Text>}
+            <Controller
+                control={control}
+                name="parceiro_cnpj_cpf"
+                render={({ field: { onChange, value } }) => (
+                    <TextInputMask
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setCnpj(text)
+                            onChange(text)
+                        }}
+                        value={cnpj}
+                        placeholder="CPF/CNPJ"
+                        type={"cpf"}
+                    />
+                )}
+            />
+            {errors.parceiro_cnpj_cpf && <Text style={styles.labelError}>{errors.parceiro_cnpj_cpf?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name="parceiro_cep"
-                    render={({ field: { onChange, value } }) => (
-                        <TextInputMask
-                            style={styles.input}
+            <Controller
+                control={control}
+                name="parceiro_cep"
+                render={({ field: { onChange, value } }) => (
+                    <TextInputMask
+                        style={styles.input}
 
-                            onChangeText={onChange}
-                            onBlur={async () => {
-                                if (value.length === 9) {
-                                    await searchCEP(value);
-                                }
-                            }}
-                            value={cep}
-                            placeholder="CEP"
-                            type={"zip-code"}
-                        />
-                    )}
-                />
-                {errors.parceiro_cep && <Text style={styles.labelError}>{errors.parceiro_cep?.message}</Text>}
+                        onChangeText={onChange}
+                        onBlur={async () => {
+                            if (value.length === 9) {
+                                await searchCEP(value);
+                            }
+                        }}
+                        value={cep}
+                        placeholder="CEP"
+                        type={"zip-code"}
+                    />
+                )}
+            />
+            {errors.parceiro_cep && <Text style={styles.labelError}>{errors.parceiro_cep?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name="parceiro_telefone"
-                    render={({ field: { onChange, value } }) => (
-                        <TextInputMask
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setTelefone(text);
-                                onChange(text)
-                            }}
-                            value={telefone}
-                            placeholder="Telefone"
-                            type={"cel-phone"}
-                            options={{
-                                maskType: "BRL",
-                                withDDD: true,
-                                dddMask: "(99) ",
-                            }}
-                        />
-                    )}
-                />
-                {errors.parceiro_telefone && <Text style={styles.labelError}>{errors.parceiro_telefone?.message}</Text>}
+            <Controller
+                control={control}
+                name="parceiro_telefone"
+                render={({ field: { onChange, value } }) => (
+                    <TextInputMask
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setTelefone(text);
+                            onChange(text)
+                        }}
+                        value={telefone}
+                        placeholder="Telefone"
+                        type={"cel-phone"}
+                        options={{
+                            maskType: "BRL",
+                            withDDD: true,
+                            dddMask: "(99) ",
+                        }}
+                    />
+                )}
+            />
+            {errors.parceiro_telefone && <Text style={styles.labelError}>{errors.parceiro_telefone?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name='parceiro_logradouro'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setLogradouro(text);
-                                onChange(text)
-                            }}
+            <Controller
+                control={control}
+                name='parceiro_logradouro'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setLogradouro(text);
+                            onChange(text)
+                        }}
 
-                            value={logradouro}
-                            placeholder="Logradouro"
+                        value={logradouro}
+                        placeholder="Logradouro"
 
-                        />
-                    )}
-                />
-                {errors.parceiro_logradouro && <Text style={styles.labelError}>{errors.parceiro_logradouro?.message}</Text>}
+                    />
+                )}
+            />
+            {errors.parceiro_logradouro && <Text style={styles.labelError}>{errors.parceiro_logradouro?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name='parceiro_logradouro_numero'
-                    render={({ field: { onChange } }) => (
-                        <TextInputMask
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setLogradouro_numero(text);
-                                onChange(text)
-                            }}
-                            value={logradouro_numero}
-                            placeholder="Número do Logradouro"
-                            type={"only-numbers"}
-                        />
-                    )}
-                />
-                {errors.parceiro_logradouro_numero && <Text style={styles.labelError}>{errors.parceiro_logradouro_numero?.message}</Text>}
+            <Controller
+                control={control}
+                name='parceiro_logradouro_numero'
+                render={({ field: { onChange } }) => (
+                    <TextInputMask
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setLogradouro_numero(text);
+                            onChange(text)
+                        }}
+                        value={logradouro_numero}
+                        placeholder="Número do Logradouro"
+                        type={"only-numbers"}
+                    />
+                )}
+            />
+            {errors.parceiro_logradouro_numero && <Text style={styles.labelError}>{errors.parceiro_logradouro_numero?.message}</Text>}
 
-                <Controller
-                    control={control}
-                    name='parceiro_bairro'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setBairro(text);
-                                onChange(text)
-                            }}
+            <Controller
+                control={control}
+                name='parceiro_bairro'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setBairro(text);
+                            onChange(text)
+                        }}
 
-                            value={bairro}
-                            placeholder="Bairro"
+                        value={bairro}
+                        placeholder="Bairro"
 
-                        />
-                    )}
-                />
-                {errors.parceiro_bairro && <Text style={styles.labelError}>{errors.parceiro_bairro?.message}</Text>}
-
+                    />
+                )}
+            />
+            {errors.parceiro_bairro && <Text style={styles.labelError}>{errors.parceiro_bairro?.message}</Text>}
 
 
-                <Controller
-                    control={control}
-                    name='parceiro_cidade'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setCidade(text);
-                                onChange(text)
-                            }}
 
-                            value={cidade}
-                            placeholder="Cidade"
+            <Controller
+                control={control}
+                name='parceiro_cidade'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setCidade(text);
+                            onChange(text)
+                        }}
 
-                        />
-                    )}
-                />
-                {errors.parceiro_cidade && <Text style={styles.labelError}>{errors.parceiro_cidade?.message}</Text>}
+                        value={cidade}
+                        placeholder="Cidade"
 
-                <Controller
-                    control={control}
-                    name='parceiro_estado'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setEstado(text);
-                                onChange(text)
-                            }}
+                    />
+                )}
+            />
+            {errors.parceiro_cidade && <Text style={styles.labelError}>{errors.parceiro_cidade?.message}</Text>}
 
-                            value={estado}
-                            placeholder="Estado"
+            <Controller
+                control={control}
+                name='parceiro_estado'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setEstado(text);
+                            onChange(text)
+                        }}
 
-                        />
-                    )}
-                />
-                {errors.parceiro_estado && <Text style={styles.labelError}>{errors.parceiro_estado?.message}</Text>}
+                        value={estado}
+                        placeholder="Estado"
 
-                <Controller
-                    control={control}
-                    name='parceiro_senha'
-                    render={({ field: { onChange } }) => (
-                        <TextInput
-                            style={styles.input}
-                            onChangeText={(text) => {
-                                setSenha(text);
-                                onChange(text)
-                            }}
-                            secureTextEntry
-                            value={senha}
-                            placeholder="Senha"
+                    />
+                )}
+            />
+            {errors.parceiro_estado && <Text style={styles.labelError}>{errors.parceiro_estado?.message}</Text>}
 
-                        />
-                    )}
-                />
-                {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
+            <Controller
+                control={control}
+                name='parceiro_senha'
+                render={({ field: { onChange } }) => (
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={(text) => {
+                            setSenha(text);
+                            onChange(text)
+                        }}
+                        secureTextEntry
+                        value={senha}
+                        placeholder="Senha"
 
-                <TouchableOpacity style={styles.button} onPress={handleSubmit(handleSignDados)}>
-                    {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
-                    <Text style={styles.buttonText}>Cadastrar</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </View>
+                    />
+                )}
+            />
+            {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
+
+            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleSignDados)}>
+                {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
+                <Text style={styles.buttonText}>Cadastrar</Text>
+            </TouchableOpacity>
+        </ScrollView>
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { ScrollView, Text, Pressable } from "react-native";
 import * as Progress from 'react-native-progress';
 
 import { useNavigation } from '@react-navigation/native';
@@ -58,7 +58,7 @@ export function Cursos() {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.title}>Trilhas de Especializações</Text>
             {trilhas.map((item: any) => (
                 <Pressable 
@@ -69,6 +69,6 @@ export function Cursos() {
                 <Progress.Bar progress={progress} width={380} color={'#17E753'} />
                 </Pressable>
             ))}
-        </View>
+        </ScrollView>
     )
 }
