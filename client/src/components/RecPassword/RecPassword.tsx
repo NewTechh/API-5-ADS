@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -47,7 +47,7 @@ export function RecPassword() {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.title}>Recuperar Conta</Text>
 
             <Controller
@@ -57,7 +57,7 @@ export function RecPassword() {
                     <TextInput
                         style={styles.input}
                         onChangeText={onChange}
-                        value={value} 
+                        value={value}
                         placeholder="Insira um e-mail para recuperação"
 
                     />
@@ -74,6 +74,6 @@ export function RecPassword() {
                 <Text style={{ color: "white" }}>Voltar para a página de </Text>
                 <Text style={styles.TxtBackLogin}>Login</Text>
             </Pressable>
-        </View>
+        </ScrollView>
     )
 }

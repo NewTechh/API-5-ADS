@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -59,7 +59,7 @@ export function NewPassword() {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.title}>Nova Senha</Text>
 
             <View style={styles.passwordInputContainer}>
@@ -117,6 +117,6 @@ export function NewPassword() {
                 {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Atualizar</Text>
             </Pressable>
-        </View>
+        </ScrollView>
     )
 }
