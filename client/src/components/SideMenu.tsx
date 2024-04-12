@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import getIpAddress from '../../services/IPAddress';
+import axios from 'axios'; // Importe o axios para fazer requisições HTTP
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import getIpAddress from '../../services/IPAddress';
 
 const { width } = Dimensions.get('window');
 
@@ -10,14 +11,24 @@ interface SideMenuProps {
     onClose: () => void;
 }
 
-type Parceiro = {
-    parceiro_nome: string;
-    parceiro_email: string;
-}
-
 const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
     const sideMenuRef = useRef<View>(null);
-    const [parceiros, setParceiros] = useState<Parceiro[]>([]);
+    const [parceiroData, setParceiroData] = useState<any>(null); // Estado para armazenar os dados do parceiro
+
+    useEffect(() => {
+        // Função para buscar os dados do parceiro pelo ID assim que o componente for montado
+        const fetchParceiroData = async () => {
+            try {
+                const parceiro_id = await AsyncStorage.getItem('usuario_id'); // Substitua 'coloque aqui o ID do parceiro' pelo ID real do parceiro
+                const response = await axios.get(`http://${getIpAddress()}:3001/GetUser/Parceiros/${parceiro_id}`);
+                setParceiroData(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar dados do parceiro:', error);
+            }
+        };
+
+        fetchParceiroData(); // Chama a função de busca ao montar o componente
+    }, []);
 
     const handleClose = () => {
         onClose();
@@ -31,29 +42,6 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
         }
     };
 
-    useEffect(() => {
-        fetchParceirosID();
-    }, []);
-    
-    const fetchParceirosID = async () => {
-        
-        const parceiro_id = await AsyncStorage.getItem('usuario_id');
-        try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetUser/Parceiros/${parceiro_id}`, {
-                method: 'GET'
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao carregar parceiros');
-            }
-            const data = await response.json();
-            setParceiros(data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    console.log(parceiros)
-
     return (
         <TouchableOpacity
             style={styles.container}
@@ -64,11 +52,11 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
                 <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
                     <Ionicons name="close-outline" size={24} color="black" />
                 </TouchableOpacity>
-                    <View style={styles.userContainer}>
-                        <Ionicons name="person-circle-outline" size={64} color="black" />
-                        <Text style={styles.userName}></Text>
-                        <Text style={styles.userEmail}>dsadas</Text>
-                    </View>
+                <View style={styles.userContainer}>
+                    <Ionicons name="person-circle-outline" size={64} color="black" />
+                    <Text style={styles.userName}>{parceiroData ? parceiroData.parceiro_nome : 'Carregando...'}</Text>
+                    <Text style={styles.userEmail}>{parceiroData ? parceiroData.parceiro_email : 'Carregando...'}</Text>
+                </View>
                 <View style={styles.menuContainer}>
                     <TouchableOpacity style={styles.menuItem}>
                         <Ionicons name="home-outline" size={24} color="black" />

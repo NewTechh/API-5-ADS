@@ -69,8 +69,6 @@ export function Cursos() {
                 <Progress.Bar progress={progress} width={380} color={'#17E753'} />
                 </Pressable>
             ))}
-        <Footer onPressMenu={toggleSideMenu} />
-        {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />}
         </View>
     )
 }
