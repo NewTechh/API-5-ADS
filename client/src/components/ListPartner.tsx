@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal } from 'react-native';
+import getIpAddress from '../../services/IPAddress';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -11,10 +12,16 @@ type RootStackParamList = {
     Cadastro: undefined;
 }
 
+type Parceiro = {
+    parceiro_nome: string;
+    parceiro_cnpj_cpf: string;
+}
+
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CadAdm'>;
 
 const ListPartner = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [parceiros, setParceiros] = useState<Parceiro[]>([]);
     const navigation = useNavigation<ScreenNavigationProp>();
 
     const handleSignUp = () => {
@@ -26,6 +33,26 @@ const ListPartner = () => {
         navigation.navigate('CadAdm');
         setModalVisible(false);
     };
+
+    useEffect(() => {
+        fetchParceiros();
+    }, []);
+
+    const fetchParceiros = async () => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Parceiros`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao carregar parceiros');
+            }
+            const data = await response.json();
+            setParceiros(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     return (
         <View style={styles.container}>
@@ -64,43 +91,19 @@ const ListPartner = () => {
             <View style={styles.tableContainer}>
                 <View style={styles.headerRow}>
                     <Text style={styles.header}>Nome</Text>
-                    <Text style={styles.header}>CNPJ</Text>
+                    <Text style={styles.header}>CPF/CNPJ</Text>
                     <Text style={styles.header}>Ações</Text>
                 </View>
-                <View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Jose Armando</Text>
-                        <Text style={styles.data}>XX. XXX. XXX/0001-XX</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Claudia Silva</Text>
-                        <Text style={styles.data}>XX. XXX. XXX/0001-XX</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Marcos Souza</Text>
-                        <Text style={styles.data}>XX. XXX. XXX/0001-XX</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Roberta Nobre</Text>
-                        <Text style={styles.data}>XX. XXX. XXX/0001-XX</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                </View>
+                    {parceiros.map((parceiro, index) => (
+                        <View style={styles.row} key={index}>
+                            <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
+                            <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
+                            <Text style={styles.data}>
+                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                                <Ionicons name="trash-bin" size={24} color="black" />
+                            </Text>
+                        </View>
+                    ))}
                 <View style={styles.separator} />
             </View>
         </View>

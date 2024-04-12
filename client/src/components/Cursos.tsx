@@ -8,6 +8,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { styles } from '../styles/curse';
 import getIpAddress from "../../services/IPAddress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Footer from "./Footer";
+import SideMenu from "./SideMenu";
 
 type RootStackParamList = {
     Cursos: undefined;
@@ -20,6 +22,11 @@ export function Cursos() {
     const [progress, setProgress] = useState(0.5);
     const [trilhas, setTrilhas] = useState([]);
     const navigation = useNavigation<ScreenNavigationProp>();
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
 
     const handlePress = async (item: any) => {
         
@@ -62,6 +69,8 @@ export function Cursos() {
                 <Progress.Bar progress={progress} width={380} color={'#17E753'} />
                 </Pressable>
             ))}
+        <Footer onPressMenu={toggleSideMenu} />
+        {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} />}
         </View>
     )
 }

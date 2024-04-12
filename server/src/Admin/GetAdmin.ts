@@ -11,7 +11,7 @@ function ListarTodosUsuarios(): express.Router{
         if (result.rows.length === 0) {
             res.status(404).json({ message: 'Parceiros não encontrados' });
         } else {
-            res.status(200).json(result.rows[0]);
+            res.status(200).json(result.rows);
         }
         } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -20,12 +20,6 @@ function ListarTodosUsuarios(): express.Router{
 
     return router;
 
-}
-
-function ListarAlguns(): express.Router {
-    const router = express.Router()
-    console.log('Hello World');
-    return router;
 }
 
 export default ListarTodosUsuarios;
