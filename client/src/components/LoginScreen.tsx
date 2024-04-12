@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground, NativeModules } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -78,7 +78,7 @@ const LoginScreen = () => {
         } else if (userType === 'Administrador') {
           navigation.navigate('ListPartner')
         }
-        
+
       } else {
         const errorMessage = await response.text();
         console.log('Erro ao fazer login', errorMessage);
@@ -90,7 +90,7 @@ const LoginScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollView}>
       <ImageBackground
         style={styles.image}
 
@@ -125,11 +125,19 @@ const LoginScreen = () => {
         <Text style={styles.text} onPress={handleCadastroPress}>Não tem uma conta? Crie uma!</Text>
 
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#272424',
+    paddingHorizontal: 16,
+  },
+
   text: {
     color: '#FFFFFF',
     paddingTop: 20,
@@ -160,24 +168,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
 
   },
+
   image: {
     height: 60,
     width: 90,
-    paddingVertical: 10,
-    marginTop: 150,
   },
-
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#272424',
-    paddingHorizontal: 16,
-    paddingBottom: 150,
-    paddingTop: 50,
-  },
-
-
 
   button: {
     width: '100%',
@@ -188,6 +183,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20
   },
+
   buttonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
