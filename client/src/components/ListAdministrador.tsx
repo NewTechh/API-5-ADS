@@ -7,11 +7,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 
 type RootStackParamList = {
-    CadAdm: undefined;
+    SignUpAdm: undefined;
     Cadastro: undefined;
 }
 
-type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CadAdm'>;
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
 const ListAdm = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,8 +22,8 @@ const ListAdm = () => {
         setModalVisible(false);
     };
 
-    const handleAdm = () => {
-        navigation.navigate('CadAdm');
+    const handleSignUpAdm = () => {
+        navigation.navigate('SignUpAdm');
         setModalVisible(false);
     };
 
@@ -51,7 +51,7 @@ const ListAdm = () => {
                         <Pressable onPress={handleSignUp} style={styles.modalButton}>
                             <Text style={[styles.modalText, { color: 'blue' }]}>Parceiro</Text>
                         </Pressable>
-                        <Pressable onPress={handleAdm} style={styles.modalButton}>
+                        <Pressable onPress={handleSignUpAdm} style={styles.modalButton}>
                             <Text style={[styles.modalText, { color: 'blue' }]}>Administrador</Text>
                         </Pressable>
                         <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
