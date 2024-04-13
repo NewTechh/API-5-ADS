@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 const Rotas = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Token'>
+      <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Cadastro" component={SignUp} options={{ headerShown: false }} />
         <Stack.Screen name="RecSenha" component={RecPassword} options={{ headerShown: false }} />
