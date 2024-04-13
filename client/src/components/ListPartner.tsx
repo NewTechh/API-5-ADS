@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, StatusBar, Pressable } from 'react-native';
 import getIpAddress from '../../services/IPAddress';
 
 import { useNavigation } from '@react-navigation/native';
@@ -47,7 +47,7 @@ const ListPartner = () => {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Parceiros Cadastrados</Text>
 
@@ -78,16 +78,17 @@ const ListPartner = () => {
                     ))}
                 <View style={styles.separator} />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#312D2A',
-    },
+    scrollView: {
+        flexGrow: 1,
+        alignItems: 'center',
+        backgroundColor: '#272424',
+        paddingHorizontal: 16,
+      },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
