@@ -11,6 +11,7 @@ import { DetailsCurse } from '../src/components/DetailsCurse';
 import ListPartner from '../src/components/ListPartner';
 import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
 import ListAdm from '../src/components/ListAdministrador';
+import Token from '../src/components/Token'
 
 
 const Stack = createStackNavigator();
@@ -18,7 +19,7 @@ const Stack = createStackNavigator();
 const Rotas = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
+      <Stack.Navigator initialRouteName='Token'>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Cadastro" component={SignUp} options={{ headerShown: false }} />
         <Stack.Screen name="RecSenha" component={RecPassword} options={{ headerShown: false }} />
@@ -29,6 +30,7 @@ const Rotas = () => {
         <Stack.Screen name="ListAdm" component={ListAdm} options={{ headerShown: false }} />
         <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpAdm" component={SignUpAdm} options={{ headerShown: false }} />
+        <Stack.Screen name="Token" component={Token} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
