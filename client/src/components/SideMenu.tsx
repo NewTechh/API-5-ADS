@@ -4,14 +4,16 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios'; // Importe o axios para fazer requisições HTTP
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getIpAddress from '../../services/IPAddress';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const { width } = Dimensions.get('window');
 
 interface SideMenuProps {
     onClose: () => void;
+    navigation: StackNavigationProp<any, any>;
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
+const SideMenu: React.FC<SideMenuProps> = ({ onClose, navigation }) => {
     const sideMenuRef = useRef<View>(null);
     const [parceiroData, setParceiroData] = useState<any>(null); // Estado para armazenar os dados do parceiro
 
@@ -58,28 +60,28 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose }) => {
                     <Text style={styles.userEmail}>{parceiroData ? parceiroData.parceiro_email : 'Carregando...'}</Text>
                 </View>
                 <View style={styles.menuContainer}>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ListPartner')} style={styles.menuItem}>
                         <Ionicons name="home-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Home</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={styles.menuItem}>
                         <Ionicons name="apps-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Dashboard</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Cursos')} style={styles.menuItem}>
                         <Ionicons name="book-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Cursos</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ListPartner')} style={styles.menuItem}>
                         <Ionicons name="people-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Parceiros</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
-                        <Ionicons name="pencil-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Editar</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('ListAdm')} style={styles.menuItem}>
+                        <Ionicons name="people-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Administradores</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.exitButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.exitButton}>
                     <Ionicons name="log-out-outline" size={24} color="black" />
                     <Text style={styles.menuText}>Sair</Text>
                 </TouchableOpacity>

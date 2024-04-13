@@ -1,10 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
+import Footer from './Footer';
+import SideMenu from './SideMenu';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type RootStackParamList = {
+  Dashboard: undefined;
+}
+
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
 const DashboardPartner = () => {
   const screenWidth = Dimensions.get('window').width;
   const chartWidth = screenWidth - 40;
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   const data = [
     {
@@ -61,70 +72,81 @@ const DashboardPartner = () => {
     { name: "Junior Santos", cnpj: "4567891230001-03", progress: 90 }
   ];
 
-  return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      <Text style={styles.title}>Progresso de Parceiros</Text>
-      <View style={styles.tableContainer}>
-        <View style={styles.headerRow}>
-          <Text style={styles.header}>Nome</Text>
-          <Text style={styles.header}>CNPJ</Text>
-          <Text style={styles.header}>Progresso</Text>
-        </View>
-      </View>
-        {partnerProgress.map((partner, index) => (
-          <View key={index}>
-            <View style={styles.row}>
-              <Text style={styles.data}>{partner.name}</Text>
-              <Text style={styles.data}>{partner.cnpj}</Text>
-              <Text style={styles.data}>{partner.progress}%</Text>
-            </View>
-            <View style={styles.progressBar}>
-            <View style={[styles.progress, { width: `${partner.progress}%` }]} />
-            </View>
-            <View style={styles.separator} />
-          </View>
-        ))}
-      <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
-      <PieChart
-        data={data}
-        width={chartWidth}
-        height={160}
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientTo: "#08130D",
-          color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-        }}
-        accessor="population"
-        backgroundColor="transparent"
-        paddingLeft="5"
-      />
+  const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
-      <Text style={styles.title}>Demandas por Área:</Text>
-      <BarChart
-        data={barChartData}
-        width={chartWidth}
-        height={220}
-        yAxisSuffix=""
-        yAxisLabel=""
-        chartConfig={{
-          backgroundGradientFrom: "#1E2923",
-          backgroundGradientTo: "#08130D",
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          barPercentage: 0.5
-        }}
-        style={{
-          marginVertical: 8,
-          borderRadius: 16
-        }}
-      />
-    </ScrollView>
+  const toggleSideMenu = () => {
+    setIsSideMenuVisible(!isSideMenuVisible);
+  };
+
+  return (
+    <>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Text style={styles.title}>Progresso de Parceiros</Text>
+        <View style={styles.tableContainer}>
+          <View style={styles.headerRow}>
+            <Text style={styles.header}>Nome</Text>
+            <Text style={styles.header}>CNPJ</Text>
+            <Text style={styles.header}>Progresso</Text>
+          </View>
+          {partnerProgress.map((partner, index) => (
+            <View key={index}>
+              <View style={styles.row}>
+                <Text style={styles.data}>{partner.name}</Text>
+                <Text style={styles.data}>{partner.cnpj}</Text>
+                <Text style={styles.data}>{partner.progress}%</Text>
+              </View>
+              <View style={styles.progressBar}>
+                <View style={[styles.progress, { width: `${partner.progress}%` }]} />
+              </View>
+              <View style={styles.separator} />
+            </View>
+          ))}
+        </View>
+
+        <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
+        <PieChart
+          data={data}
+          width={chartWidth}
+          height={160}
+          chartConfig={{
+            backgroundGradientFrom: "#1E2923",
+            backgroundGradientTo: "#08130D",
+            color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
+          }}
+          accessor="population"
+          backgroundColor="transparent"
+          paddingLeft="5"
+        />
+
+        <Text style={styles.title}>Demandas por Área:</Text>
+        <BarChart
+          data={barChartData}
+          width={chartWidth}
+          height={220}
+          yAxisSuffix=""
+          yAxisLabel=""
+          chartConfig={{
+            backgroundGradientFrom: "#1E2923",
+            backgroundGradientTo: "#08130D",
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            barPercentage: 0.5
+          }}
+          style={{
+            marginVertical: 8,
+            borderRadius: 16
+          }}
+        />
+      </ScrollView>
+      <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
+      {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   scrollView: {
-    flexGrow: 1, 
-    alignItems: 'center', 
+    flexGrow: 1,
+    alignItems: 'center',
     backgroundColor: '#272424',
     paddingHorizontal: 16,
   },
@@ -169,12 +191,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     textAlign: 'center',
-  },
-  active: {
-    color: 'green',
-  },
-  inactive: {
-    color: 'black',
   },
   progressBar: {
     height: 10,

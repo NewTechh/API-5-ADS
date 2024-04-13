@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign } from '@expo/vector-icons';
+import Footer from './Footer';
+import SideMenu from './SideMenu';
 
 type RootStackParamList = {
     Cadastro: undefined;
@@ -21,6 +23,11 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cadastro'>;
 const ListPartner = () => {
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
     const navigation = useNavigation<ScreenNavigationProp>();
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
@@ -47,25 +54,26 @@ const ListPartner = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollView}>
-            <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-            <Text style={styles.title}>Parceiros Cadastrados</Text>
+        <>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
+                <Text style={styles.title}>Parceiros Cadastrados</Text>
 
-            <Pressable style={styles.iconPlus} onPress={handleSignUp}>
-                <AntDesign
-                    name={'pluscircleo'}
-                    size={35}
-                    color='white'
-                // onPress={}
-                />
-            </Pressable>
+                <Pressable style={styles.iconPlus} onPress={handleSignUp}>
+                    <AntDesign
+                        name={'pluscircleo'}
+                        size={35}
+                        color='white'
+                    // onPress={}
+                    />
+                </Pressable>
 
-            <View style={styles.tableContainer}>
-                <View style={styles.headerRow}>
-                    <Text style={styles.header}>Nome</Text>
-                    <Text style={styles.header}>CPF/CNPJ</Text>
-                    <Text style={styles.header}>Ações</Text>
-                </View>
+                <View style={styles.tableContainer}>
+                    <View style={styles.headerRow}>
+                        <Text style={styles.header}>Nome</Text>
+                        <Text style={styles.header}>CPF/CNPJ</Text>
+                        <Text style={styles.header}>Ações</Text>
+                    </View>
                     {parceiros.map((parceiro, index) => (
                         <View style={styles.row} key={index}>
                             <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
@@ -76,9 +84,13 @@ const ListPartner = () => {
                             </Text>
                         </View>
                     ))}
-                <View style={styles.separator} />
-            </View>
-        </ScrollView>
+                    <View style={styles.separator} />
+                </View>
+            </ScrollView>
+
+            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+        </>
     );
 };
 
@@ -88,7 +100,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#272424',
         paddingHorizontal: 16,
-      },
+    },
     title: {
         fontSize: 30,
         fontWeight: 'bold',

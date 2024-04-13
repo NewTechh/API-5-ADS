@@ -10,6 +10,7 @@ import getIpAddress from "../../services/IPAddress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "./Footer";
 import SideMenu from "./SideMenu";
+import ListPartner from "./ListPartner";
 
 type RootStackParamList = {
     Cursos: undefined;
@@ -56,8 +57,8 @@ export function Cursos() {
             .catch((error) => console.log(error))
     }, []);
 
-
     return (
+        <>
         <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.title}>Trilhas de Especializações</Text>
             {trilhas.map((item: any) => (
@@ -70,5 +71,8 @@ export function Cursos() {
                 </Pressable>
             ))}
         </ScrollView>
+        <Footer onPressMenu={toggleSideMenu} navigation={navigation}/>
+        {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+        </>
     )
 }

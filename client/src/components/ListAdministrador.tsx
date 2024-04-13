@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign } from '@expo/vector-icons';
+import SideMenu from './SideMenu';
+import Footer from './Footer';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -14,67 +16,76 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>
 
 const ListAdm = () => {
     const navigation = useNavigation<ScreenNavigationProp>();
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
     const handleSignUpAdm = () => {
         navigation.navigate('SignUpAdm');
     };
 
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
+
     return (
+        <>
         <ScrollView contentContainerStyle={styles.scrollView}>
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Administradores Cadastrados</Text>
 
-            <Pressable style={styles.iconPlus} onPress={handleSignUpAdm}>
-                <AntDesign
-                    name={'pluscircleo'}
-                    size={35}
-                    color='white'
-                />
-            </Pressable>
+                <Pressable style={styles.iconPlus} onPress={handleSignUpAdm}>
+                    <AntDesign
+                        name={'pluscircleo'}
+                        size={35}
+                        color='white'
+                    />
+                </Pressable>
 
-            <View style={styles.tableContainer}>
-                <View style={styles.headerRow}>
-                    <Text style={styles.header}>Nome</Text>
-                    <Text style={styles.header}>Função</Text>
-                    <Text style={styles.header}>Ações</Text>
+                <View style={styles.tableContainer}>
+                    <View style={styles.headerRow}>
+                        <Text style={styles.header}>Nome</Text>
+                        <Text style={styles.header}>Função</Text>
+                        <Text style={styles.header}>Ações</Text>
+                    </View>
+                    <View>
+                        <View style={styles.row}>
+                            <Text style={styles.data}>Jose Armando</Text>
+                            <Text style={styles.data}>Desenvolvedor</Text>
+                            <Text style={styles.data}>
+                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                                <Ionicons name="trash-bin" size={24} color="black" />
+                            </Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.data}>Claudia Silva</Text>
+                            <Text style={styles.data}>Suporte</Text>
+                            <Text style={styles.data}>
+                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                                <Ionicons name="trash-bin" size={24} color="black" />
+                            </Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.data}>Marcos Souza</Text>
+                            <Text style={styles.data}>Cloud Computing</Text>
+                            <Text style={styles.data}>
+                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                                <Ionicons name="trash-bin" size={24} color="black" />
+                            </Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.data}>Roberta Nobre</Text>
+                            <Text style={styles.data}>Segurança Digital</Text>
+                            <Text style={styles.data}>
+                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                                <Ionicons name="trash-bin" size={24} color="black" />
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.separator} />
                 </View>
-                <View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Jose Armando</Text>
-                        <Text style={styles.data}>Desenvolvedor</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Claudia Silva</Text>
-                        <Text style={styles.data}>Suporte</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Marcos Souza</Text>
-                        <Text style={styles.data}>Cloud Computing</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Roberta Nobre</Text>
-                        <Text style={styles.data}>Segurança Digital</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.separator} />
-            </View>
         </ScrollView>
+            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+        </>
     );
 };
 
