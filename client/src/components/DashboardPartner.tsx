@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, StatusBar, ScrollView } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 
 const DashboardPartner = () => {
@@ -62,8 +62,7 @@ const DashboardPartner = () => {
   ];
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
+    <ScrollView contentContainerStyle={styles.scrollView}>
       <Text style={styles.title}>Progresso de Parceiros</Text>
       <View style={styles.tableContainer}>
         <View style={styles.headerRow}>
@@ -71,6 +70,7 @@ const DashboardPartner = () => {
           <Text style={styles.header}>CNPJ</Text>
           <Text style={styles.header}>Progresso</Text>
         </View>
+      </View>
         {partnerProgress.map((partner, index) => (
           <View key={index}>
             <View style={styles.row}>
@@ -84,7 +84,6 @@ const DashboardPartner = () => {
             <View style={styles.separator} />
           </View>
         ))}
-      </View>
       <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
       <PieChart
         data={data}
@@ -118,15 +117,16 @@ const DashboardPartner = () => {
           borderRadius: 16
         }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#312D2A',
+  scrollView: {
+    flexGrow: 1, 
+    alignItems: 'center', 
+    backgroundColor: '#272424',
+    paddingHorizontal: 16,
   },
   title: {
     fontSize: 30,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
     textAlign: 'center',
-    color: 'white'
+    color: 'white',
   },
   tableContainer: {
     backgroundColor: '#f0f0f0',
