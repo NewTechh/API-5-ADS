@@ -2,20 +2,18 @@ import { StyleSheet } from "react-native"
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
+    scrollView: {
+        flexGrow: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center',
         backgroundColor: '#272424',
         paddingHorizontal: 16,
-
-    },
+      },
     title: {
         fontSize: 34,
-        marginTop: 100,
         marginBottom: 80,
         color: '#FFFFFF',
         fontWeight: 'bold',
-        justifyContent: 'center',
         textAlign: 'center',
     },
     input: {

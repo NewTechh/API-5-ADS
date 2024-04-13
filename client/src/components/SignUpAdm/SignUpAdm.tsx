@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -61,7 +61,7 @@ export function SignUpAdm() {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.title}>Cadastro de{'\n'}Administrador</Text>
 
             <Controller
@@ -176,6 +176,6 @@ export function SignUpAdm() {
                 {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Cadastrar</Text>
             </Pressable>
-        </View>
+        </ScrollView>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -20,7 +20,7 @@ const ListAdm = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
             <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
             <Text style={styles.title}>Administradores Cadastrados</Text>
 
@@ -74,16 +74,17 @@ const ListAdm = () => {
                 </View>
                 <View style={styles.separator} />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#312D2A',
-    },
+    scrollView: {
+        flexGrow: 1, 
+        alignItems: 'center', 
+        backgroundColor: '#272424',
+        paddingHorizontal: 16,
+      },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
