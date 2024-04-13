@@ -22,7 +22,9 @@ CREATE TABLE Administradores(
 	administrador_nome DESC100 NOT NULL,
 	administrador_email DESC100 NOT NULL,
 	administrador_senha DESC100 NOT NULL,
-	administrador_nivel_acesso CHAR(1) CHECK (administrador_nivel_acesso IN ('A', 'B', 'C', 'D')) NOT NULL
+	administrador_matricula DESC100 NOT NULL,
+	administrador_funcao DESC100 NOT NULL,
+	administrador_setor CHAR(1) CHECK (administrador_setor IN ('A', 'B', 'C', 'D')) NOT NULL
 );
 
 CREATE TABLE Cursos(

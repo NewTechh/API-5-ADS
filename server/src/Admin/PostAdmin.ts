@@ -11,14 +11,16 @@ function CadastroDeAdmin(): express.Router {
             administrador_nome,
             administrador_email,
             administrador_senha,
-            administrador_nivel_acesso,
+            administrador_matricula,
+            administrador_funcao,
+            administrador_setor,
             } = req.body;
 
             const hashedPassword = await bcrypt.hash(administrador_senha, 10);
 
             await DB.query(
-            'INSERT INTO Administradores(administrador_nome, administrador_email, administrador_senha, administrador_nivel_acesso) VALUES ($1, $2, $3, $4);',
-            [administrador_nome, administrador_email, hashedPassword, administrador_nivel_acesso]
+            'INSERT INTO Administradores(administrador_nome, administrador_email, administrador_senha, administrador_matricula, administrador_funcao, administrador_setor) VALUES ($1, $2, $3, $4, $5, $6);',
+            [administrador_nome, administrador_email, hashedPassword, administrador_matricula, administrador_funcao, administrador_setor]
             );
 
             res.status(201).json({ message: 'Administrador criado com sucesso' });

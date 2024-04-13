@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 
 const DB = new Pool({
-    connectionString: "postgres://kwimhxcj:RyNuAKu7DY4p_ksUKDL92NPXclELJpMa@isilo.db.elephantsql.com/kwimhxcj"
+    connectionString: "postgres://dytopzjm:G426WLiNfydDu6kKvM_m6Q5YcVRcpqz6@isabelle.db.elephantsql.com/dytopzjm"
     // user: 'postgres',       //user PostgreSQL padrão = postgres
     // host: 'localhost',
     // database: '',       // Sua database
