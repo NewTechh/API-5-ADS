@@ -18,7 +18,7 @@ type FormDataProps = {
 type RootStackParamList = {
     RecPassword: undefined;
     Login: undefined;
-    NovaSenha: undefined;
+    Token: undefined;
 }
 
 type RecPasswordScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RecPassword'>;
@@ -43,7 +43,7 @@ export function RecPassword() {
 
     const handleEnviarCodigo = (data: FormDataProps) => {
         console.log(data)
-        navigation.navigate('NovaSenha');
+        navigation.navigate('Token');
     };
 
     return (
