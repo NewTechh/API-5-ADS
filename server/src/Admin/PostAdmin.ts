@@ -5,7 +5,7 @@ import DB from '../ConnectionDB/db';
 function CadastroDeAdmin(): express.Router {
     const router = express.Router()
 
-    router.post('/CadastroADMIN', async (req, res) => {
+    router.post('/CadastroDeAdmin', async (req, res) => {
         try {
             const {
             administrador_nome,

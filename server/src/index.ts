@@ -8,6 +8,7 @@ import CadastroDeAdmin from './Admin/PostAdmin';
 import ListarTodosUsuarios from './Admin/GetAdmin';
 import Login from './Authentication/Login';
 import CadastroDeParceirosAdmin from './Admin/PostAdmin';
+import DeleteUser from './User/DeleteUser';
 
 
 
@@ -44,7 +45,10 @@ app.use('/PostUser', CadastroDeParceiros());
 app.use('/GetUser', ListarParceiroID());
 
 // Edição de Parceiro por ID
-app.use('/PutUser', EdicaoDeParceiros())
+app.use('/PutUser', EdicaoDeParceiros());
+
+// Delete de Parceiro por ID
+app.use('/DeleteUser', DeleteUser());
 
 
 
@@ -59,4 +63,4 @@ app.use('/PostAdmin', CadastroDeAdmin())
 app.use('/GetAdmin', ListarTodosUsuarios())
 
 //Cadastro de Parceiros pelo Admin
-app.use('/PostAdminParceiros', CadastroDeParceirosAdmin())
+app.use('/PostAdmin', CadastroDeParceirosAdmin())
