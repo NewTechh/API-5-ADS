@@ -9,6 +9,8 @@ import ListarTodosUsuarios from './Admin/GetAdmin';
 import Login from './Authentication/Login';
 import GetTrack from './Expertise/GetTrack';
 import ListarExpertiseByTrackID from './Expertise/ExpByTrack';
+import TrackProgress from './Expertise/TrackProgress';
+import LinkPartner from './Expertise/LinkPartner';
 
 
 
@@ -63,3 +65,5 @@ app.use('/GetAdmin', ListarTodosUsuarios())
 // Trilhas de especialização
 app.use('/Tracks', GetTrack())
 app.use('/Tracks', ListarExpertiseByTrackID())
+app.use('/Tracks', TrackProgress())
+app.use('/Tracks', LinkPartner())

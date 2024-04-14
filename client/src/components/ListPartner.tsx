@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, StatusBar, Pressable } from 'react-native';
-import getIpAddress from '../../services/IPAddress';
+import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign } from '@expo/vector-icons';
-import Footer from './Footer';
-import SideMenu from './SideMenu';
+import getIpAddress from '../../services/IPAddress';
 
 type RootStackParamList = {
+    SignUpAdm: undefined;
     Cadastro: undefined;
 }
 
@@ -18,19 +17,21 @@ type Parceiro = {
     parceiro_cnpj_cpf: string;
 }
 
-type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cadastro'>;
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
 const ListPartner = () => {
-    const [parceiros, setParceiros] = useState<Parceiro[]>([]);
+    const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
-    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
-
-    const toggleSideMenu = () => {
-        setIsSideMenuVisible(!isSideMenuVisible);
-    };
+    const [parceiros, setParceiros] = useState<Parceiro[]>([]);
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
+        setModalVisible(false);
+    };
+
+    const handleAdm = () => {
+        navigation.navigate('SignUpAdm');
+        setModalVisible(false);
     };
 
     useEffect(() => {
@@ -52,54 +53,69 @@ const ListPartner = () => {
         }
     };
 
-
     return (
-        <>
-            <ScrollView contentContainerStyle={styles.scrollView}>
-                <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-                <Text style={styles.title}>Parceiros Cadastrados</Text>
+        <View style={styles.container}>
+            <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
+            <Text style={styles.title}>Parceiros Cadastrados</Text>
 
-                <Pressable style={styles.iconPlus} onPress={handleSignUp}>
-                    <AntDesign
-                        name={'pluscircleo'}
-                        size={35}
-                        color='white'
-                    // onPress={}
-                    />
-                </Pressable>
+            <Pressable style={styles.iconPlus} onPress={() => setModalVisible(true)}>
+                <AntDesign
+                    name={'pluscircleo'}
+                    size={35}
+                    color='white'
+                // onPress={}
+                />
+            </Pressable>
 
-                <View style={styles.tableContainer}>
-                    <View style={styles.headerRow}>
-                        <Text style={styles.header}>Nome</Text>
-                        <Text style={styles.header}>CPF/CNPJ</Text>
-                        <Text style={styles.header}>Ações</Text>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Pressable onPress={handleSignUp} style={styles.modalButton}>
+                            <Text style={[styles.modalText, { color: 'blue' }]}>Parceiro</Text>
+                        </Pressable>
+                        <Pressable onPress={handleAdm} style={styles.modalButton}>
+                            <Text style={[styles.modalText, { color: 'blue' }]}>Administrador</Text>
+                        </Pressable>
+                        <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                            <Text style={[styles.modalText, { color: 'red' }]}>Cancelar</Text>
+                        </Pressable>
                     </View>
-                    {parceiros.map((parceiro, index) => (
-                        <View style={styles.row} key={index}>
-                            <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
-                            <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
-                            <Text style={styles.data}>
-                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                                <Ionicons name="trash-bin" size={24} color="black" />
-                            </Text>
-                        </View>
-                    ))}
-                    <View style={styles.separator} />
                 </View>
-            </ScrollView>
+            </Modal>
 
-            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
-            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
-        </>
+            <View style={styles.tableContainer}>
+                <View style={styles.headerRow}>
+                    <Text style={styles.header}>Nome</Text>
+                    <Text style={styles.header}>CNPJ</Text>
+                    <Text style={styles.header}>Ações</Text>
+                </View>
+                <View>
+                {parceiros && parceiros.map && parceiros.map((parceiro, index) => (
+                    <View style={styles.row} key={index}>
+                        <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
+                        <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
+                        <Text style={styles.data}>
+                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                            <Ionicons name="trash-bin" size={24} color="black" />
+                        </Text>
+                    </View>
+                ))}
+                </View>
+                <View style={styles.separator} />
+            </View>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    scrollView: {
-        flexGrow: 1,
-        alignItems: 'center',
-        backgroundColor: '#272424',
-        paddingHorizontal: 16,
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#312D2A',
     },
     title: {
         fontSize: 30,

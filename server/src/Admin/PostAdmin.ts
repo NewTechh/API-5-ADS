@@ -13,9 +13,10 @@ function CadastroDeAdmin(): express.Router {
             administrador_senha,
             administrador_matricula,
             administrador_funcao,
-            administrador_setor,
+            administrador_setor
             } = req.body;
 
+            console.log(administrador_setor)
             const hashedPassword = await bcrypt.hash(administrador_senha, 10);
 
             await DB.query(

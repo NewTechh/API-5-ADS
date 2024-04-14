@@ -3,13 +3,12 @@ import { ScrollView, Text, Pressable, View } from "react-native";
 import * as Progress from 'react-native-progress';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import Checkbox from 'expo-checkbox';
 import { styles } from '../styles/curse';
 import getIpAddress from "../../services/IPAddress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "./Footer";
 import SideMenu from "./SideMenu";
-import ListPartner from "./ListPartner";
+
 
 type RootStackParamList = {
     Cursos: undefined;
@@ -23,7 +22,7 @@ export function Cursos() {
     const [trilhas, setTrilhas] = useState([]);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
-    const [isChecked, setChecked] = useState(false);
+
 
 
     const toggleSideMenu = () => {
@@ -31,7 +30,6 @@ export function Cursos() {
     };
 
     const handlePress = async (item: any) => {
-
         try {
             await AsyncStorage.setItem('trilha_id', item.trilha_id);
             await AsyncStorage.setItem('trilha_nome', item.trilha_nome);
@@ -39,10 +37,8 @@ export function Cursos() {
         } catch (error) {
             console.error("Erro ao salvar dados da trilha: ", error);
         }
-
-
-
     };
+
 
     useEffect(() => {
         fetch(`http://${getIpAddress()}:3001/Tracks/listar`, {
@@ -63,7 +59,7 @@ export function Cursos() {
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <Text style={styles.title}>Trilhas de Especializações</Text>
-                {trilhas && trilhas.map((item: any) => (
+                {trilhas && trilhas.map && trilhas.map((item: any) => (
                     <Pressable
                         key={item.trilha_id}
                         onPress={() => handlePress(item)}
@@ -73,23 +69,6 @@ export function Cursos() {
                     </Pressable>
 
                 ))}
-                <View style={{
-                    flexDirection: 'row', alignItems: 'center'
-
-                }}>
-                    <Checkbox
-                        style={{
-                            margin: 8,
-                            backgroundColor: 'white'
-                        }}
-                        value={isChecked}
-                        onValueChange={setChecked}
-                        color={isChecked ? '#4630EB' : undefined}
-                    />
-                    <Text style={{ fontSize: 15, color: 'white' }}>Checkbox</Text>
-
-
-                </View>
             </ScrollView>
 
             <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
