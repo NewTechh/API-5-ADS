@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, Pressable } from "react-native";
+import { ScrollView, Text, Pressable, View } from "react-native";
 import * as Progress from 'react-native-progress';
-
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import Checkbox from 'expo-checkbox';
 import { styles } from '../styles/curse';
 import getIpAddress from "../../services/IPAddress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,34 +23,37 @@ export function Cursos() {
     const [trilhas, setTrilhas] = useState([]);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+    const [isChecked, setChecked] = useState(false);
+
 
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
 
     const handlePress = async (item: any) => {
-        
-        try{
+
+        try {
             await AsyncStorage.setItem('trilha_id', item.trilha_id);
             await AsyncStorage.setItem('trilha_nome', item.trilha_nome);
             navigation.navigate('DetailsCurse');
-        } catch (error){
+        } catch (error) {
             console.error("Erro ao salvar dados da trilha: ", error);
         }
 
 
-        
+
     };
 
     useEffect(() => {
         fetch(`http://${getIpAddress()}:3001/Tracks/listar`, {
             method: 'GET',
             headers: {
-            'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log("Dados recebidos:", data);
                 setTrilhas(data)
             })
             .catch((error) => console.log(error))
@@ -59,20 +61,40 @@ export function Cursos() {
 
     return (
         <>
-        <ScrollView contentContainerStyle={styles.scrollView}>
-            <Text style={styles.title}>Trilhas de Especializações</Text>
-            {trilhas.map((item: any) => (
-                <Pressable 
-                key={item.trilha_id} 
-                onPress = { () => handlePress(item)}
-                style={styles.button}>
-                <Text style={styles.buttonText}>{item.trilha_nome}</Text>
-                <Progress.Bar progress={progress} width={380} color={'#17E753'} />
-                </Pressable>
-            ))}
-        </ScrollView>
-        <Footer onPressMenu={toggleSideMenu} navigation={navigation}/>
-        {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <Text style={styles.title}>Trilhas de Especializações</Text>
+                {trilhas && trilhas.map((item: any) => (
+                    <Pressable
+                        key={item.trilha_id}
+                        onPress={() => handlePress(item)}
+                        style={styles.button}>
+                        <Text style={styles.buttonText}>{item.trilha_nome}</Text>
+                        <Progress.Bar progress={progress} width={380} color={'#17E753'} />
+                    </Pressable>
+
+                ))}
+                <View style={{
+                    flexDirection: 'row', alignItems: 'center'
+
+                }}>
+                    <Checkbox
+                        style={{
+                            margin: 8,
+                            backgroundColor: 'white'
+                        }}
+                        value={isChecked}
+                        onValueChange={setChecked}
+                        color={isChecked ? '#4630EB' : undefined}
+                    />
+                    <Text style={{ fontSize: 15, color: 'white' }}>Checkbox</Text>
+
+
+                </View>
+            </ScrollView>
+
+            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
         </>
     )
 }
+

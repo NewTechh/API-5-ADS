@@ -1,11 +1,9 @@
 
 
 function getIpAddress() {
-<<<<<<< Updated upstream
-    const ip = ''
-=======
-    const ip = '192.168.0.101'
->>>>>>> Stashed changes
+
+    const ip = '192.168.0.0'
+
 
     return ip
 }
