@@ -63,7 +63,7 @@ export function Cursos() {
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <Text style={styles.title}>Trilhas de Especializações</Text>
-                {trilhas && trilhas.map((item: any) => (
+                {trilhas && trilhas.map && trilhas.map((item: any) => (
                     <Pressable
                         key={item.trilha_id}
                         onPress={() => handlePress(item)}
