@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import getIpAddress from '../../services/IPAddress';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import SideMenu from './SideMenu';
 import Footer from './Footer';
@@ -12,9 +12,14 @@ type RootStackParamList = {
     SignUpAdm: undefined;
 }
 
+type Administrador = {
+    administrador_nome: string;
+}
+
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
 const ListAdm = () => {
+    const [administradores, setAdministradores] = useState<Administrador[]>([]);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
@@ -24,6 +29,25 @@ const ListAdm = () => {
 
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
+    };
+
+    useEffect(() => {
+        fetchAdmin()
+    })
+
+    const fetchAdmin = async () => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao carregar administradores');
+            }
+            const data = await response.json();
+            setAdministradores(data);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -46,43 +70,19 @@ const ListAdm = () => {
                         <Text style={styles.header}>Função</Text>
                         <Text style={styles.header}>Ações</Text>
                     </View>
-                    <View>
-                        <View style={styles.row}>
-                            <Text style={styles.data}>Jose Armando</Text>
-                            <Text style={styles.data}>Desenvolvedor</Text>
+                    {administradores.map((administrador, index) => (
+                        <View style={styles.row} key={index}>
+                            <Text style={styles.data}>{administrador.administrador_nome}</Text>
                             <Text style={styles.data}>
                                 <Ionicons style={styles.icon} name="create" size={24} color="black" />
                                 <Ionicons name="trash-bin" size={24} color="black" />
                             </Text>
                         </View>
-                        <View style={styles.row}>
-                            <Text style={styles.data}>Claudia Silva</Text>
-                            <Text style={styles.data}>Suporte</Text>
-                            <Text style={styles.data}>
-                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                                <Ionicons name="trash-bin" size={24} color="black" />
-                            </Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.data}>Marcos Souza</Text>
-                            <Text style={styles.data}>Cloud Computing</Text>
-                            <Text style={styles.data}>
-                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                                <Ionicons name="trash-bin" size={24} color="black" />
-                            </Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.data}>Roberta Nobre</Text>
-                            <Text style={styles.data}>Segurança Digital</Text>
-                            <Text style={styles.data}>
-                                <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                                <Ionicons name="trash-bin" size={24} color="black" />
-                            </Text>
-                        </View>
-                    </View>
+                    ))}
                     <View style={styles.separator} />
                 </View>
-        </ScrollView>
+            </ScrollView>
+
             <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
             {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
         </>
