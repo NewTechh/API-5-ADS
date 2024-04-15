@@ -6,6 +6,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import getIpAddress from '../../services/IPAddress';
+import Footer from './Footer';
+import SideMenu from './SideMenu';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -23,6 +25,11 @@ const ListPartner = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
@@ -53,61 +60,49 @@ const ListPartner = () => {
         }
     };
 
+    function Cadastro(arg0: boolean): void {
+        throw new Error('Function not implemented.');
+    }
+
     return (
-        <View style={styles.container}>
-            <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-            <Text style={styles.title}>Parceiros Cadastrados</Text>
+        <>
+            <View style={styles.container}>
+                <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
+                <Text style={styles.title}>Parceiros Cadastrados</Text>
 
-            <Pressable style={styles.iconPlus} onPress={() => setModalVisible(true)}>
-                <AntDesign
-                    name={'pluscircleo'}
-                    size={35}
-                    color='white'
-                // onPress={}
-                />
-            </Pressable>
+                <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
+                    <AntDesign
+                        name={'pluscircleo'}
+                        size={35}
+                        color='white'
+                    // onPress={}
+                    />
+                </Pressable>
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}>
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Pressable onPress={handleSignUp} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'blue' }]}>Parceiro</Text>
-                        </Pressable>
-                        <Pressable onPress={handleAdm} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'blue' }]}>Administrador</Text>
-                        </Pressable>
-                        <Pressable onPress={() => setModalVisible(false)} style={styles.modalButton}>
-                            <Text style={[styles.modalText, { color: 'red' }]}>Cancelar</Text>
-                        </Pressable>
+                <View style={styles.tableContainer}>
+                    <View style={styles.headerRow}>
+                        <Text style={styles.header}>Nome</Text>
+                        <Text style={styles.header}>CNPJ</Text>
+                        <Text style={styles.header}>Ações</Text>
                     </View>
-                </View>
-            </Modal>
-
-            <View style={styles.tableContainer}>
-                <View style={styles.headerRow}>
-                    <Text style={styles.header}>Nome</Text>
-                    <Text style={styles.header}>CNPJ</Text>
-                    <Text style={styles.header}>Ações</Text>
-                </View>
-                <View>
-                {parceiros && parceiros.map && parceiros.map((parceiro, index) => (
-                    <View style={styles.row} key={index}>
-                        <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
-                        <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
-                        <Text style={styles.data}>
-                            <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                            <Ionicons name="trash-bin" size={24} color="black" />
-                        </Text>
+                    <View>
+                        {parceiros && parceiros.map && parceiros.map((parceiro, index) => (
+                            <View style={styles.row} key={index}>
+                                <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
+                                <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
+                                <Text style={styles.data}>
+                                    <Ionicons style={styles.icon} name="create" size={24} color="black" />
+                                    <Ionicons name="trash-bin" size={24} color="black" />
+                                </Text>
+                            </View>
+                        ))}
                     </View>
-                ))}
+                    <View style={styles.separator} />
                 </View>
-                <View style={styles.separator} />
             </View>
-        </View>
+            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+        </>
     );
 };
 

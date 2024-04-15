@@ -16,6 +16,11 @@ const DashboardPartner = () => {
   const screenWidth = Dimensions.get('window').width;
   const chartWidth = screenWidth - 40;
   const navigation = useNavigation<ScreenNavigationProp>();
+  const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+
+  const toggleSideMenu = () => {
+    setIsSideMenuVisible(!isSideMenuVisible);
+  };
 
   const data = [
     {
@@ -71,12 +76,6 @@ const DashboardPartner = () => {
     { name: "Roberta Almeida", cnpj: "9876543210001-02", progress: 40 },
     { name: "Junior Santos", cnpj: "4567891230001-03", progress: 90 }
   ];
-
-  const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
-
-  const toggleSideMenu = () => {
-    setIsSideMenuVisible(!isSideMenuVisible);
-  };
 
   return (
     <>
@@ -140,6 +139,7 @@ const DashboardPartner = () => {
       <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
       {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
     </>
+
   );
 };
 

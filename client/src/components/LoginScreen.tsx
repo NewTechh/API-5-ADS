@@ -113,8 +113,8 @@ const LoginScreen = () => {
         secureTextEntry={true}
       />
 
-      <TouchableOpacity style={styles.button} >
-        <Text onPress={handleLogin} style={styles.buttonText}>Entrar</Text>
+      <TouchableOpacity onPress={handleLogin} style={styles.button} >
+        <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
 
 
