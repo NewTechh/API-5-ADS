@@ -14,6 +14,7 @@ CREATE TABLE Parceiros (
 	parceiro_cep DESC100 NOT NULL,
 	parceiro_cidade DESC100 NOT NULL,
 	parceiro_estado DESC100 NOT NULL,
+	parceiro_status BOOLEAN NOT NULL DEFAULT TRUE,
 	parceiro_senha DESC100 NOT NULL
 );
 
@@ -24,6 +25,7 @@ CREATE TABLE Administradores(
 	administrador_senha DESC100 NOT NULL,
 	administrador_matricula DESC100 NOT NULL,
 	administrador_funcao DESC100 NOT NULL,
+	administrador_status BOOLEAN NOT NULL DEFAULT TRUE
 	administrador_setor CHAR(1) CHECK (administrador_setor IN ('A', 'B', 'C', 'D')) NOT NULL
 );
 

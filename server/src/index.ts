@@ -19,7 +19,7 @@ import { EnviarToken, ValidarToken} from './Authentication/RecPassword';
 import EmailPorID from './Authentication/RecIDbyEmail';
 import UpdatePassword from './Authentication/ChangePassword';
 import ListarParceiroCPF from './User/ConsultaPorCPF';
-import DeleteUser from './User/DeleteUser';
+import {DeleteUser, ExclusaoLogicaParceiro, ReativacaoParceiro } from './User/DeleteUser';
 
 
 
@@ -58,6 +58,8 @@ app.use('/GetParceiro', ListarParceiroID());
 app.use('/GetParceiro', ListarParceiroCPF());
 app.use('/PutParceiro', EdicaoDeParceiros())
 app.use('/DeleteParceiro', DeleteUser())
+app.use('/DeleteParceiro', ExclusaoLogicaParceiro())
+app.use('/DeleteParceiro', ReativacaoParceiro())
 
 
 //CRUD - Consultor

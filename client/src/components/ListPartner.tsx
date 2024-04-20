@@ -18,6 +18,7 @@ type RootStackParamList = {
 type Parceiro = {
     parceiro_nome: string;
     parceiro_cnpj_cpf: string;
+    parceiro_status: boolean; // Adicionando o campo de status do parceiro
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
@@ -26,6 +27,7 @@ const ListPartner = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
+    const [selectedPartnerId, setSelectedPartnerId] = useState('');
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
     const toggleSideMenu = () => {
@@ -38,11 +40,6 @@ const ListPartner = () => {
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
-        setModalVisible(false);
-    };
-
-    const handleAdm = () => {
-        navigation.navigate('SignUpAdm');
         setModalVisible(false);
     };
 
@@ -68,6 +65,76 @@ const ListPartner = () => {
             console.error(error);
         }
     };
+
+    const handleDelete = async (parceiro_cnpj_cpf: string) => {
+        Alert.alert(
+            'Confirmação',
+            'Tem certeza de que deseja excluir este parceiro definitivamente? Essa ação é irreversível.',
+            [
+                {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Exclusão cancelada'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Excluir',
+                    onPress: () => confirmDelete(parceiro_cnpj_cpf)
+                }
+            ]
+        );
+    };
+    
+    const confirmDelete = async (parceiro_cnpj_cpf: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/Parceiros/${parceiro_cnpj_cpf}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao excluir parceiro');
+            }
+            fetchParceiros();
+            console.log('Parceiro excluído com sucesso');
+        } catch (error) {
+            console.error('Erro ao excluir parceiro:', error);
+            Alert.alert('Erro', 'Erro ao excluir parceiro. Por favor, tente novamente.');
+        }
+    };
+
+    const logicalDeletePartner = async (parceiro_cnpj_cpf: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ExclusaoParceiro/${parceiro_cnpj_cpf}`, {
+                method: 'PUT'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao excluir parceiro logicamente');
+            }
+
+            Alert.alert('Sucesso','Exclusão Lógica realizada.')
+            console.log('Parceiro excluído logicamente com sucesso');
+            fetchParceiros();
+        } catch (error) {
+            console.error('Erro ao excluir parceiro logicamente:', error);
+            Alert.alert('Erro', 'Erro ao excluir parceiro logicamente. Por favor, tente novamente.');
+        }
+    };
+
+    const reactivatePartner = async (parceiro_cnpj_cpf: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ReativacaoParceiro/${parceiro_cnpj_cpf}`, {
+                method: 'PUT'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao reativar parceiro');
+            }
+            Alert.alert('Sucesso', 'Reativação realizada.')
+            console.log('Parceiro reativado')
+            fetchParceiros();     
+        } catch (error) {
+            console.error('Erro ao reativar parceiro:', error);
+            Alert.alert('Erro', 'Erro ao reativar parceiro. Por favor, tente novamente.');
+        }
+    };
+
 
     const handleParceiroClick = async (parceiroCPF: string) => {
         try {
@@ -135,12 +202,12 @@ const ListPartner = () => {
                                 />
                                 <Ionicons
                                     style={styles.icon}
-                                    name="trash-bin"
+                                    name={parceiro.parceiro_status ? "trash-bin" : "power"}
                                     size={24}
                                     color="black"
                                     onPress={() => {
                                         Alert.alert(
-                                            'Selecione o tipo de exclusão:',
+                                            'Selecione o tipo de operação:',
                                             'Esta ação pode ser irreversível, escolha com cuidado',
                                             [
                                                 {
@@ -153,14 +220,18 @@ const ListPartner = () => {
                                                 {
                                                     text: 'Exclusão Definitiva',
                                                     onPress: () => {
-                                                        // Implemente a lógica de exclusão definitiva aqui
+                                                        handleDelete(parceiro.parceiro_cnpj_cpf)
                                                     },
                                                 },
 
                                                 {
-                                                    text: 'Exclusão Lógica',
+                                                    text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
                                                     onPress: () => {
-                                                        // Implemente a lógica de exclusão lógica aqui
+                                                        if (parceiro.parceiro_status) {
+                                                            logicalDeletePartner(parceiro.parceiro_cnpj_cpf);
+                                                        } else {
+                                                            reactivatePartner(parceiro.parceiro_cnpj_cpf);
+                                                        }
                                                     },
                                                 },
                                             ]
