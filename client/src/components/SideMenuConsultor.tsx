@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import axios from 'axios'; // Importe o axios para fazer requisições HTTP
+import axios from 'axios'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getIpAddress from '../../services/IPAddress';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -13,23 +13,22 @@ interface SideMenuProps {
     navigation: StackNavigationProp<any, any>;
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({ onClose, navigation }) => {
+const SideMenuConsultor: React.FC<SideMenuProps> = ({ onClose, navigation }) => {
     const sideMenuRef = useRef<View>(null);
-    const [parceiroData, setParceiroData] = useState<any>(null); // Estado para armazenar os dados do parceiro
+    const [consultorData, setConsultorData] = useState<any>(null); 
 
     useEffect(() => {
-        // Função para buscar os dados do parceiro pelo ID assim que o componente for montado
         const fetchParceiroData = async () => {
             try {
-                const parceiro_id = await AsyncStorage.getItem('usuario_id'); // Substitua 'coloque aqui o ID do parceiro' pelo ID real do parceiro
-                const response = await axios.get(`http://${getIpAddress()}:3001/GetParceiro/Parceiros/${parceiro_id}`);
-                setParceiroData(response.data);
+                const consultor_alianca_id = await AsyncStorage.getItem('usuario_id'); 
+                const response = await axios.get(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consultor_alianca_id}`);
+                setConsultorData(response.data);
             } catch (error) {
-                console.error('Erro ao buscar dados do parceiro:', error);
+                console.error('Erro ao buscar dados do consultor:', error);
             }
         };
 
-        fetchParceiroData(); // Chama a função de busca ao montar o componente
+        fetchParceiroData(); 
     }, []);
 
     const handleClose = () => {
@@ -56,33 +55,29 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, navigation }) => {
                 </TouchableOpacity>
                 <View style={styles.userContainer}>
                     <Ionicons name="person-circle-outline" size={64} color="black" />
-                    <Text style={styles.userName}>{parceiroData ? parceiroData.parceiro_nome : 'Carregando...'}</Text>
-                    <Text style={styles.userEmail}>{parceiroData ? parceiroData.parceiro_email : 'Carregando...'}</Text>
+                    <Text style={styles.userName}>{consultorData ? consultorData.consultor_alianca_nome : 'Carregando...'}</Text>
+                    <Text style={styles.userEmail}>{consultorData ? consultorData.consultor_alianca_email : 'Carregando...'}</Text>
                 </View>
                 <View style={styles.menuContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('ListPartner')} style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => navigation.navigate('')} style={styles.menuItem}>
                         <Ionicons name="home-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Home</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={styles.menuItem}>
-                        <Ionicons name="apps-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Dashboard</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Cursos')} style={styles.menuItem}>
-                        <Ionicons name="book-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Cursos</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('ListPartner')} style={styles.menuItem}>
                         <Ionicons name="people-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Parceiros</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('ListAdm')} style={styles.menuItem}>
-                        <Ionicons name="people-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Administradores</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={styles.menuItem}>
+                        <Ionicons name="apps-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Dashboard</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('ListAdm')} style={styles.menuItem}>
-                        <Ionicons name="people-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Administradores</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Trilhas')} style={styles.menuItem}>
+                        <Ionicons name="trail-sign-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Trilhas</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Cursos')} style={styles.menuItem}>
+                        <Ionicons name="book-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Cursos</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.exitButton}>
@@ -144,4 +139,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SideMenu;
+export default SideMenuConsultor;

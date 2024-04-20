@@ -6,6 +6,9 @@ import React, { useState } from "react";
 import { styles } from '../styles/estilos'
 import { TextInputMask } from "react-native-masked-text";
 import getIpAddress from '../../services/IPAddress';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 type FormDataProps = {
@@ -40,6 +43,12 @@ const signUpSchema = yup.object().shape({
     parceiro_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
 
+type RootStackParamList = {
+    ListPartner: undefined
+};
+
+type ListPartnerScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ListPartner'>;
+
 
 export function SignUp() {
 
@@ -59,6 +68,7 @@ export function SignUp() {
     const [estado, setEstado] = useState('');
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const navigation = useNavigation<ListPartnerScreenNavigationProp>();
 
     async function handleSignDados(data: FormDataProps) {
 
@@ -78,7 +88,7 @@ export function SignUp() {
         }
 
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/PostUser/CadastroParceiros`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/PostParceiro/CadastroParceiros`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,6 +100,7 @@ export function SignUp() {
                 alert('Cadastro realizado!')
                 setErrorMessage('');
                 resetFields()
+                navigation.navigate('ListPartner')
             } else {
                 const errorMessage = await response.text();
                 console.error('Erro ao cadastrar parceiro:', errorMessage);

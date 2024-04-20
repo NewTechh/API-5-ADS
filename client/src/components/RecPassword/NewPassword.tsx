@@ -19,7 +19,7 @@ type FormDataProps = {
 
 type RootStackParamList = {
     Login: undefined
-  };
+};
 
 type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 

@@ -80,7 +80,7 @@ const LoginScreen = () => {
         } else if (userType === 'Administrador') {
           navigation.navigate('ListPartner')
         } else if (userType === 'Consultor de Aliança') {
-          navigation.navigate('Dashboard')
+          navigation.navigate('ListPartner')
         }
 
       } else if (response.status === 404) {
@@ -130,7 +130,6 @@ const LoginScreen = () => {
 
         <Text style={[styles.text]} onPress={handleRecSenha}>Esqueceu a senha?</Text>
 
-        <Text style={styles.text} onPress={handleCadastroPress}>Não tem uma conta? Crie uma!</Text>
 
       </View>
     </ScrollView>

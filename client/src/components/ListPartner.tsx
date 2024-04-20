@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -7,11 +7,12 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import getIpAddress from '../../services/IPAddress';
 import Footer from './Footer';
-import SideMenu from './SideMenu';
+import SideMenuConsultor from './SideMenuConsultor';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
     Cadastro: undefined;
+    EditarParceiro: { parceiro: Parceiro };
 }
 
 type Parceiro = {
@@ -31,6 +32,10 @@ const ListPartner = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
 
+    const handleEditClick = (parceiro: Parceiro) => {
+        navigation.navigate('EditarParceiro', { parceiro });
+    };
+
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
         setModalVisible(false);
@@ -43,7 +48,11 @@ const ListPartner = () => {
 
     useEffect(() => {
         fetchParceiros();
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchParceiros();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     const fetchParceiros = async () => {
         try {
@@ -60,9 +69,35 @@ const ListPartner = () => {
         }
     };
 
-    function Cadastro(arg0: boolean): void {
-        throw new Error('Function not implemented.');
-    }
+    const handleParceiroClick = async (parceiroCPF: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/ConsultaPorCPF/${parceiroCPF}`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao buscar parceiro');
+            }
+            const parceiroData = await response.json();
+            const formattedData = formatParceiroData(parceiroData);
+            Alert.alert(`Dados Adicionais do Parceiro:\n\n`, formattedData);
+        } catch (error) {
+            console.error('Erro ao buscar parceiro:', error);
+            Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
+        }
+    };
+    
+    const formatParceiroData = (parceiroData: any) => {
+        return (
+            `Email: ${parceiroData.parceiro_email}\n\n` +
+            `Telefone: ${parceiroData.parceiro_telefone}\n\n` +
+            `Logradouro: ${parceiroData.parceiro_logradouro}\n\n` +
+            `Número do Logradouro: ${parceiroData.parceiro_logradouro_numero}\n\n` +
+            `Bairro: ${parceiroData.parceiro_bairro}\n\n` +
+            `CEP: ${parceiroData.parceiro_cep}\n\n` +
+            `Cidade: ${parceiroData.parceiro_cidade}\n\n` +
+            `Estado: ${parceiroData.parceiro_estado}`
+        );
+    };
 
     return (
         <>
@@ -87,21 +122,60 @@ const ListPartner = () => {
                     </View>
                     <View>
                         {parceiros && parceiros.map && parceiros.map((parceiro, index) => (
-                            <View style={styles.row} key={index}>
+                            <Pressable style={styles.row} key={index} onPress={() => handleParceiroClick(parceiro.parceiro_cnpj_cpf)}>
                                 <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
                                 <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
-                                <Text style={styles.data}>
-                                    <Ionicons style={styles.icon} name="create" size={24} color="black" />
-                                    <Ionicons name="trash-bin" size={24} color="black" />
-                                </Text>
-                            </View>
+                                <View style={styles.actionButtons}>
+                                <Ionicons
+                                    style={styles.icon}
+                                    name="create"
+                                    size={24}
+                                    color="black"
+                                    onPress={() => {handleEditClick(parceiro)}}
+                                />
+                                <Ionicons
+                                    style={styles.icon}
+                                    name="trash-bin"
+                                    size={24}
+                                    color="black"
+                                    onPress={() => {
+                                        Alert.alert(
+                                            'Selecione o tipo de exclusão:',
+                                            'Esta ação pode ser irreversível, escolha com cuidado',
+                                            [
+                                                {
+                                                    text: 'Cancelar',
+                                                    onPress: () => {
+                                                        return
+                                                    },
+                                                },
+
+                                                {
+                                                    text: 'Exclusão Definitiva',
+                                                    onPress: () => {
+                                                        // Implemente a lógica de exclusão definitiva aqui
+                                                    },
+                                                },
+
+                                                {
+                                                    text: 'Exclusão Lógica',
+                                                    onPress: () => {
+                                                        // Implemente a lógica de exclusão lógica aqui
+                                                    },
+                                                },
+                                            ]
+                                        );
+                                    }}
+                                />
+                                </View>
+                            </Pressable>
                         ))}
                     </View>
                     <View style={styles.separator} />
                 </View>
             </View>
             <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
-            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+            {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
         </>
     );
 };
@@ -135,6 +209,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 5,
     },
     separator: {
         height: 1,
@@ -154,49 +231,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         textAlign: 'center',
     },
-    active: {
-        color: 'green',
-    },
-    inactive: {
-        color: 'black',
+    actionButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     icon: {
         marginRight: 10,
     },
     iconPlus: {
-        marginLeft: 330,
+        marginLeft: 300, // Ajuste a margem esquerda conforme necessário
         marginBottom: 7,
-    },
-
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalView: {
-        backgroundColor: '#ffffff',
-        borderRadius: 10,
-        padding: 15,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 4,
-        shadowRadius: 4,
-        elevation: 5,
-        borderWidth: 1, // Adicionando borda
-        borderColor: 'black', // Cor da borda
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
-        fontSize: 18,
-    },
-    modalButton: {
-        width: 150,
-        padding: 10,
     },
 });
 

@@ -13,6 +13,7 @@ import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
 import ListAdm from '../src/components/ListAdministrador';
 import Token from '../src/components/RecPassword/Token'
 import UserScreen from '../src/components/UserScreen';
+import EditarParceiro from '../src/components/EditarParceiro';
 
 
 const Stack = createStackNavigator();
@@ -33,6 +34,7 @@ const Rotas = () => {
         <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpAdm" component={SignUpAdm} options={{ headerShown: false }} />
         <Stack.Screen name="Token" component={Token} options={{ headerShown: false }} />
+        <Stack.Screen name="EditarParceiro" component={EditarParceiro} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

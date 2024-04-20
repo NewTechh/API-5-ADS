@@ -18,6 +18,8 @@ import EdicaoDeConsultores from './Consultor/PutConsultor';
 import { EnviarToken, ValidarToken} from './Authentication/RecPassword';
 import EmailPorID from './Authentication/RecIDbyEmail';
 import UpdatePassword from './Authentication/ChangePassword';
+import ListarParceiroCPF from './User/ConsultaPorCPF';
+import DeleteUser from './User/DeleteUser';
 
 
 
@@ -51,9 +53,11 @@ app.use('/Auth', UpdatePassword());
 
 // CRUD - USER
 
-app.use('/PostUser', CadastroDeParceiros());
-app.use('/GetUser', ListarParceiroID());
-app.use('/PutUser', EdicaoDeParceiros())
+app.use('/PostParceiro', CadastroDeParceiros());
+app.use('/GetParceiro', ListarParceiroID());
+app.use('/GetParceiro', ListarParceiroCPF());
+app.use('/PutParceiro', EdicaoDeParceiros())
+app.use('/DeleteParceiro', DeleteUser())
 
 
 //CRUD - Consultor
