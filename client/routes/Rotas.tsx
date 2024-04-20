@@ -11,7 +11,7 @@ import { DetailsCurse } from '../src/components/DetailsCurse';
 import ListPartner from '../src/components/ListPartner';
 import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
 import ListAdm from '../src/components/ListAdministrador';
-import Token from '../src/components/Token'
+import Token from '../src/components/RecPassword/Token'
 import UserScreen from '../src/components/UserScreen';
 
 

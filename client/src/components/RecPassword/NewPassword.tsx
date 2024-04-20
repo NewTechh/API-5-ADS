@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView, Alert } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,12 +10,18 @@ import * as yup from 'yup';
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from './styles'
-
+import getIpAddress from "../../../services/IPAddress";
 
 type FormDataProps = {
     senha: string;
     senhaRep: string;
 }
+
+type RootStackParamList = {
+    Login: undefined
+  };
+
+type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 const Schema = yup.object().shape({
     senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
@@ -22,10 +31,10 @@ const Schema = yup.object().shape({
         .oneOf([yup.ref('senha')], 'As senhas devem ser iguais'),
 });
 
-
 export function NewPassword() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordRep, setShowPasswordRep] = useState(false);
+    const navigation = useNavigation<CursosScreenNavigationProp>();
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -44,17 +53,38 @@ export function NewPassword() {
     async function handleNewPassword(data: FormDataProps) {
         try {
             await Schema.validate(data);
-            console.log('Formulário válido:', data);
+            setErrorMessage('');
+
+            const userId = await AsyncStorage.getItem('userId');
+            const userType = await AsyncStorage.getItem('userType');
+
+            const requestData = {
+                userId: userId,
+                userType: userType,
+                user_senha: data.senha
+            };
+
+            const response = await fetch(`http://${getIpAddress()}:3001/Auth/updatePassword`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar senha');
+            }
+
+            const responseData = await response.json();
+            Alert.alert('Senha alterada com sucesso')
+            navigation.navigate('Login');
+
             reset();
             setErrorMessage('');
         } catch (error) {
-            if (error instanceof yup.ValidationError) {
-                const errorMessage = error.errors[0];
-                setErrorMessage(errorMessage);
-            } else {
-                console.error(error);
-                setErrorMessage('Erro ao validar formulário');
-            }
+            console.error('Erro ao atualizar senha:', error);
+            setErrorMessage('Erro ao atualizar senha');
         }
     }
 
@@ -65,7 +95,7 @@ export function NewPassword() {
             <View style={styles.passwordInputContainer}>
                 <Controller
                     control={control}
-                    name='senha' //Aqui já cria a variável, caso queira é só trocar
+                    name='senha'
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             style={styles.inputPass}
@@ -90,7 +120,7 @@ export function NewPassword() {
             <View style={styles.passwordInputContainer}>
                 <Controller
                     control={control}
-                    name='senhaRep' //Aqui já cria a variável, caso queira é só trocar
+                    name='senhaRep'
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             style={styles.inputPass}

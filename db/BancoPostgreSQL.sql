@@ -27,6 +27,15 @@ CREATE TABLE Administradores(
 	administrador_setor CHAR(1) CHECK (administrador_setor IN ('A', 'B', 'C', 'D')) NOT NULL
 );
 
+CREATE TABLE ConsultorAlianca(
+	consultor_alianca_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
+	consultor_alianca_nome DESC100 NOT NULL,
+	consultor_alianca_cpf DESC100 NOT NULL,
+	consultor_alianca_email DESC100 NOT NULL,
+	consultor_alianca_senha DESC100 NOT NULL,
+	consultor_alianca_status BOOLEAN NOT NULL DEFAULT TRUE
+);
+
 -- tabelas sugeridas para sprint 1 (depois sera adicionado mais niveis de qualificao)
 
 CREATE TABLE Trilhas(

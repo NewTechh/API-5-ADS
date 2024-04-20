@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
-
+import { View, Text, TextInput, Pressable, ScrollView, Alert} from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
-import { styles } from './styles'
-
+import { styles } from './styles';
+import getIpAddress from "../../../services/IPAddress";
 
 type FormDataProps = {
     email: string;
@@ -27,10 +25,8 @@ const Schema = yup.object().shape({
     email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
 });
 
-
 export function RecPassword() {
-
-    const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
+    const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(Schema)
     });
 
@@ -41,9 +37,29 @@ export function RecPassword() {
         navigation.navigate('Login');
     };
 
-    const handleEnviarCodigo = (data: FormDataProps) => {
-        console.log(data)
-        navigation.navigate('Token');
+    const handleEnviarCodigo = async (data: FormDataProps) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/Auth/token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                if (response.status === 404) { 
+                    Alert.alert('Email não encontrado na base de dados')
+                } else {
+                    throw new Error('Erro ao enviar código');
+                }
+            } else {
+                await AsyncStorage.setItem('email', data.email);
+                navigation.navigate('Token');
+            }
+        } catch (error: any) {
+            setErrorMessage(error.message);
+        }
     };
 
     return (
@@ -52,14 +68,13 @@ export function RecPassword() {
 
             <Controller
                 control={control}
-                name='email' //Aqui já cria a variável, caso queira é só trocar
+                name='email'
                 render={({ field: { onChange, value } }) => (
                     <TextInput
                         style={styles.input}
                         onChangeText={onChange}
                         value={value}
                         placeholder="Insira um e-mail para recuperação"
-
                     />
                 )}
             />
