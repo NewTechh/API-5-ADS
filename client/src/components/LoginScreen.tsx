@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackground, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +7,7 @@ import * as Network from "expo-network"
 import axios from "axios"
 import Constants from 'expo-constants';
 import getIpAddress from '../../services/IPAddress';
+import { err } from 'react-native-svg';
 
 
 
@@ -20,6 +21,7 @@ type RootStackParamList = {
   Cadastro: undefined;
   RecSenha: undefined;
   ListPartner: undefined;
+  Dashboard: undefined;
 };
 
 type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
@@ -77,7 +79,13 @@ const LoginScreen = () => {
           navigation.navigate('Cursos')
         } else if (userType === 'Administrador') {
           navigation.navigate('ListPartner')
+        } else if (userType === 'Consultor de Aliança') {
+          navigation.navigate('Dashboard')
         }
+
+      } else if (response.status === 404) {
+        const errorData = await response.json();
+        Alert.alert('Erro', errorData.message);
 
       } else {
         const errorMessage = await response.text();
