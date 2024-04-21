@@ -8,15 +8,15 @@ import { RecPassword } from '../src/components/RecPassword/RecPassword';
 import { NewPassword } from '../src/components/RecPassword/NewPassword';
 import { Cursos } from '../src/components/Cursos';
 import { DetailsCurse } from '../src/components/DetailsCurse';
-import ListPartner from '../src/components/ListPartner';
 import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
-import ListAdm from '../src/components/ListAdministrador';
 import Token from '../src/components/RecPassword/Token'
 import UserScreen from '../src/components/Parceiros/UserScreen';
 import UserScreenConsultor from '../src/components/Consultor/UserScreenConsultor';
 import UserScreenAdmin from '../src/components/Admin/UserScreenAdmin';
 import EditarParceiro from '../src/components/EditarParceiro';
+import ListPartner from '../src/components/ListPartner';
 import ListConsultores from '../src/components/ListConsultores';
+import ListAdministrador from '../src/components/ListAdministrador';
 
 
 const Stack = createStackNavigator();
@@ -35,7 +35,7 @@ const Rotas = () => {
         <Stack.Screen name="Dashboard" component={DashboardPartner} options={{ headerShown: false }} />
         <Stack.Screen name="Cursos" component={Cursos} options={{ headerShown: false }} />
         <Stack.Screen name="DetailsCurse" component={DetailsCurse} options={{ headerShown: false }} />
-        <Stack.Screen name="ListAdm" component={ListAdm} options={{ headerShown: false }} />
+        <Stack.Screen name="ListAdministrador" component={ListAdministrador} options={{ headerShown: false }} />
         <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }} />
         <Stack.Screen name="ListConsultores" component={ListConsultores} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpAdm" component={SignUpAdm} options={{ headerShown: false }} />

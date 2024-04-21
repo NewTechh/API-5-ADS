@@ -27,7 +27,6 @@ const ListPartner = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
-    const [selectedPartnerId, setSelectedPartnerId] = useState('');
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
     const toggleSideMenu = () => {

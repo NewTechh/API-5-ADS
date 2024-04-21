@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from '../../services/IPAddress';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
-import SideMenu from './Parceiros/SideMenu';
-import Footer from './Parceiros/Footer';
+import FooterAdmin from './Admin/FooterAdmin';
+import SideMenuAdmin from './Admin/SideMenuAdmin';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -14,11 +14,12 @@ type RootStackParamList = {
 
 type Administrador = {
     administrador_nome: string;
+    administrador_matricula: string;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
-const ListAdm = () => {
+const ListAdministrador = () => {
     const [administradores, setAdministradores] = useState<Administrador[]>([]);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
@@ -32,8 +33,12 @@ const ListAdm = () => {
     };
 
     useEffect(() => {
-        fetchAdmin()
-    })
+        fetchAdmin();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchAdmin();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     const fetchAdmin = async () => {
         try {
@@ -73,6 +78,7 @@ const ListAdm = () => {
                     {administradores.map((administrador, index) => (
                         <View style={styles.row} key={index}>
                             <Text style={styles.data}>{administrador.administrador_nome}</Text>
+                            <Text style={styles.data}>{administrador.administrador_matricula}</Text>
                             <Text style={styles.data}>
                                 <Ionicons style={styles.icon} name="create" size={24} color="black" />
                                 <Ionicons name="trash-bin" size={24} color="black" />
@@ -83,8 +89,8 @@ const ListAdm = () => {
                 </View>
             </ScrollView>
 
-            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
-            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+            <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenuAdmin onClose={toggleSideMenu} navigation={navigation} />}
         </>
     );
 };
@@ -184,4 +190,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListAdm;
+export default ListAdministrador;
