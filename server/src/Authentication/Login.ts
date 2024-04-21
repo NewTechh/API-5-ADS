@@ -10,11 +10,11 @@ function Login(): express.Router {
 
       try {
             // Verificar se o usuário existe na tabela de parceiros
-            const parceiroResult = await DB.query('SELECT * FROM parceiros WHERE parceiro_email = $1', [parceiro_email]);
+            const parceiroResult = await DB.query('SELECT * FROM parceiros WHERE parceiro_email = $1 AND parceiro_status = TRUE', [parceiro_email]);
             const parceiro = parceiroResult.rows[0];
 
             // Verificar se o usuário existe na tabela de administradores
-            const adminResult = await DB.query('SELECT * FROM administradores WHERE administrador_email = $1', [parceiro_email]);
+            const adminResult = await DB.query('SELECT * FROM administradores WHERE administrador_email = $1 AND administrador_status = TRUE', [parceiro_email]);
             const admin = adminResult.rows[0];
 
             // Verificar se o usuário existe na tabela de administradores
