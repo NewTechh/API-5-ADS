@@ -68,4 +68,4 @@ function ListarAdminID(): express.Router {
 
 
 
-export default ListarTodosUsuarios; ListarAdminID; ListarTodosAdministradores;
+export {ListarTodosUsuarios, ListarAdminID, ListarTodosAdministradores}

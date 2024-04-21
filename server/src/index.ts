@@ -5,7 +5,7 @@ import CadastroDeParceiros from './User/PostUser';
 import ListarParceiroID from './User/GetUser';
 import EdicaoDeParceiros from './User/PutUser';
 import CadastroDeAdmin from './Admin/PostAdmin';
-import ListarTodosUsuarios from './Admin/GetAdmin';
+import { ListarTodosUsuarios, ListarAdminID } from './Admin/GetAdmin';
 import Login from './Authentication/Login';
 import GetTrack from './Expertise/GetTrack';
 import ListarExpertiseByTrackID from './Expertise/ExpByTrack';
@@ -85,6 +85,7 @@ app.use('/PutConsultor', ReativacaoConsultor())
 
 app.use('/PostAdmin', CadastroDeAdmin())
 app.use('/GetAdmin', ListarTodosUsuarios())
+app.use('/GetAdmin', ListarAdminID())
 
 
 // Trilhas de especialização
