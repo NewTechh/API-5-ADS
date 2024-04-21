@@ -11,13 +11,13 @@ import SideMenuAdmin from './Admin/SideMenuAdmin';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
-    Cadastro: undefined;
-    EditarParceiro: { parceiro: Parceiro };
+    CadastroConsultor: undefined;
+    // EditarParceiro: { parceiro: Parceiro };
 }
 
-type Parceiro = {
-    parceiro_nome: string;
-    parceiro_cnpj_cpf: string;
+type Consultor = {
+    consultor_alianca_nome: string;
+    consultor_alianca_cpf: string;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
@@ -25,19 +25,19 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>
 const ListConsultores = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
-    const [parceiros, setParceiros] = useState<Parceiro[]>([]);
+    const [consultorData, setConsultorData] = useState<Consultor[]>([]);
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
 
-    const handleEditClick = (parceiro: Parceiro) => {
-        navigation.navigate('EditarParceiro', { parceiro });
+    const handleEditClick = () => {
+        // navigation.navigate('EditarParceiro', { parceiro });
     };
 
     const handleSignUp = () => {
-        navigation.navigate('Cadastro');
+        navigation.navigate('CadastroConsultor');
         setModalVisible(false);
     };
 
@@ -56,54 +56,54 @@ const ListConsultores = () => {
 
     const fetchConsultores = async () => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Parceiros`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores`, {
                 method: 'GET'
             });
             if (!response.ok) {
-                throw new Error('Erro ao carregar parceiros');
+                throw new Error('Erro ao carregar consultores.');
             }
             const data = await response.json();
-            setParceiros(data);
+            setConsultorData(data);
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleParceiroClick = async (parceiroCPF: string) => {
-        try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/ConsultaPorCPF/${parceiroCPF}`, {
-                method: 'GET'
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao buscar parceiro');
-            }
-            const parceiroData = await response.json();
-            const formattedData = formatParceiroData(parceiroData);
-            Alert.alert(`Dados Adicionais do Parceiro:\n\n`, formattedData);
-        } catch (error) {
-            console.error('Erro ao buscar parceiro:', error);
-            Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
-        }
-    };
+    // const handleParceiroClick = async (parceiroCPF: string) => {
+    //     try {
+    //         const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/ConsultaPorCPF/${parceiroCPF}`, {
+    //             method: 'GET'
+    //         });
+    //         if (!response.ok) {
+    //             throw new Error('Erro ao buscar parceiro');
+    //         }
+    //         const parceiroData = await response.json();
+    //         const formattedData = formatParceiroData(parceiroData);
+    //         Alert.alert(`Dados Adicionais do Parceiro:\n\n`, formattedData);
+    //     } catch (error) {
+    //         console.error('Erro ao buscar parceiro:', error);
+    //         Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
+    //     }
+    // };
     
-    const formatParceiroData = (parceiroData: any) => {
-        return (
-            `Email: ${parceiroData.parceiro_email}\n\n` +
-            `Telefone: ${parceiroData.parceiro_telefone}\n\n` +
-            `Logradouro: ${parceiroData.parceiro_logradouro}\n\n` +
-            `Número do Logradouro: ${parceiroData.parceiro_logradouro_numero}\n\n` +
-            `Bairro: ${parceiroData.parceiro_bairro}\n\n` +
-            `CEP: ${parceiroData.parceiro_cep}\n\n` +
-            `Cidade: ${parceiroData.parceiro_cidade}\n\n` +
-            `Estado: ${parceiroData.parceiro_estado}`
-        );
-    };
+    // const formatParceiroData = (parceiroData: any) => {
+    //     return (
+    //         `Email: ${parceiroData.parceiro_email}\n\n` +
+    //         `Telefone: ${parceiroData.parceiro_telefone}\n\n` +
+    //         `Logradouro: ${parceiroData.parceiro_logradouro}\n\n` +
+    //         `Número do Logradouro: ${parceiroData.parceiro_logradouro_numero}\n\n` +
+    //         `Bairro: ${parceiroData.parceiro_bairro}\n\n` +
+    //         `CEP: ${parceiroData.parceiro_cep}\n\n` +
+    //         `Cidade: ${parceiroData.parceiro_cidade}\n\n` +
+    //         `Estado: ${parceiroData.parceiro_estado}`
+    //     );
+    // };
 
     return (
         <>
             <View style={styles.container}>
                 <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-                <Text style={styles.title}>Parceiros Cadastrados</Text>
+                <Text style={styles.title}>Consultores Cadastrados</Text>
 
                 <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
                     <AntDesign
@@ -117,55 +117,26 @@ const ListConsultores = () => {
                 <View style={styles.tableContainer}>
                     <View style={styles.headerRow}>
                         <Text style={styles.header}>Nome</Text>
-                        <Text style={styles.header}>CNPJ</Text>
+                        <Text style={styles.header}>CPF</Text>
                         <Text style={styles.header}>Ações</Text>
                     </View>
                     <View>
-                        {parceiros && parceiros.map && parceiros.map((parceiro, index) => (
-                            <Pressable style={styles.row} key={index} onPress={() => handleParceiroClick(parceiro.parceiro_cnpj_cpf)}>
-                                <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
-                                <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
+                        {consultorData && consultorData.map && consultorData.map((consultor, index) => (
+                            <Pressable style={styles.row} key={index}>
+                                <Text style={styles.data}>{consultor.consultor_alianca_nome}</Text>
+                                <Text style={styles.data}>{consultor.consultor_alianca_cpf}</Text>
                                 <View style={styles.actionButtons}>
                                 <Ionicons
                                     style={styles.icon}
                                     name="create"
                                     size={24}
                                     color="black"
-                                    onPress={() => {handleEditClick(parceiro)}}
                                 />
                                 <Ionicons
                                     style={styles.icon}
                                     name="trash-bin"
                                     size={24}
                                     color="black"
-                                    onPress={() => {
-                                        Alert.alert(
-                                            'Selecione o tipo de exclusão:',
-                                            'Esta ação pode ser irreversível, escolha com cuidado',
-                                            [
-                                                {
-                                                    text: 'Cancelar',
-                                                    onPress: () => {
-                                                        return
-                                                    },
-                                                },
-
-                                                {
-                                                    text: 'Exclusão Definitiva',
-                                                    onPress: () => {
-                                                        // Implemente a lógica de exclusão definitiva aqui
-                                                    },
-                                                },
-
-                                                {
-                                                    text: 'Exclusão Lógica',
-                                                    onPress: () => {
-                                                        // Implemente a lógica de exclusão lógica aqui
-                                                    },
-                                                },
-                                            ]
-                                        );
-                                    }}
                                 />
                                 </View>
                             </Pressable>

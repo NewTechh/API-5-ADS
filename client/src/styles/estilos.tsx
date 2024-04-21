@@ -25,15 +25,26 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: 'bold',
     },
-    button: {
-        width: '100%',
+    button1: {
+        width: '40%',
         height: 40,
         backgroundColor: '#C74634',
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
-        marginBottom: 30
+        marginBottom: 30,
+        marginRight: 25,
+    },
+    button2: {
+        width: '40%',
+        height: 40,
+        backgroundColor: '#C74634',
+        borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 30,
     },
     buttonText: {
         color: '#FFFFFF',
@@ -48,7 +59,7 @@ const styles = StyleSheet.create({
 
     //select
     customSelect: {
-        width: '100%',
+        width: '80%',
         height: 40,
         borderWidth: 1,
         borderColor: '#FFFFFF',
@@ -79,7 +90,13 @@ const styles = StyleSheet.create({
     },
     optionText: {
         fontWeight: 'bold',
-    }
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
 })
 
 export { styles }

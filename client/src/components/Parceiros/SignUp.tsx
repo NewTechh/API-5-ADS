@@ -3,9 +3,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import React, { useState } from "react";
-import { styles } from '../styles/estilos'
+import { styles } from '../../styles/estilos'
 import { TextInputMask } from "react-native-masked-text";
-import getIpAddress from '../../services/IPAddress';
+import getIpAddress from '../../../services/IPAddress';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
@@ -358,11 +358,16 @@ export function SignUp() {
                 )}
             />
             {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ListPartner')}>
+                    <Text style={styles.buttonText}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button2} onPress={handleSubmit(handleSignDados)}>
+                    {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
+                    <Text style={styles.buttonText}>Cadastrar</Text>
+                </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit(handleSignDados)}>
-                {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
-                <Text style={styles.buttonText}>Cadastrar</Text>
-            </TouchableOpacity>
         </ScrollView>
     )
 }
