@@ -12,8 +12,11 @@ import ListPartner from '../src/components/ListPartner';
 import { SignUpAdm } from '../src/components/SignUpAdm/SignUpAdm';
 import ListAdm from '../src/components/ListAdministrador';
 import Token from '../src/components/RecPassword/Token'
-import UserScreen from '../src/components/UserScreen';
+import UserScreen from '../src/components/Parceiros/UserScreen';
+import UserScreenConsultor from '../src/components/Consultor/UserScreenConsultor';
+import UserScreenAdmin from '../src/components/Admin/UserScreenAdmin';
 import EditarParceiro from '../src/components/EditarParceiro';
+import ListConsultores from '../src/components/ListConsultores';
 
 
 const Stack = createStackNavigator();
@@ -24,6 +27,8 @@ const Rotas = () => {
       <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserScreen" component={UserScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="UserScreenConsultor" component={UserScreenConsultor} options={{ headerShown: false }} />
+        <Stack.Screen name="UserScreenAdmin" component={UserScreenAdmin} options={{ headerShown: false }} />
         <Stack.Screen name="Cadastro" component={SignUp} options={{ headerShown: false }} />
         <Stack.Screen name="RecSenha" component={RecPassword} options={{ headerShown: false }} />
         <Stack.Screen name="NovaSenha" component={NewPassword} options={{ headerShown: false }} />
@@ -32,6 +37,7 @@ const Rotas = () => {
         <Stack.Screen name="DetailsCurse" component={DetailsCurse} options={{ headerShown: false }} />
         <Stack.Screen name="ListAdm" component={ListAdm} options={{ headerShown: false }} />
         <Stack.Screen name="ListPartner" component={ListPartner} options={{ headerShown: false }} />
+        <Stack.Screen name="ListConsultores" component={ListConsultores} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpAdm" component={SignUpAdm} options={{ headerShown: false }} />
         <Stack.Screen name="Token" component={Token} options={{ headerShown: false }} />
         <Stack.Screen name="EditarParceiro" component={EditarParceiro} options={{ headerShown: false }} />

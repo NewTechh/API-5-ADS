@@ -6,8 +6,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { styles } from '../styles/curse';
 import getIpAddress from "../../services/IPAddress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Footer from "./Footer";
-import SideMenu from "./SideMenu";
+import Footer from "./Parceiros/Footer";
+import SideMenu from "./Parceiros/SideMenu";
 
 
 type RootStackParamList = {

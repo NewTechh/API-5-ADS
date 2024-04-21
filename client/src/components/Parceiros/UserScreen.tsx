@@ -6,9 +6,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import axios from 'axios'; // Importe o axios para fazer requisições HTTP
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getIpAddress from '../../services/IPAddress';
+import getIpAddress from '../../../services/IPAddress';
 
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import SideMenu from './SideMenu';
 import Footer from './Footer';
 
@@ -23,28 +23,24 @@ const UserScreen = () => {
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
     const [parceiroData, setParceiroData] = useState<any>(null);
 
-    const handleSignUpAdm = () => {
-        navigation.navigate('SignUpAdm');
-    };
-
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
 
-    useEffect(() => {
-        // Função para buscar os dados do parceiro pelo ID assim que o componente for montado
-        const fetchParceiroData = async () => {
-            try {
-                const parceiro_id = await AsyncStorage.getItem('usuario_id'); // Substitua 'coloque aqui o ID do parceiro' pelo ID real do parceiro
-                const response = await axios.get(`http://${getIpAddress()}:3001/GetUser/Parceiros/${parceiro_id}`);
-                setParceiroData(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar dados do parceiro:', error);
-            }
-        };
+    const fetchParceiroData = async () => {
+        try {
+            const parceiro_id = await AsyncStorage.getItem('usuario_id'); // Substitua 'coloque aqui o ID do parceiro' pelo ID real do parceiro
+            const response = await axios.get(`http://${getIpAddress()}:3001/GetParceiro/Parceiros/${parceiro_id}`);
+            setParceiroData(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar dados do parceiro:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchParceiroData();
     }, []);
+
 
     return (
         <>
@@ -59,43 +55,50 @@ const UserScreen = () => {
                     {parceiroData ? (
                         <View style={styles.card}>
                             <View style={styles.userInfo}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.userInfoTitle}>Informações do Usuário:</Text>
                                     <Pressable onPress={() => { }}>
                                         <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
                                     </Pressable>
-                                </div>
-                                <Text style={styles.cardText}>Nome: {parceiroData.parceiro_nome}</Text>
-                                <Text style={styles.cardText}>E-mail: {parceiroData.parceiro_email}</Text>
-                                <Text style={styles.cardText}>CPF/CNPJ: {parceiroData.parceiro_cnpj_cpf}</Text>
-                                <Text style={styles.cardText}>Telefone: {parceiroData.parceiro_telefone}</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.cardText}>Nome: {parceiroData.parceiro_nome}</Text>
+                                    <Text style={styles.cardText}>E-mail: {parceiroData.parceiro_email}</Text>
+                                    <Text style={styles.cardText}>CPF/CNPJ: {parceiroData.parceiro_cnpj_cpf}</Text>
+                                    <Text style={styles.cardText}>Telefone: {parceiroData.parceiro_telefone}</Text>
+                                </View>
                             </View>
                             <View style={styles.passwordInfo}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.passwordInfoTitle}>Senha:</Text>
                                     <Pressable onPress={() => { }}>
                                         <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
                                     </Pressable>
-                                </div>
-                                <Text style={styles.cardText}>********</Text> {/* Senha ocultada */}
+                                </View>
+                                <Text style={styles.cardText}>********</Text>
                             </View>
                             <View style={styles.addressInfo}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.userInfoTitle}>Endereço:</Text>
                                     <Pressable onPress={() => { }}>
                                         <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
                                     </Pressable>
-                                </div>
-                                <Text style={styles.cardText}>Logradouro: {parceiroData.parceiro_logradouro}</Text>
-                                <Text style={styles.cardText}>Logradouro número: {parceiroData.parceiro_logradouro_numero}</Text>
-                                <Text style={styles.cardText}>Bairro: {parceiroData.parceiro_bairro}</Text>
-                                <Text style={styles.cardText}>CEP: {parceiroData.parceiro_cep}</Text>
-                                <Text style={styles.cardText}>Cidade: {parceiroData.parceiro_cidade}</Text>
-                                <Text style={styles.cardText}>Estado: {parceiroData.parceiro_estado}</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.cardText}>Logradouro: {parceiroData.parceiro_logradouro}</Text>
+                                    <Text style={styles.cardText}>Logradouro número: {parceiroData.parceiro_logradouro_numero}</Text>
+                                    <Text style={styles.cardText}>Bairro: {parceiroData.parceiro_bairro}</Text>
+                                    <Text style={styles.cardText}>CEP: {parceiroData.parceiro_cep}</Text>
+                                    <Text style={styles.cardText}>Cidade: {parceiroData.parceiro_cidade}</Text>
+                                    <Text style={styles.cardText}>Estado: {parceiroData.parceiro_estado}</Text>
+                                </View>
+
                             </View>
                         </View>
                     ) : (
-                        <Text style={styles.loadingText}>Carregando...</Text>
+                        <View>
+                            <Text style={styles.loadingText}>Carregando...</Text>
+                        </View>
                     )}
                 </View>
             </View>
@@ -113,7 +116,8 @@ const styles = StyleSheet.create({
     },
     userContainer: {
         alignItems: 'center',
-        marginBottom: 25
+        marginBottom: 25,
+        marginTop: 30,
     },
     userName: {
         fontSize: 16,

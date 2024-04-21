@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from '../../services/IPAddress';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
-import SideMenu from './SideMenu';
-import Footer from './Footer';
+import SideMenu from './Parceiros/SideMenu';
+import Footer from './Parceiros/Footer';
 
 type RootStackParamList = {
     SignUpAdm: undefined;

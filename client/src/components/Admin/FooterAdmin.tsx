@@ -8,16 +8,16 @@ interface FooterProps {
     navigation: StackNavigationProp<any, any>;
 }
 
-const Footer: React.FC<FooterProps> = ({ onPressMenu, navigation }) => {
+const FooterAdmin: React.FC<FooterProps> = ({ onPressMenu, navigation }) => {
     return (
         <View style={styles.footer}>
             <TouchableOpacity onPress={onPressMenu}>
                 <Ionicons name="menu" size={32} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('ListPartner')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ListConsulters')}>
                 <Ionicons name="home" size={32} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('UserScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserScreenAdmin')}>
                 <Ionicons name="person" size={32} color="black" />
             </TouchableOpacity>
             
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Footer;
+export default FooterAdmin;

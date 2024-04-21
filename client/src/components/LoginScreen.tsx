@@ -22,6 +22,7 @@ type RootStackParamList = {
   RecSenha: undefined;
   ListPartner: undefined;
   Dashboard: undefined;
+  ListConsultores: undefined;
 };
 
 type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
@@ -78,7 +79,7 @@ const LoginScreen = () => {
         if (userType === 'Parceiro') {
           navigation.navigate('Cursos')
         } else if (userType === 'Administrador') {
-          navigation.navigate('ListPartner')
+          navigation.navigate('ListConsultores')
         } else if (userType === 'Consultor de Aliança') {
           navigation.navigate('ListPartner')
         }

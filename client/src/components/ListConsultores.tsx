@@ -6,8 +6,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import getIpAddress from '../../services/IPAddress';
-import SideMenuConsultor from './Consultor/SideMenuConsultor';
-import FooterConsultor from './Consultor/FooterConsultor';
+import FooterAdmin from './Admin/FooterAdmin';
+import SideMenuAdmin from './Admin/SideMenuAdmin';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -18,16 +18,14 @@ type RootStackParamList = {
 type Parceiro = {
     parceiro_nome: string;
     parceiro_cnpj_cpf: string;
-    parceiro_status: boolean; // Adicionando o campo de status do parceiro
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
-const ListPartner = () => {
+const ListConsultores = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
-    const [selectedPartnerId, setSelectedPartnerId] = useState('');
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
     const toggleSideMenu = () => {
@@ -43,15 +41,20 @@ const ListPartner = () => {
         setModalVisible(false);
     };
 
+    const handleAdm = () => {
+        navigation.navigate('SignUpAdm');
+        setModalVisible(false);
+    };
+
     useEffect(() => {
-        fetchParceiros();
+        fetchConsultores();
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchParceiros();
+            fetchConsultores();
         });
         return unsubscribe;
     }, [navigation]);
 
-    const fetchParceiros = async () => {
+    const fetchConsultores = async () => {
         try {
             const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Parceiros`, {
                 method: 'GET'
@@ -65,76 +68,6 @@ const ListPartner = () => {
             console.error(error);
         }
     };
-
-    const handleDelete = async (parceiro_cnpj_cpf: string) => {
-        Alert.alert(
-            'Confirmação',
-            'Tem certeza de que deseja excluir este parceiro definitivamente? Essa ação é irreversível.',
-            [
-                {
-                    text: 'Cancelar',
-                    onPress: () => console.log('Exclusão cancelada'),
-                    style: 'cancel'
-                },
-                {
-                    text: 'Excluir',
-                    onPress: () => confirmDelete(parceiro_cnpj_cpf)
-                }
-            ]
-        );
-    };
-    
-    const confirmDelete = async (parceiro_cnpj_cpf: string) => {
-        try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/Parceiros/${parceiro_cnpj_cpf}`, {
-                method: 'DELETE'
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao excluir parceiro');
-            }
-            fetchParceiros();
-            console.log('Parceiro excluído com sucesso');
-        } catch (error) {
-            console.error('Erro ao excluir parceiro:', error);
-            Alert.alert('Erro', 'Erro ao excluir parceiro. Por favor, tente novamente.');
-        }
-    };
-
-    const logicalDeletePartner = async (parceiro_cnpj_cpf: string) => {
-        try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ExclusaoParceiro/${parceiro_cnpj_cpf}`, {
-                method: 'PUT'
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao excluir parceiro logicamente');
-            }
-
-            Alert.alert('Sucesso','Exclusão Lógica realizada.')
-            console.log('Parceiro excluído logicamente com sucesso');
-            fetchParceiros();
-        } catch (error) {
-            console.error('Erro ao excluir parceiro logicamente:', error);
-            Alert.alert('Erro', 'Erro ao excluir parceiro logicamente. Por favor, tente novamente.');
-        }
-    };
-
-    const reactivatePartner = async (parceiro_cnpj_cpf: string) => {
-        try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ReativacaoParceiro/${parceiro_cnpj_cpf}`, {
-                method: 'PUT'
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao reativar parceiro');
-            }
-            Alert.alert('Sucesso', 'Reativação realizada.')
-            console.log('Parceiro reativado')
-            fetchParceiros();     
-        } catch (error) {
-            console.error('Erro ao reativar parceiro:', error);
-            Alert.alert('Erro', 'Erro ao reativar parceiro. Por favor, tente novamente.');
-        }
-    };
-
 
     const handleParceiroClick = async (parceiroCPF: string) => {
         try {
@@ -202,12 +135,12 @@ const ListPartner = () => {
                                 />
                                 <Ionicons
                                     style={styles.icon}
-                                    name={parceiro.parceiro_status ? "trash-bin" : "power"}
+                                    name="trash-bin"
                                     size={24}
                                     color="black"
                                     onPress={() => {
                                         Alert.alert(
-                                            'Selecione o tipo de operação:',
+                                            'Selecione o tipo de exclusão:',
                                             'Esta ação pode ser irreversível, escolha com cuidado',
                                             [
                                                 {
@@ -220,18 +153,14 @@ const ListPartner = () => {
                                                 {
                                                     text: 'Exclusão Definitiva',
                                                     onPress: () => {
-                                                        handleDelete(parceiro.parceiro_cnpj_cpf)
+                                                        // Implemente a lógica de exclusão definitiva aqui
                                                     },
                                                 },
 
                                                 {
-                                                    text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
+                                                    text: 'Exclusão Lógica',
                                                     onPress: () => {
-                                                        if (parceiro.parceiro_status) {
-                                                            logicalDeletePartner(parceiro.parceiro_cnpj_cpf);
-                                                        } else {
-                                                            reactivatePartner(parceiro.parceiro_cnpj_cpf);
-                                                        }
+                                                        // Implemente a lógica de exclusão lógica aqui
                                                     },
                                                 },
                                             ]
@@ -245,8 +174,8 @@ const ListPartner = () => {
                     <View style={styles.separator} />
                 </View>
             </View>
-            <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
-            {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
+            <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenuAdmin onClose={toggleSideMenu} navigation={navigation} />}
         </>
     );
 };
@@ -315,4 +244,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ListPartner;
+export default ListConsultores;

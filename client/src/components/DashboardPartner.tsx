@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
-import Footer from './Footer';
-import SideMenu from './SideMenu';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import FooterConsultor from './Consultor/FooterConsultor';
+import SideMenuConsultor from './Consultor/SideMenuConsultor';
 
 type RootStackParamList = {
   Dashboard: undefined;
@@ -101,7 +101,6 @@ const DashboardPartner = () => {
             </View>
           ))}
         </View>
-
         <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
         <PieChart
           data={data}
@@ -136,8 +135,8 @@ const DashboardPartner = () => {
           }}
         />
       </ScrollView>
-      <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
-      {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
+      <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
+      {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
     </>
 
   );
@@ -159,7 +158,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   tableContainer: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f1f1f1',
+    width: "100%",
   },
   headerRow: {
     flexDirection: 'row',
