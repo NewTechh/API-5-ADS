@@ -14,7 +14,7 @@ const FooterAdmin: React.FC<FooterProps> = ({ onPressMenu, navigation }) => {
             <TouchableOpacity onPress={onPressMenu}>
                 <Ionicons name="menu" size={32} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('ListConsulters')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ListConsultores')}>
                 <Ionicons name="home" size={32} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('UserScreenAdmin')}>

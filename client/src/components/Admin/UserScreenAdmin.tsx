@@ -29,16 +29,11 @@ const UserScreenAdmin = () => {
 
     const fetchAdmin = async () => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores`, {
-                method: 'GET'
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao carregar administradores');
-            }
-            const data = await response.json();
-            setAdministradores(data);
+            const administrador_id = await AsyncStorage.getItem('usuario_id'); // Substitua 'coloque aqui o ID do parceiro' pelo ID real do parceiro
+            const response = await axios.get(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${administrador_id}`);
+            setAdministradores(response.data);
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao buscar dados do parceiro:', error);
         }
     };
 
