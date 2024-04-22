@@ -12,12 +12,14 @@ import SideMenuAdmin from './Admin/SideMenuAdmin';
 type RootStackParamList = {
     SignUpAdm: undefined;
     CadastroConsultor: undefined;
-    // EditarParceiro: { parceiro: Parceiro };
+    EditarConsultor: { consultor: Consultor };
+    
 }
 
 type Consultor = {
     consultor_alianca_nome: string;
     consultor_alianca_cpf: string;
+    consultor_alianca_status: boolean;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
@@ -31,9 +33,8 @@ const ListConsultores = () => {
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
-
-    const handleEditClick = () => {
-        // navigation.navigate('EditarParceiro', { parceiro });
+    const handleEditClick = (consultor: Consultor) => {
+        navigation.navigate('EditarConsultor', { consultor });
     };
 
     const handleSignUp = () => {
@@ -69,35 +70,97 @@ const ListConsultores = () => {
         }
     };
 
-    // const handleParceiroClick = async (parceiroCPF: string) => {
-    //     try {
-    //         const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/ConsultaPorCPF/${parceiroCPF}`, {
-    //             method: 'GET'
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao buscar parceiro');
-    //         }
-    //         const parceiroData = await response.json();
-    //         const formattedData = formatParceiroData(parceiroData);
-    //         Alert.alert(`Dados Adicionais do Parceiro:\n\n`, formattedData);
-    //     } catch (error) {
-    //         console.error('Erro ao buscar parceiro:', error);
-    //         Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
-    //     }
-    // };
+    const handleDelete = async (consultor_alianca_cpf: string) => {
+        Alert.alert(
+            'Confirmação',
+            'Tem certeza de que deseja excluir este Consultor de Aliança definitivamente? Essa ação é irreversível.',
+            [
+                {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Exclusão cancelada'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Excluir',
+                    onPress: () => confirmDelete(consultor_alianca_cpf)
+                }
+            ]
+        );
+    };
+
+    const confirmDelete = async (consultor_alianca_cpf: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/Consultores/${consultor_alianca_cpf}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao excluir consultor');
+            }
+            fetchConsultores();
+            console.log('Consultor excluído com sucesso');
+        } catch (error) {
+            console.error('Erro ao excluir consultor:', error);
+            Alert.alert('Erro', 'Erro ao excluir consultor. Por favor, tente novamente.');
+        }
+    };
+
+    const logicalDeleteConsul= async (consultor_alianca_cpf: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/PutConsultor/ExclusaoConsultor/${consultor_alianca_cpf}`, {
+                method: 'PUT'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao excluir consultor logicamente');
+            }
+
+            Alert.alert('Sucesso','Exclusão Lógica realizada.')
+            console.log('Consultor excluído logicamente com sucesso');
+            fetchConsultores();
+        } catch (error) {
+            console.error('Erro ao excluir consultor logicamente:', error);
+            Alert.alert('Erro', 'Erro ao excluir consultor logicamente. Por favor, tente novamente.');
+        }
+    };
+
+    const reactivateConsul = async (consultor_alianca_cpf: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/PutConsultor/ReativacaoConsultor/${consultor_alianca_cpf}`, {
+                method: 'PUT'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao reativar consultor');
+            }
+            Alert.alert('Sucesso', 'Reativação realizada.')
+            console.log('Consultor reativado')
+            fetchConsultores();     
+        } catch (error) {
+            console.error('Erro ao reativar consultor:', error);
+            Alert.alert('Erro', 'Erro ao reativar consultor. Por favor, tente novamente.');
+        }
+    };
+
+    const handleConsultorClick = async (consultorCPF: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetConsultor/ConsultarPorCPF/${consultorCPF}`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao buscar parceiro');
+            }
+            const consultorData = await response.json();
+            const formattedData = formatConsultorData(consultorData);
+            Alert.alert(`Dados Adicionais do Consultor de Aliança:`, formattedData);
+        } catch (error) {
+            console.error('Erro ao buscar consultor:', error);
+            Alert.alert('Erro', 'Erro ao buscar dados do consultor. Por favor, tente novamente.');
+        }
+    };
     
-    // const formatParceiroData = (parceiroData: any) => {
-    //     return (
-    //         `Email: ${parceiroData.parceiro_email}\n\n` +
-    //         `Telefone: ${parceiroData.parceiro_telefone}\n\n` +
-    //         `Logradouro: ${parceiroData.parceiro_logradouro}\n\n` +
-    //         `Número do Logradouro: ${parceiroData.parceiro_logradouro_numero}\n\n` +
-    //         `Bairro: ${parceiroData.parceiro_bairro}\n\n` +
-    //         `CEP: ${parceiroData.parceiro_cep}\n\n` +
-    //         `Cidade: ${parceiroData.parceiro_cidade}\n\n` +
-    //         `Estado: ${parceiroData.parceiro_estado}`
-    //     );
-    // };
+    const formatConsultorData = (consultorData: any) => {
+        return (
+            `Email: ${consultorData.consultor_alianca_email}`
+        );
+    };
 
     return (
         <>
@@ -122,7 +185,7 @@ const ListConsultores = () => {
                     </View>
                     <View>
                         {consultorData && consultorData.map && consultorData.map((consultor, index) => (
-                            <Pressable style={styles.row} key={index}>
+                            <Pressable style={styles.row} key={index} onPress={() => handleConsultorClick(consultor.consultor_alianca_cpf)}>
                                 <Text style={styles.data}>{consultor.consultor_alianca_nome}</Text>
                                 <Text style={styles.data}>{consultor.consultor_alianca_cpf}</Text>
                                 <View style={styles.actionButtons}>
@@ -131,12 +194,45 @@ const ListConsultores = () => {
                                     name="create"
                                     size={24}
                                     color="black"
+                                    onPress={() => {handleEditClick(consultor)}}
                                 />
                                 <Ionicons
                                     style={styles.icon}
-                                    name="trash-bin"
+                                    name={consultor.consultor_alianca_status ? "trash-bin" : "power"}
                                     size={24}
                                     color="black"
+                                    onPress={() => {
+                                        Alert.alert(
+                                            'Selecione o tipo de operação:',
+                                            'Esta ação pode ser irreversível, escolha com cuidado',
+                                            [
+                                                {
+                                                    text: 'Cancelar',
+                                                    onPress: () => {
+                                                        return
+                                                    },
+                                                },
+
+                                                {
+                                                    text: 'Exclusão Definitiva',
+                                                    onPress: () => {
+                                                        handleDelete(consultor.consultor_alianca_cpf)
+                                                    },
+                                                },
+
+                                                {
+                                                    text: consultor.consultor_alianca_status ? 'Exclusão Lógica' : 'Reativar',
+                                                    onPress: () => {
+                                                        if (consultor.consultor_alianca_status) {
+                                                            logicalDeleteConsul(consultor.consultor_alianca_cpf);
+                                                        } else {
+                                                            reactivateConsul(consultor.consultor_alianca_cpf);
+                                                        }
+                                                    },
+                                                },
+                                            ]
+                                        );
+                                    }}
                                 />
                                 </View>
                             </Pressable>

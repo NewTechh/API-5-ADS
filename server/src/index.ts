@@ -13,13 +13,14 @@ import TrackProgress from './Expertise/TrackProgress';
 import LinkPartner from './Expertise/LinkPartner';
 import CadastroConsultor from './Consultor/PostConsultor';
 import { ListarConsultorID, ListarTodosConsultores } from './Consultor/GetConsultor';
-import {ExclusaoLogicaConsultor, ReativacaoConsultor } from './Consultor/DeleteConsultor';
+import {DeleteConsultor, ExclusaoLogicaConsultor, ReativacaoConsultor } from './Consultor/DeleteConsultor';
 import EdicaoDeConsultores from './Consultor/PutConsultor';
 import { EnviarToken, ValidarToken} from './Authentication/RecPassword';
 import EmailPorID from './Authentication/RecIDbyEmail';
 import UpdatePassword from './Authentication/ChangePassword';
 import ListarParceiroCPF from './User/ConsultaPorCPF';
 import {DeleteUser, ExclusaoLogicaParceiro, ReativacaoParceiro } from './User/DeleteUser';
+import ListarConsultorCPF from './Consultor/ConsultarPorCPF';
 
 
 
@@ -70,6 +71,9 @@ app.use('/PostConsultor', CadastroConsultor())
 //Listar apenas os dados do usuário logado
 app.use('/GetConsultor', ListarConsultorID())
 
+// Listar os dados do usuário ao clicar na tabela
+app.use('/GetConsultor', ListarConsultorCPF())
+
 //Listar todos os dados de todos os consultores
 app.use('/GetConsultor', ListarTodosConsultores())
 
@@ -79,6 +83,9 @@ app.use('/PutConsultor', EdicaoDeConsultores())
 //Exclusão Lógica
 app.use('/PutConsultor', ExclusaoLogicaConsultor())
 app.use('/PutConsultor', ReativacaoConsultor())
+
+//Exclusão Definitiva
+app.use('/DeleteConsultor', DeleteConsultor())
 
 
 // CRUD - ADMIN
