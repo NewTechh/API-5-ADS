@@ -13,15 +13,29 @@ import SideMenuAdmin from './SideMenuAdmin';
 import FooterAdmin from './FooterAdmin';
 
 type RootStackParamList = {
-    SignUpAdm: undefined;
+    EditarAdminSelf: { administrador: Administrador };
 }
 
-type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
+type Administrador = {
+    administrador_nome: string;
+    administrador_email: string;
+    administrador_cpf: string;
+    administrador_status: boolean;
+    administrador_funcao: string;
+    administrador_setor: string;
+}
+
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EditarAdminSelf'>;
 
 const UserScreenAdmin = () => {
     const navigation = useNavigation<ScreenNavigationProp>();
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
     const [administradores, setAdministradores] = useState<any>([]);
+
+    const handleEditClick = (administrador: Administrador) => {
+        navigation.navigate('EditarAdminSelf', { administrador });
+        console.log('teste')
+    };
 
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
@@ -38,8 +52,12 @@ const UserScreenAdmin = () => {
     };
 
     useEffect(() => {
-        fetchAdmin()
-    }, []);
+        fetchAdmin();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchAdmin();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
 
     return (
@@ -57,8 +75,14 @@ const UserScreenAdmin = () => {
                             <View style={styles.userInfo}>
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.userInfoTitle}>Informações do Usuário:</Text>
-                                    <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                    <Pressable>
+                                        <Ionicons 
+                                            name="create" 
+                                            size={24} 
+                                            color="black" 
+                                            style={styles.editIcon}
+                                            onPress={() => {handleEditClick(administradores)}}
+                                        />
                                     </Pressable>
                                 </View>
                                 <View>

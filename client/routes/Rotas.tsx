@@ -19,6 +19,7 @@ import ListPartner from '../src/components/ListPartner';
 import ListConsultores from '../src/components/ListConsultores';
 import ListAdministrador from '../src/components/ListAdministrador';
 import EditarConsultor from '../src/components/EditarConsultor';
+import EditarAdminSelf from '../src/components/Admin/EdicaoAdminSelf';
 
 
 const Stack = createStackNavigator();
@@ -45,6 +46,7 @@ const Rotas = () => {
         <Stack.Screen name="Token" component={Token} options={{ headerShown: false }} />
         <Stack.Screen name="EditarParceiro" component={EditarParceiro} options={{ headerShown: false }} />
         <Stack.Screen name="EditarConsultor" component={EditarConsultor} options={{ headerShown: false }} />
+        <Stack.Screen name="EditarAdminSelf" component={EditarAdminSelf} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

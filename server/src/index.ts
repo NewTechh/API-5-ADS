@@ -22,6 +22,7 @@ import ListarParceiroCPF from './User/ConsultaPorCPF';
 import {DeleteUser, ExclusaoLogicaParceiro, ReativacaoParceiro } from './User/DeleteUser';
 import ListarConsultorCPF from './Consultor/ConsultarPorCPF';
 import { ExclusaoLogicaAdmin, ReativacaoAdmin, DeleteAdmin } from './Admin/DeleteAdmin';
+import EdicaoDeAdmin from './Admin/PutAdmin';
 
 
 
@@ -115,6 +116,9 @@ app.use('/GetAdmin', ListarAdminID())
 
 // Listar todos os dados dos administradores
 app.use('/GetAdmin', ListarTodosAdministradores())
+
+//Editar Admin
+app.use('/PutAdmin', EdicaoDeAdmin())
 
 //Exclusão Lógica
 app.use('/DeleteAdmin', ExclusaoLogicaAdmin())

@@ -33,6 +33,7 @@ const ListConsultores = () => {
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
+    
     const handleEditClick = (consultor: Consultor) => {
         navigation.navigate('EditarConsultor', { consultor });
     };

@@ -37,7 +37,7 @@ function EdicaoDeAdmin(): express.Router {
     const setClause = fields.map((field, index) => `${field} = $${index + 2}`).join(', ');
 
     // Atualizar as informações do parceiro no banco de dados
-    const queryText = `UPDATE Administrador SET ${setClause} WHERE administrador_id = $1`;
+    const queryText = `UPDATE Administradores SET ${setClause} WHERE administrador_id = $1`;
     await DB.query(queryText, [administrador_id, ...values]);
 
     res.status(200).json({ message: 'Administrador atualizado com sucesso' });
