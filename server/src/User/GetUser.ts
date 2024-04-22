@@ -1,6 +1,27 @@
 import express from 'express';
 import DB from '../ConnectionDB/db';
 
+function ListarTodosParceiros(): express.Router{
+  const router = express.Router();
+
+  router.get('/Parceiros', async (_, res) => {
+      try {
+      const result = await DB.query('SELECT * FROM Parceiros;');
+  
+      if (result.rows.length === 0) {
+          res.status(404).json({ message: 'Parceiros não encontrados' });
+      } else {
+          res.status(200).json(result.rows);
+      }
+      } catch (error: any) {
+      res.status(500).json({ error: error.message });
+      }
+  });
+
+  return router;
+
+}
+
 function ListarParceiroID(): express.Router {
 
     const router = express.Router();
@@ -24,4 +45,4 @@ function ListarParceiroID(): express.Router {
     return router;
 };
 
-export default ListarParceiroID;
+export {ListarTodosParceiros, ListarParceiroID};

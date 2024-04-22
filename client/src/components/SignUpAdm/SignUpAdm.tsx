@@ -9,6 +9,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from './styles'
 import getIpAddress from "../../../services/IPAddress";
 
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
+
 type FormDataProps = {
     administrador_nome: string;
     administrador_email: string;
@@ -18,11 +21,21 @@ type FormDataProps = {
     administrador_senha: string;
 }
 
+type RootStackParamList = {
+    ListAdministrador: undefined
+};
+
+type ListAdmScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ListAdministrador'>;
+
 const Schema = yup.object().shape({
     administrador_nome: yup.string().required("Informe o Nome"),
     administrador_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
     administrador_funcao: yup.string().required("Informe a Função"),
-    administrador_setor: yup.string().required("Informe o Setor"),
+    administrador_setor: yup.string()
+    .required("Informe o Setor")
+    .test('is-valid-setor', 'O Setor deve ser A, B, C ou D', (value) => {
+        return ['A', 'B', 'C', 'D'].includes(value);
+    }),
     administrador_matricula: yup.string().required("Informe a Matricula"),
     administrador_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
@@ -30,6 +43,7 @@ const Schema = yup.object().shape({
 
 export function SignUpAdm() {
     const [showPassword, setShowPassword] = useState(false);
+    const navigation = useNavigation<ListAdmScreenNavigationProp>();
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -41,7 +55,8 @@ export function SignUpAdm() {
 
     const [errorMessage, setErrorMessage] = useState('');
 
-    async function handleNewPassword(data: FormDataProps) {
+    async function handleNewAdm(data: FormDataProps) {
+        
         try {
             await Schema.validate(data);
             
@@ -57,15 +72,26 @@ export function SignUpAdm() {
                 throw new Error('Erro ao cadastrar administrador');
             }
 
-            console.log('Administrador cadastrado com sucesso');
-            alert('Administrador Cadastrado')
-            reset();
+            alert('Cadastro realizado!')
             setErrorMessage('');
+            resetFields()
+            navigation.navigate('ListAdministrador')
         } catch (error) {
             console.error(error);
             setErrorMessage('Erro ao cadastrar administrador');
         }
     }
+
+    const resetFields = () => {
+        reset({
+            administrador_nome: '',
+            administrador_email: '',
+            administrador_funcao: '',
+            administrador_setor: '',
+            administrador_matricula: '',
+            administrador_senha: '',
+        });
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
@@ -166,7 +192,7 @@ export function SignUpAdm() {
 
             {errors.administrador_senha && <Text style={styles.labelError}>{errors.administrador_senha?.message}</Text>}
 
-            <Pressable style={styles.button} onPress={handleSubmit(handleNewPassword)}>
+            <Pressable style={styles.button} onPress={handleSubmit(handleNewAdm)}>
                 {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
                 <Text style={styles.buttonText}>Cadastrar</Text>
             </Pressable>

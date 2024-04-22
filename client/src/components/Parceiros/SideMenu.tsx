@@ -63,10 +63,6 @@ const SideMenu: React.FC<SideMenuProps> = ({ onClose, navigation }) => {
 
                 <View style={styles.menuContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('Cursos')} style={styles.menuItem}>
-                        <Ionicons name="home-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Home</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('Cursos')} style={styles.menuItem}>
                         <Ionicons name="book-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Cursos</Text>
                     </TouchableOpacity>

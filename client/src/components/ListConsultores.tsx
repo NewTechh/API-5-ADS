@@ -106,7 +106,7 @@ const ListConsultores = () => {
 
     const logicalDeleteConsul= async (consultor_alianca_cpf: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/PutConsultor/ExclusaoConsultor/${consultor_alianca_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ExclusaoConsultor/${consultor_alianca_cpf}`, {
                 method: 'PUT'
             });
             if (!response.ok) {
@@ -124,7 +124,7 @@ const ListConsultores = () => {
 
     const reactivateConsul = async (consultor_alianca_cpf: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/PutConsultor/ReativacaoConsultor/${consultor_alianca_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ReativacaoConsultor/${consultor_alianca_cpf}`, {
                 method: 'PUT'
             });
             if (!response.ok) {
@@ -145,7 +145,7 @@ const ListConsultores = () => {
                 method: 'GET'
             });
             if (!response.ok) {
-                throw new Error('Erro ao buscar parceiro');
+                throw new Error('Erro ao buscar consultor');
             }
             const consultorData = await response.json();
             const formattedData = formatConsultorData(consultorData);

@@ -22,6 +22,7 @@ CREATE TABLE Administradores(
 	administrador_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	administrador_nome DESC100 NOT NULL,
 	administrador_email DESC100 NOT NULL,
+	administrador_cpf DESC100 NOT NULL,
 	administrador_senha DESC100 NOT NULL,
 	administrador_matricula DESC100 NOT NULL,
 	administrador_funcao DESC100 NOT NULL,

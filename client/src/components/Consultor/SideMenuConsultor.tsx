@@ -60,16 +60,16 @@ const SideMenuConsultor: React.FC<SideMenuProps> = ({ onClose, navigation }) => 
                 </View>
                 <View style={styles.menuContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('ListPartner')} style={styles.menuItem}>
-                        <Ionicons name="home-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Home</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('ListPartner')} style={styles.menuItem}>
                         <Ionicons name="people-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Parceiros</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('Dashboard')} style={styles.menuItem}>
                         <Ionicons name="apps-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Dashboard</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Trilhas')} style={styles.menuItem}>
+                        <Ionicons name="trail-sign-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Trilhas</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.exitButton}>

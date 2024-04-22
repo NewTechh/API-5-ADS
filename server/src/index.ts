@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser'
 import CadastroDeParceiros from './User/PostUser';
-import ListarParceiroID from './User/GetUser';
+import { ListarTodosParceiros, ListarParceiroID } from './User/GetUser';
 import EdicaoDeParceiros from './User/PutUser';
 import CadastroDeAdmin from './Admin/PostAdmin';
-import { ListarTodosUsuarios, ListarAdminID } from './Admin/GetAdmin';
+import { ListarAdminID, ListarTodosAdministradores } from './Admin/GetAdmin';
 import Login from './Authentication/Login';
 import GetTrack from './Expertise/GetTrack';
 import ListarExpertiseByTrackID from './Expertise/ExpByTrack';
@@ -21,6 +21,7 @@ import UpdatePassword from './Authentication/ChangePassword';
 import ListarParceiroCPF from './User/ConsultaPorCPF';
 import {DeleteUser, ExclusaoLogicaParceiro, ReativacaoParceiro } from './User/DeleteUser';
 import ListarConsultorCPF from './Consultor/ConsultarPorCPF';
+import { ExclusaoLogicaAdmin, ReativacaoAdmin, DeleteAdmin } from './Admin/DeleteAdmin';
 
 
 
@@ -40,9 +41,11 @@ app.listen(port, () => {
 
 
 
-// AUTHENTICATION
+// Authentication
 
 app.use('/Auth', Login());
+
+// Recuperação de Senha
 app.use('/Auth', EnviarToken());
 app.use('/Auth', ValidarToken());
 app.use('/Auth', EmailPorID());
@@ -50,22 +53,35 @@ app.use('/Auth', UpdatePassword());
 
 
 
-
-
 // CRUD - USER
 
+// Cadastro de Parceiros
 app.use('/PostParceiro', CadastroDeParceiros());
+
+//Listar todos os dados de todos os parceiros.
+app.use('/GetParceiro', ListarTodosParceiros())
+
+//Listar apenas os dados do usuário logado
 app.use('/GetParceiro', ListarParceiroID());
+
+// Listar os dados do usuário ao clicar na tabela
 app.use('/GetParceiro', ListarParceiroCPF());
+
+// Edição Parceiro
 app.use('/PutParceiro', EdicaoDeParceiros())
-app.use('/DeleteParceiro', DeleteUser())
+
+// Exclusão Lógica
 app.use('/DeleteParceiro', ExclusaoLogicaParceiro())
 app.use('/DeleteParceiro', ReativacaoParceiro())
+
+// Exclusão Definitiva
+app.use('/DeleteParceiro', DeleteUser())
+
 
 
 //CRUD - Consultor
 
-//Cadastro
+//Cadastro de Consultor
 app.use('/PostConsultor', CadastroConsultor())
 
 //Listar apenas os dados do usuário logado
@@ -81,18 +97,31 @@ app.use('/GetConsultor', ListarTodosConsultores())
 app.use('/PutConsultor', EdicaoDeConsultores())
 
 //Exclusão Lógica
-app.use('/PutConsultor', ExclusaoLogicaConsultor())
-app.use('/PutConsultor', ReativacaoConsultor())
+app.use('/DeleteConsultor', ExclusaoLogicaConsultor())
+app.use('/DeleteConsultor', ReativacaoConsultor())
 
 //Exclusão Definitiva
 app.use('/DeleteConsultor', DeleteConsultor())
 
 
+
 // CRUD - ADMIN
 
+// Cadastro de Admin
 app.use('/PostAdmin', CadastroDeAdmin())
-app.use('/GetAdmin', ListarTodosUsuarios())
+
+//Listar apenas os dados do usuário logado
 app.use('/GetAdmin', ListarAdminID())
+
+// Listar todos os dados dos administradores
+app.use('/GetAdmin', ListarTodosAdministradores())
+
+//Exclusão Lógica
+app.use('/DeleteAdmin', ExclusaoLogicaAdmin())
+app.use('/DeleteAdmin', ReativacaoAdmin())
+
+//Exclusão Definitiva
+app.use('/DeleteAdmin', DeleteAdmin())
 
 
 // Trilhas de especialização

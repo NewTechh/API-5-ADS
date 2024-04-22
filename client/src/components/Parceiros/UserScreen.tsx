@@ -86,7 +86,7 @@ const UserScreen = () => {
                                 </View>
                                 <View>
                                     <Text style={styles.cardText}>Logradouro: {parceiroData.parceiro_logradouro}</Text>
-                                    <Text style={styles.cardText}>Logradouro número: {parceiroData.parceiro_logradouro_numero}</Text>
+                                    <Text style={styles.cardText}>Número do Logradouro: {parceiroData.parceiro_logradouro_numero}</Text>
                                     <Text style={styles.cardText}>Bairro: {parceiroData.parceiro_bairro}</Text>
                                     <Text style={styles.cardText}>CEP: {parceiroData.parceiro_cep}</Text>
                                     <Text style={styles.cardText}>Cidade: {parceiroData.parceiro_cidade}</Text>

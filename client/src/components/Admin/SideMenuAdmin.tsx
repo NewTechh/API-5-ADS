@@ -63,14 +63,10 @@ const SideMenuAdmin: React.FC<SideMenuProps> = ({ onClose, navigation }) => {
 
                 <View style={styles.menuContainer}>
                     <TouchableOpacity onPress={() => navigation.navigate('ListConsultores')} style={styles.menuItem}>
-                        <Ionicons name="home-outline" size={24} color="black" />
-                        <Text style={styles.menuText}>Home</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('ListConsultores')} style={styles.menuItem}>
                         <Ionicons name="people-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Consultores</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('ListConsultores')} style={styles.menuItem}>
+                    <TouchableOpacity onPress={() => navigation.navigate('ListAdministrador')} style={styles.menuItem}>
                         <Ionicons name="people-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Administradores</Text>
                     </TouchableOpacity>

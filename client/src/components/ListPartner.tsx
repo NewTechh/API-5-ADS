@@ -52,7 +52,7 @@ const ListPartner = () => {
 
     const fetchParceiros = async () => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Parceiros`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/Parceiros`, {
                 method: 'GET'
             });
             if (!response.ok) {
