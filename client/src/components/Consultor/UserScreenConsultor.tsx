@@ -14,6 +14,14 @@ import FooterConsultor from './FooterConsultor';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
+    NewPassSelf: undefined;
+    EditarConsulSelf: { consultor: Consultor }
+}
+
+type Consultor = {
+    consultor_alianca_nome: string;
+    consultor_alianca_email: string;
+    consultor_alianca_cpf: string;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
@@ -25,6 +33,14 @@ const UserScreenConsultor = () => {
 
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
+    };
+
+    const handleEditClick = (consultor: Consultor) => {
+        navigation.navigate('EditarConsulSelf', { consultor });
+    };
+
+    const handleEditClickSenha = () => {
+        navigation.navigate('NewPassSelf');
     };
 
     const fetchConsultorData = async () => {
@@ -39,7 +55,11 @@ const UserScreenConsultor = () => {
 
     useEffect(() => {
         fetchConsultorData();
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchConsultorData();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
 
     return (
@@ -58,7 +78,7 @@ const UserScreenConsultor = () => {
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.userInfoTitle}>Informações do Usuário:</Text>
                                     <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} onPress={() => {handleEditClick(consultorData)}} />
                                     </Pressable>
                                 </View>
                                 <View>
@@ -70,8 +90,14 @@ const UserScreenConsultor = () => {
                             <View style={styles.passwordInfo}>
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.passwordInfoTitle}>Senha:</Text>
-                                    <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                    <Pressable onPress={() => {}}>
+                                        <Ionicons 
+                                        name="create" 
+                                        size={24} 
+                                        color="black" 
+                                        style={styles.editIcon} 
+                                        onPress={() => {handleEditClickSenha()}}
+                                    />
                                     </Pressable>
                                 </View>
                                 <Text style={styles.cardText}>********</Text>

@@ -23,6 +23,7 @@ import {DeleteUser, ExclusaoLogicaParceiro, ReativacaoParceiro } from './User/De
 import ListarConsultorCPF from './Consultor/ConsultarPorCPF';
 import { ExclusaoLogicaAdmin, ReativacaoAdmin, DeleteAdmin } from './Admin/DeleteAdmin';
 import EdicaoDeAdmin from './Admin/PutAdmin';
+import UpdatePasswordSelf from './Authentication/ChangeSenhaSelf';
 
 
 
@@ -51,6 +52,9 @@ app.use('/Auth', EnviarToken());
 app.use('/Auth', ValidarToken());
 app.use('/Auth', EmailPorID());
 app.use('/Auth', UpdatePassword());
+
+//Alteração de Senha
+app.use('/Auth', UpdatePasswordSelf())
 
 
 

@@ -14,6 +14,7 @@ import FooterAdmin from './FooterAdmin';
 
 type RootStackParamList = {
     EditarAdminSelf: { administrador: Administrador };
+    NewPassSelf: undefined
 }
 
 type Administrador = {
@@ -34,7 +35,10 @@ const UserScreenAdmin = () => {
 
     const handleEditClick = (administrador: Administrador) => {
         navigation.navigate('EditarAdminSelf', { administrador });
-        console.log('teste')
+    };
+
+    const handleEditClickSenha = () => {
+        navigation.navigate('NewPassSelf');
     };
 
     const toggleSideMenu = () => {
@@ -97,7 +101,13 @@ const UserScreenAdmin = () => {
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.passwordInfoTitle}>Senha:</Text>
                                     <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                        <Ionicons 
+                                        name="create" 
+                                        size={24} 
+                                        color="black" 
+                                        style={styles.editIcon}
+                                        onPress={() => {handleEditClickSenha()}}
+                                    />
                                     </Pressable>
                                 </View>
                                 <Text style={styles.cardText}>********</Text>

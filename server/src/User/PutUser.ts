@@ -1,5 +1,4 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
 import DB from '../ConnectionDB/db';
 
 function EdicaoDeParceiros(): express.Router {
@@ -20,7 +19,6 @@ function EdicaoDeParceiros(): express.Router {
         parceiro_cep,
         parceiro_cidade,
         parceiro_estado,
-        parceiro_senha
     } = req.body;
 
     // Montar o objeto com os campos que foram alterados.
@@ -35,10 +33,6 @@ function EdicaoDeParceiros(): express.Router {
     if (parceiro_cep !== undefined) updatedFields.parceiro_cep = parceiro_cep;
     if (parceiro_cidade !== undefined) updatedFields.parceiro_cidade = parceiro_cidade;
     if (parceiro_estado !== undefined) updatedFields.parceiro_estado = parceiro_estado;
-    if (parceiro_senha !== undefined) {
-        const hashedPassword = await bcrypt.hash(parceiro_senha, 10);
-        updatedFields.parceiro_senha = hashedPassword;
-    }
 
     // Montar a query SQL para atualizar apenas os campos alterados
     const fields = Object.keys(updatedFields);

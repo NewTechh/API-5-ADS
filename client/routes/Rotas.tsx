@@ -20,6 +20,10 @@ import ListConsultores from '../src/components/ListConsultores';
 import ListAdministrador from '../src/components/ListAdministrador';
 import EditarConsultor from '../src/components/EditarConsultor';
 import EditarAdminSelf from '../src/components/Admin/EdicaoAdminSelf';
+import { NewPassSelf } from '../src/components/NewPassSelf';
+import EdicaoConsulSelf from '../src/components/Consultor/EdicaoConsulSelf';
+import EdicaoInfoPartner from '../src/components/Parceiros/EdicaoInfoPartner';
+import EdicaoEnderecoPartner from '../src/components/Parceiros/EdicaoEnderecoPartner';
 
 
 const Stack = createStackNavigator();
@@ -47,6 +51,10 @@ const Rotas = () => {
         <Stack.Screen name="EditarParceiro" component={EditarParceiro} options={{ headerShown: false }} />
         <Stack.Screen name="EditarConsultor" component={EditarConsultor} options={{ headerShown: false }} />
         <Stack.Screen name="EditarAdminSelf" component={EditarAdminSelf} options={{ headerShown: false }} />
+        <Stack.Screen name="EditarConsulSelf" component={EdicaoConsulSelf} options={{ headerShown: false }} />
+        <Stack.Screen name="EditarInfoPartner" component={EdicaoInfoPartner} options={{ headerShown: false }} />
+        <Stack.Screen name="NewPassSelf" component={NewPassSelf} options={{ headerShown: false }} />
+        <Stack.Screen name="EditarEnderecoPartner" component={EdicaoEnderecoPartner} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

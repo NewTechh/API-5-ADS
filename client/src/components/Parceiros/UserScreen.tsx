@@ -14,6 +14,21 @@ import Footer from './Footer';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
+    NewPassSelf: undefined;
+    EditarInfoPartner:  { parceiro: Parceiro }
+    EditarEnderecoPartner:  { parceiro: Parceiro }
+}
+
+type Parceiro = {
+    parceiro_nome: string;
+    parceiro_email: string;
+    parceiro_telefone: string;
+    parceiro_logradouro: string,
+    parceiro_logradouro_numero: string,
+    parceiro_bairro: string,
+    parceiro_cep: string,
+    parceiro_cidade: string,
+    parceiro_estado: string
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
@@ -26,6 +41,14 @@ const UserScreen = () => {
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
+    
+    const handleEditClick = (parceiro: Parceiro) => {
+        navigation.navigate('EditarInfoPartner', { parceiro });
+    };
+
+    const handleEditClick2 = (parceiro: Parceiro) => {
+        navigation.navigate('EditarEnderecoPartner', { parceiro });
+    };
 
     const fetchParceiroData = async () => {
         try {
@@ -37,9 +60,17 @@ const UserScreen = () => {
         }
     };
 
+    const handleEditClickSenha = () => {
+        navigation.navigate('NewPassSelf');
+    };
+
     useEffect(() => {
         fetchParceiroData();
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchParceiroData();
+        });
+        return unsubscribe;
+    }, [navigation]);
 
 
     return (
@@ -58,7 +89,7 @@ const UserScreen = () => {
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.userInfoTitle}>Informações do Usuário:</Text>
                                     <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} onPress={() => {handleEditClick(parceiroData)}}/>
                                     </Pressable>
                                 </View>
                                 <View>
@@ -71,8 +102,14 @@ const UserScreen = () => {
                             <View style={styles.passwordInfo}>
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.passwordInfoTitle}>Senha:</Text>
-                                    <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                    <Pressable >
+                                        <Ionicons 
+                                        name="create" 
+                                        size={24} 
+                                        color="black" 
+                                        style={styles.editIcon} 
+                                        onPress={() => { handleEditClickSenha()}}
+                                    />
                                     </Pressable>
                                 </View>
                                 <Text style={styles.cardText}>********</Text>
@@ -81,7 +118,7 @@ const UserScreen = () => {
                                 <View style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Text style={styles.userInfoTitle}>Endereço:</Text>
                                     <Pressable onPress={() => { }}>
-                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} />
+                                        <Ionicons name="create" size={24} color="black" style={styles.editIcon} onPress={() => {handleEditClick2(parceiroData)}}/>
                                     </Pressable>
                                 </View>
                                 <View>

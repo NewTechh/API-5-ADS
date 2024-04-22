@@ -1,5 +1,4 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
 import DB from '../ConnectionDB/db';
 
 function EdicaoDeAdmin(): express.Router {
@@ -15,7 +14,6 @@ function EdicaoDeAdmin(): express.Router {
         administrador_matricula,
         administrador_funcao,
         administrador_setor,
-        administrador_senha
     
     } = req.body;
 
@@ -26,10 +24,6 @@ function EdicaoDeAdmin(): express.Router {
     if (administrador_matricula !== undefined) updatedFields.administrador_matricula = administrador_matricula;
     if (administrador_funcao!== undefined) updatedFields.administrador_funcao = administrador_funcao;
     if (administrador_setor!== undefined) updatedFields.administrador_setor = administrador_setor;
-    if (administrador_senha !== undefined) {
-        const hashedPassword = await bcrypt.hash(administrador_senha, 10);
-        updatedFields.administrador_senha = hashedPassword;
-    }
 
     // Montar a query SQL para atualizar apenas os campos alterados
     const fields = Object.keys(updatedFields);

@@ -42,6 +42,13 @@ const LoginScreen = () => {
     navigation.navigate('RecSenha');
   };
 
+  useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        AsyncStorage.clear();
+      });
+      return unsubscribe;
+  }, [navigation]);
+
   async function handleLogin() {
     const data: FormDataPropsLogin = {
       parceiro_email: parceiro_email,
