@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from '../../services/IPAddress';
 import { TextInputMask } from "react-native-masked-text";
 
 type RootStackParamList = {
-    EditarConsultor: undefined
+  EditarConsultor: undefined
 }
 
 type EditarConsultorScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EditarConsultor'>;
@@ -36,13 +36,13 @@ const EditarConsultor = ({ navigation, route }: Props) => {
   };
 
   const handleSubmit = async () => {
-    
+
     // Verifica se algum campo está vazio
     for (const field in consultorData) {
-        if (!consultorData[field as keyof typeof consultorData]) {
+      if (!consultorData[field as keyof typeof consultorData]) {
         Alert.alert('Erro', 'Por favor, preencha todos os campos.');
         return;
-        }
+      }
     }
     try {
       const response = await fetch(`http://${getIpAddress()}:3001/PutConsultor/Consultores/${consultor.consultor_alianca_id}`, {
@@ -67,16 +67,20 @@ const EditarConsultor = ({ navigation, route }: Props) => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Edição do Parceiro</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={consultorData.consultor_alianca_email}
-            onChangeText={(text) => handleChange('consultor_alianca_email', text)}
-        />
+      <Text style={styles.title}>Edição do Parceiro</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={consultorData.consultor_alianca_email}
+        onChangeText={(text) => handleChange('consultor_alianca_email', text)}
+      />
       <View style={styles.buttonWrapper}>
-        <Button title="Voltar" onPress={handleBack} />
-        <Button title="Salvar" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.button} onPress={handleBack}>
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Salvar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -87,26 +91,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: '#272424',
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 50,
+    color: '#FFFFFF',
   },
   input: {
     height: 40,
     width: '100%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 8,
+    marginBottom: 20,
+    borderRadius: 10,
+    fontWeight: 'bold',
   },
   buttonWrapper: {
     flexDirection: 'row', // Posiciona os botões lado a lado
     justifyContent: 'space-between', // Distribui os botões igualmente no espaço disponível
-    width: '40%', // Para garantir que os botões ocupem toda a largura
-  }
+    width: '100%', // Para garantir que os botões ocupem toda a largura
+    paddingHorizontal: 5, // Adiciona espaçamento horizontal para evitar que os botões fiquem muito próximos às bordas
+  },
+  button: {
+    backgroundColor: '#C74634',
+    paddingVertical: 10,
+    marginTop: 20,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });
 
 export default EditarConsultor;

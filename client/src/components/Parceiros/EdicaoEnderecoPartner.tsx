@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TextInputMask } from "react-native-masked-text";
 import getIpAddress from '../../../services/IPAddress';
 
 type RootStackParamList = {
-    EditarParceiro: undefined
+  EditarParceiro: undefined
 }
 
 type EditarParceiroScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EditarParceiro'>;
@@ -14,6 +14,8 @@ type Props = {
   navigation: EditarParceiroScreenNavigationProp;
   route: any
 };
+
+const cepRegex = /^\d{5}-\d{3}$/;
 
 const EdicaoEnderecoPartner = ({ navigation, route }: Props) => {
   const { parceiro } = route.params;
@@ -40,14 +42,35 @@ const EdicaoEnderecoPartner = ({ navigation, route }: Props) => {
     navigation.goBack();
   };
 
+
+  const handleSearchCep = async (cep: string) => {
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      if (!response.ok) {
+        throw new Error('Erro ao buscar o CEP');
+      }
+      const data = await response.json();
+      setParceiroData({
+        ...parceiroData,
+        parceiro_logradouro: data.logradouro || '',
+        parceiro_bairro: data.bairro || '',
+        parceiro_cidade: data.localidade || '',
+        parceiro_estado: data.uf || ''
+      });
+    } catch (error) {
+      console.error('Erro ao buscar o CEP:', error);
+      Alert.alert('Erro', 'Erro ao buscar o CEP. Por favor, verifique se o CEP está correto e tente novamente.');
+    }
+  };
+
   const handleSubmit = async () => {
-    
+
     // Verifica se algum campo está vazio
     for (const field in parceiroData) {
-        if (!parceiroData[field as keyof typeof parceiroData]) {
+      if (!parceiroData[field as keyof typeof parceiroData]) {
         Alert.alert('Erro', 'Por favor, preencha todos os campos.');
         return;
-        }
+      }
     }
     try {
       const response = await fetch(`http://${getIpAddress()}:3001/PutParceiro/Parceiros/${parceiro.parceiro_id}`, {
@@ -72,48 +95,59 @@ const EdicaoEnderecoPartner = ({ navigation, route }: Props) => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Edição do Parceiro</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="Logradouro"
-            value={parceiroData.parceiro_logradouro}
-            onChangeText={(text) => handleChange('parceiro_logradouro', text)}
-        />
-        <TextInputMask
-            style={styles.input}
-            placeholder="Número do Logradouro"
-            value={parceiroData.parceiro_logradouro_numero}
-            type={'only-numbers'}
-            onChangeText={(text) => handleChange('parceiro_logradouro_numero', text)}
-        />
-        <TextInput
-            style={styles.input}
-            placeholder="Bairro"
-            value={parceiroData.parceiro_bairro}
-            onChangeText={(text) => handleChange('parceiro_bairro', text)}
-        />
-        <TextInputMask
-            style={styles.input}
-            placeholder="CEP"
-            type= {'zip-code'}
-            value={parceiroData.parceiro_cep}
-            onChangeText={(text) => handleChange('parceiro_cep', text)}
-        />
-        <TextInput
-            style={styles.input}
-            placeholder="Cidade"
-            value={parceiroData.parceiro_cidade}
-            onChangeText={(text) => handleChange('parceiro_cidade', text)}
-        />
-        <TextInput
-            style={styles.input}
-            placeholder="Estado"
-            value={parceiroData.parceiro_estado}
-            onChangeText={(text) => handleChange('parceiro_estado', text)}
-        />
+      <Text style={styles.title}>Edição do Parceiro</Text>
+
+      <TextInputMask
+        style={styles.input}
+        placeholder="CEP"
+        type={'zip-code'}
+        value={parceiroData.parceiro_cep}
+        onChangeText={(text) => {
+          handleChange('parceiro_cep', text);
+          if (text.length === 9) {
+            handleSearchCep(text);
+          }
+        }}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Logradouro"
+        value={parceiroData.parceiro_logradouro}
+        onChangeText={(text) => handleChange('parceiro_logradouro', text)}
+      />
+      <TextInputMask
+        style={styles.input}
+        placeholder="Número do Logradouro"
+        value={parceiroData.parceiro_logradouro_numero}
+        type={'only-numbers'}
+        onChangeText={(text) => handleChange('parceiro_logradouro_numero', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Bairro"
+        value={parceiroData.parceiro_bairro}
+        onChangeText={(text) => handleChange('parceiro_bairro', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Cidade"
+        value={parceiroData.parceiro_cidade}
+        onChangeText={(text) => handleChange('parceiro_cidade', text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Estado"
+        value={parceiroData.parceiro_estado}
+        onChangeText={(text) => handleChange('parceiro_estado', text)}
+      />
       <View style={styles.buttonWrapper}>
-        <Button title="Voltar" onPress={handleBack} />
-        <Button title="Salvar" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.button} onPress={handleBack}>
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Salvar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -124,26 +158,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: '#272424',
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 40,
+    color: '#FFFFFF',
   },
   input: {
     height: 40,
     width: '100%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 8,
+    marginBottom: 20,
+    borderRadius: 10,
+    fontWeight: 'bold',
   },
   buttonWrapper: {
     flexDirection: 'row', // Posiciona os botões lado a lado
     justifyContent: 'space-between', // Distribui os botões igualmente no espaço disponível
-    width: '40%', // Para garantir que os botões ocupem toda a largura
-  }
+    width: '100%', // Para garantir que os botões ocupem toda a largura
+    paddingHorizontal: 5, // Adiciona espaçamento horizontal para evitar que os botões fiquem muito próximos às bordas
+  },
+  button: {
+    backgroundColor: '#C74634',
+    paddingVertical: 10,
+    marginTop: 30,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });
 
 export default EdicaoEnderecoPartner;

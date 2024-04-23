@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TextInputMask } from "react-native-masked-text";
 import getIpAddress from '../../../services/IPAddress';
 
 type RootStackParamList = {
-    EditarParceiro: undefined
+  EditarParceiro: undefined
 }
 
 type EditarParceiroScreenNavigationProp = StackNavigationProp<RootStackParamList, 'EditarParceiro'>;
@@ -37,13 +37,13 @@ const EdicaoInfoPartner = ({ navigation, route }: Props) => {
   };
 
   const handleSubmit = async () => {
-    
+
     // Verifica se algum campo está vazio
     for (const field in parceiroData) {
-        if (!parceiroData[field as keyof typeof parceiroData]) {
+      if (!parceiroData[field as keyof typeof parceiroData]) {
         Alert.alert('Erro', 'Por favor, preencha todos os campos.');
         return;
-        }
+      }
     }
     try {
       const response = await fetch(`http://${getIpAddress()}:3001/PutParceiro/Parceiros/${parceiro.parceiro_id}`, {
@@ -68,28 +68,32 @@ const EdicaoInfoPartner = ({ navigation, route }: Props) => {
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Edição do Parceiro</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={parceiroData.parceiro_email}
-            onChangeText={(text) => handleChange('parceiro_email', text)}
-        />
-        <TextInputMask
-            style={styles.input}
-            placeholder="Telefone"
-            type={'cel-phone'}
-            options={{
-            maskType: 'BRL',
-            withDDD: true,
-            dddMask: '(99) '
-            }}
-            value={parceiroData.parceiro_telefone}
-            onChangeText={(text) => handleChange('parceiro_telefone', text)}
-        />
+      <Text style={styles.title}>Edição do Parceiro</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={parceiroData.parceiro_email}
+        onChangeText={(text) => handleChange('parceiro_email', text)}
+      />
+      <TextInputMask
+        style={styles.input}
+        placeholder="Telefone"
+        type={'cel-phone'}
+        options={{
+          maskType: 'BRL',
+          withDDD: true,
+          dddMask: '(99) '
+        }}
+        value={parceiroData.parceiro_telefone}
+        onChangeText={(text) => handleChange('parceiro_telefone', text)}
+      />
       <View style={styles.buttonWrapper}>
-        <Button title="Voltar" onPress={handleBack} />
-        <Button title="Salvar" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.button} onPress={handleBack}>
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Salvar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -100,26 +104,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    backgroundColor: '#272424',
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginBottom: 20
+    marginBottom: 40,
+    color: '#FFFFFF',
   },
   input: {
     height: 40,
     width: '100%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 8,
+    marginBottom: 20,
+    borderRadius: 10,
+    fontWeight: 'bold',
   },
   buttonWrapper: {
     flexDirection: 'row', // Posiciona os botões lado a lado
     justifyContent: 'space-between', // Distribui os botões igualmente no espaço disponível
-    width: '40%', // Para garantir que os botões ocupem toda a largura
-  }
+    width: '100%', // Para garantir que os botões ocupem toda a largura
+    paddingHorizontal: 5, // Adiciona espaçamento horizontal para evitar que os botões fiquem muito próximos às bordas
+  },
+  button: {
+    backgroundColor: '#C74634',
+    paddingVertical: 10,
+    marginTop: 30,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });
 
 export default EdicaoInfoPartner;
