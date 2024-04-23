@@ -60,7 +60,7 @@ CREATE TABLE ConsultorAlianca(
 CREATE TABLE Qualificadores(
 	qualificador_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
 	qualificador_titulo DESC100 NOT NULL,
-	qualificador_descricao DESC100 NOT NULL,
+	qualificador_descricao VARCHAR(500) NOT NULL,
 	id_especializacao UUID NOT NULL,
 	FOREIGN KEY (id_especializacao) REFERENCES Especializacoes(especializacao_id)
 );
