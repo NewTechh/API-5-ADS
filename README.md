@@ -1,18 +1,105 @@
-# PrivadoAPI
+<h1> Aprendizado por Projeto Integrado do 5º semestre da Faculdade de Tecnologia de São José dos Campos - "Professor Jessen Vidal". </h1>
 
-<h2> Para Rodar o Projeto: </h2>
+<br> <br>
 
-<p><b> Estar com um emulador de celular rodando, com o celular no modo depuração conectado via cabo USB ou Análisar o QRCODE com o Expo Go. </p></b>
-<p><b> Digitar: npm install ou npx expo install </p></b>
-<p><b> Digitar: npx expo </p></b>
-<p><b> Caso nao rode, instalar o Expo no PC: </p></b>
-<p><b> Abra o CMD e digite: npm install -g expo-cli </p></b>
+<h2> O Projeto 💼 </h2>
 
-<hr>
-<h3> Para rodar o servidor: </h3>
+<p>Desenvolver um sistema de gestão de parceiros para a Oracle. Este sistema será responsável por
+cadastrar novos parceiros, gerenciar atualizações de informações, acompanhar o desenvolvimento
+de conhecimento dos parceiros e fornecer relatórios relevantes – em plataforma mobile.</p>
 
-<p><b> Na primeira vez, navegar até a pasta servidor/ e digitar: </b></p>
-<p> npm install </p>
-<p> npx ts-node ./src/index.ts <p>
-<p><b> Nas próximas vezes, pra rodar em modo de desenvolvimento: </b></p>
-<p> nodemon ./src/index.ts </p>
+<br>
+
+<h2>Objetivo do Projeto 📌</h2>
+
+<h3>Objetivos do Sistema: </h3>
+<p><b>1. Centralizar e automatizar as atividades relacionadas à gestão de parceiros de negócios.</p> </b>
+<p><b>2. Proporcionar um local único para cadastrar, editar, excluir e monitorar todos os dados relevantes
+do relacionamento com os parceiros.</p> </b>
+<p><b>3. Melhorar a eficiência operacional da organização.</p> </b>
+<p><b>4. Auxiliar na consulta e visualização de dados relevantes do relacionamento com os parceiros.</p> </b>
+<p><b>5. Visualizar um modelo de gestão de desempenho e/ou dados dos parceiros.  </p> </b>
+ 
+<br><br>
+ 
+<h3> Requisitos Funcionais: </h3>
+
+<p> ● Desenvolver uma interface de cadastro de parceiros; </p>
+<p> ● Desenvolver uma interface de desenvolvimento de parceiros;  </p>
+<p> ● Desenvolver um Dashboard de indicadores de desempenho de parceiros; </p>
+<p> ● Desenvolver um Relatório Analítico de parceiros por produto implementado.</p>
+
+<br><br>
+
+<h3> Requisitos Não Funcionais: </h3> 
+
+ <p> ● Manual do Usuário; </p>
+ <p> ● Documentação técnica da estruturação do sistema; </p>
+ <p> ● Documentação API – Application Programming Interface; </p>
+ <p> ● Modelagem de Banco de Dados ou Arquivo de dados. </p>
+
+ <br>
+ <br>
+ 
+<h2>Cronograma das Sprints 📆</h2>
+<br>
+<br>
+<img align="center" src="Imagens/cronograma.png"/>
+
+<br>
+<br>
+<h2>Demonstração completa de nosso sistema 💻</h2><br>
+<h3> Video Sprint Review 1: https://youtu.be/Wta7mGWDcBE?si=ktAhCTTZvtMGwAHO</h3>
+<img align="center" src="#"/>
+<br>
+<br>
+
+<h2>Tecnologias Utilizadas 🔧</h2>
+<br>
+● Front-end: React-Native;<br>
+● Back-end: Node.js;<br>
+● Linguagem de Programação: TypeScript;<br>
+● Banco de Dados: PostgreSQL, MongoDB;<br>
+● Ferramentas: Git, GitHub, Visual Studio Code, Figma, Canva.<br>
+<div style="display: inline_blocks"><br>              
+<img align="center"src="Imagens/react.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/nodejs.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/typescript.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/postgre.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/mongo.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/git.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/github.webp" height= "80" width= "80"/>
+<img align="center"src="Imagens/vs.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/figma.png" height= "80" width= "80"/>
+<img align="center"src="Imagens/canva.png" height= "80" width= "80"/>
+<br>
+<br>
+
+<h2>Backlog 📊</h2><br>
+ O product backlog é uma lista ordenada que tem como função documentar de forma clara todos os requisitos do desenvolvimento de um projeto. Itens que precisem de maior refinamento geralmente têm uma importância menor e ficam mais abaixo no Product Backlog.  
+<br>
+<img align="center" src="Imagens/backlog.png"/>
+<br>
+<br>
+<br>
+<h2>Modelo de dados📑</h2><br>
+ Um modelo de banco de dados mostra a estrutura lógica de um banco de dados, incluindo as relações e restrições que determinam como os dados podem ser armazenados e acessados.
+<br>
+
+<h5>Modelo Lógico<h5>
+<img align="center"src="Imagens/ERD.png" height= "600" width= "1100"/>
+<br>
+
+<h2>Equipe 👾</h2>
+ 
+ Nome|Função|Github|Linkedin 
+-----|------|------|---------
+Eliézer Lopes       |Scrum Master|[@Github](https://github.com/EliezerLopes1)|[@Linkedin](https://www.linkedin.com/in/eli%C3%A9zer-lopes-b89a4124a)
+Mariana Veloso      |Product Owner|[@Github](https://github.com/Marih2210)|[@Linkedin](https://www.linkedin.com/in/mariana-veloso-979436231)
+Nicolas Pereira     |Desenvolvedor|[@Github](https://github.com/NicolasPereira06)|[@Linkedin](https://www.linkedin.com/in/nicolaspereira06/)
+Thalles Torres      |Desenvolvedor|[@Github](https://github.com/thallestorres)|[@Linkedin](www.linkedin.com/in/thalles-torres-83449a285)
+Francisco Quirino   |Desenvolvedor|[@Github](https://www.github.com/ciscoquirino)|[@Linkedin](https://www.linkedin.com/in/francisco-quirino )
+Gabriel Angelis     |Desenvolvedor|[@Github](https://github.com/GabrAngelis)|[@Linkedin](https://www.linkedin.com/in/gabriel-luis-de-angelis-b64816237/)
+Isabel Reis         |Desenvolvedor|[@Github](https://github.com/IsabelRReis)|[@Linkedin](https://www.linkedin.com/in/isabel-reis-09806920b/)
+<br>
+<br>
