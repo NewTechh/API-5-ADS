@@ -24,6 +24,7 @@ import { NewPassSelf } from '../src/components/NewPassSelf';
 import EdicaoConsulSelf from '../src/components/Consultor/EdicaoConsulSelf';
 import EdicaoInfoPartner from '../src/components/Parceiros/EdicaoInfoPartner';
 import EdicaoEnderecoPartner from '../src/components/Parceiros/EdicaoEnderecoPartner';
+import TableLog from '../src/components/TableLog/TableLog';
 
 
 const Stack = createStackNavigator();
@@ -31,7 +32,7 @@ const Stack = createStackNavigator();
 const Rotas = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
+      <Stack.Navigator initialRouteName='TableLog'>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserScreen" component={UserScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserScreenConsultor" component={UserScreenConsultor} options={{ headerShown: false }} />
@@ -55,6 +56,8 @@ const Rotas = () => {
         <Stack.Screen name="EditarInfoPartner" component={EdicaoInfoPartner} options={{ headerShown: false }} />
         <Stack.Screen name="NewPassSelf" component={NewPassSelf} options={{ headerShown: false }} />
         <Stack.Screen name="EditarEnderecoPartner" component={EdicaoEnderecoPartner} options={{ headerShown: false }} />
+        <Stack.Screen name="TableLog" component={TableLog} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
