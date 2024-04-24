@@ -100,6 +100,6 @@ Nicolas Pereira     |Desenvolvedor|[@Github](https://github.com/NicolasPereira06
 Thalles Torres      |Desenvolvedor|[@Github](https://github.com/thallestorres)|[@Linkedin](www.linkedin.com/in/thalles-torres-83449a285)
 Francisco Quirino   |Desenvolvedor|[@Github](https://www.github.com/ciscoquirino)|[@Linkedin](https://www.linkedin.com/in/francisco-quirino )
 Gabriel Angelis     |Desenvolvedor|[@Github](https://github.com/GabrAngelis)|[@Linkedin](https://www.linkedin.com/in/gabriel-luis-de-angelis-b64816237/)
-Isabel Reis         |Desenvolvedor|[@Github](https://github.com/IsabelRReis)|[@Linkedin](https://www.linkedin.com/in/isabel-reis-09806920b/)
+Douglas Queiroz     |Desenvolvedor|[@Github](https://github.com)|[@Linkedin](https://www.linkedin.com)
 <br>
 <br>
