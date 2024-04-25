@@ -32,7 +32,7 @@ const Stack = createStackNavigator();
 const Rotas = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='TableLog'>
+      <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserScreen" component={UserScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserScreenConsultor" component={UserScreenConsultor} options={{ headerShown: false }} />

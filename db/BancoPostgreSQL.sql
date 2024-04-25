@@ -82,16 +82,20 @@ CREATE TABLE ParceiroTrilha(
 	PRIMARY KEY (id_parceiro, id_trilha)
 );
 
-CREATE TABLE AcoesAdministrativas (
-	acao_administrativa_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
-	acao_administrativa_tipo DESC100 NOT NULL,
-	id_administrador UUID NOT NULL,
+CREATE TABLE RegistroLog(
+	registro_log_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
+	registro_log_acao VARCHAR(800) NOT NULL,
+	registro_log_alteracao VARCHAR(800) NOT NULL,
+	registro_log_fluxo VARCHAR(800) NOT NULL,
+	id_administrador UUID NULL,
 	id_parceiro UUID NULL,
+	id_consultor_alianca UUID NULL,
 	id_trilha UUID NULL,
 	id_especializacao UUID NULL,
 	id_qualificador UUID NULL,
 	FOREIGN KEY (id_administrador) REFERENCES Administradores (administrador_id),
 	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id),
+	FOREIGN KEY (id_consultor_alianca) REFERENCES ConsultorAlianca(consultor_alianca_id),
 	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id),
 	FOREIGN KEY (id_especializacao) REFERENCES Especializacoes(especializacao_id),
 	FOREIGN KEY (id_qualificador) REFERENCES Qualificadores(qualificador_id)
@@ -379,4 +383,3 @@ VALUES
 ('Serviço', 'Sistemas Projetados', 'Oracle Database Appliance', '95ddcf85-7b47-4811-9c77-46a022243f33'),
 ('Serviço', 'Sistemas Projetados', 'Oracle Exadata Database Machine', '95ddcf85-7b47-4811-9c77-46a022243f33'),
 ('Serviço', 'Outros', 'Serviços de Instalação de Hardware da Oracle', '95ddcf85-7b47-4811-9c77-46a022243f33');
-

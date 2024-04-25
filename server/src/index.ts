@@ -24,6 +24,9 @@ import ListarConsultorCPF from './Consultor/ConsultarPorCPF';
 import { ExclusaoLogicaAdmin, ReativacaoAdmin, DeleteAdmin } from './Admin/DeleteAdmin';
 import EdicaoDeAdmin from './Admin/PutAdmin';
 import UpdatePasswordSelf from './Authentication/ChangeSenhaSelf';
+import ListarLog from './RegistroLog/GetLogs';
+import EdicaoParceiroLog from './RegistroLog/EdicaoParceiroLog';
+import EdicaoConsultorLog from './RegistroLog/EdicaoConsultorLog';
 
 
 
@@ -56,6 +59,11 @@ app.use('/Auth', UpdatePassword());
 //Alteração de Senha
 app.use('/Auth', UpdatePasswordSelf())
 
+// Log
+
+app.use('/Log', EdicaoParceiroLog())
+app.use('/Log', EdicaoConsultorLog())
+app.use('/Log', ListarLog())
 
 
 // CRUD - USER

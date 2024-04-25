@@ -3,6 +3,7 @@ import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } fr
 import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from '../../services/IPAddress';
 import { TextInputMask } from "react-native-masked-text";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
   EditarParceiro: undefined
@@ -67,34 +68,75 @@ const EditarParceiro = ({ navigation, route }: Props) => {
   };
 
   const handleSubmit = async () => {
-
     // Verifica se algum campo está vazio
     for (const field in parceiroData) {
-      if (!parceiroData[field as keyof typeof parceiroData]) {
-        Alert.alert('Erro', 'Por favor, preencha todos os campos.');
-        return;
-      }
+        if (!parceiroData[field as keyof typeof parceiroData]) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            return;
+        }
     }
+
     try {
-      const response = await fetch(`http://${getIpAddress()}:3001/PutParceiro/Parceiros/${parceiro.parceiro_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(parceiroData)
-      });
+        const response = await fetch(`http://${getIpAddress()}:3001/PutParceiro/Parceiros/${parceiro.parceiro_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(parceiroData)
+        });
 
-      if (!response.ok) {
-        throw new Error('Erro ao salvar os dados do parceiro');
-      }
+        if (!response.ok) {
+            throw new Error('Erro ao salvar os dados do parceiro');
+        }
 
-      Alert.alert('Edição Realizada com sucesso')
-      navigation.goBack();
+        // Obter a resposta JSON do servidor
+        const responseBody = await response.json();
+        const { updatedFields } = responseBody;
+
+        // Verificar quais campos foram alterados
+        const changedFields = [];
+        for (const field in updatedFields) {
+            if (parceiro[field as keyof typeof parceiroData] !== updatedFields[field]) {
+                changedFields.push({ field, oldValue: parceiro[field as keyof typeof parceiroData], newValue: updatedFields[field] });
+            }
+        }
+
+        // Construir mensagens de log com base nos campos alterados
+        const logMessages = changedFields.map(({ field, oldValue, newValue }) => `O ${field.replace('parceiro_', '')} foi alterado de ${oldValue} para ${newValue}`);
+
+        const consultorId = await AsyncStorage.getItem('usuario_id');
+
+        // Obtendo informações do consultor de alianças do backend usando o ID
+        const consultorResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consultorId}`);
+        const consultorData = await consultorResponse.json();
+
+        // Construir mensagem de ação do registro de log
+        const registroLogAcao = `Consultor de Aliança ${consultorData.consultor_alianca_nome} editou os dados do parceiro ${parceiro.parceiro_nome}`;
+
+        // Enviar o registro de log para o backend
+        
+        await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                registro_log_acao: registroLogAcao,
+                registro_log_alteracao: logMessages.join('; \n'),
+                registro_log_fluxo: "Consultor de Aliança --> Parceiro",
+                id_consultor: consultorId,
+                id_parceiro: parceiro.parceiro_id,
+            })
+        });
+
+        Alert.alert('Edição Realizada com sucesso');
+        navigation.goBack();
     } catch (error) {
-      console.error('Erro ao salvar os dados do parceiro:', error);
-      Alert.alert('Erro', 'Erro ao salvar os dados do parceiro. Por favor, tente novamente.');
+        console.error('Erro ao salvar os dados do parceiro:', error);
+        Alert.alert('Erro', 'Erro ao salvar os dados do parceiro. Por favor, tente novamente.');
     }
   };
+
 
   return (
     <View style={styles.container}>

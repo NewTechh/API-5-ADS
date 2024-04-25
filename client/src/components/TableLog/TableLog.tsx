@@ -1,43 +1,87 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native';
+import FooterAdmin from '../Admin/FooterAdmin';
+import SideMenuAdmin from '../Admin/SideMenuAdmin';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import getIpAddress from '../../../services/IPAddress';
+
+type RootStackParamList = {
+    SignUpAdm: undefined;
+}
+
+type RegistroLog = {
+    registro_log_acao: string;
+    registro_log_alteracao: string;
+    registro_log_fluxo: string;
+    id_destinatario: string;
+    parceiro_nome: string;
+}
+
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
 const TableLog = () => {
 
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+    const [registrosLogs, setRegistrosLogs] = useState<RegistroLog[]>([]);
+    const navigation = useNavigation<ScreenNavigationProp>();
+
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
+
+    useEffect(() => {
+        fetchLog();
+        const unsubscribe = navigation.addListener('focus', () => {
+            fetchLog();
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+    const fetchLog = async () => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/Log/Logs`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao carregar Logs.');
+            }
+            const data = await response.json();
+            setRegistrosLogs(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
-        <ScrollView style={styles.container}>
-            <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-            <Text style={styles.title}>Tabela de Registros</Text>
-            <View style={styles.tableContainer}>
-                <View style={styles.headerRow}>
-                    <Text style={styles.header}>Remetente</Text>
-                    <Text style={styles.header}>Ação</Text>
-                    <Text style={styles.header}>Destinatário</Text>
+        <>
+            <ScrollView style={styles.container}>
+                <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
+                <Text style={styles.title}>Tabela de Registros</Text>
+                <View style={styles.tableContainer}>
+                    <View style={styles.headerRow}>
+                        <Text style={styles.header}>Ação</Text>
+                        <Text style={styles.header}>Alteração</Text>
+                        <Text style={styles.header}>Fluxo</Text>
+                    </View>
+                    <View>
+                        {registrosLogs && registrosLogs.map && registrosLogs.map((registro, index) => (
+                            <View key={index}>
+                                <View style={styles.row}>
+                                    <Text style={styles.data}>{registro.registro_log_acao}</Text>
+                                    <Text style={styles.data}>{registro.registro_log_alteracao}</Text>
+                                    <Text style={styles.data}>{registro.registro_log_fluxo}</Text>
+                                </View>
+                                {index !== registrosLogs.length - 1 && <View style={styles.divider} />}
+                            </View>
+                        ))}
+                    </View>
+                    <View style={styles.separator} />
                 </View>
-                <View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Jose Armando</Text>
-                        <Text style={styles.data}>Exclusão</Text>
-                        <Text style={styles.data}>Suporte</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Mylon Roger</Text>
-                        <Text style={styles.data}>Edição</Text>
-                        <Text style={styles.data}>Parceiro</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Bruno Leandro</Text>
-                        <Text style={styles.data}>Exclusão</Text>
-                        <Text style={styles.data}>Administrador</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.data}>Miguel Lopes</Text>
-                        <Text style={styles.data}>Inativo</Text>
-                        <Text style={styles.data}>Administrador</Text>
-                    </View>
-                </View>
-                <View style={styles.separator} />
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenuAdmin onClose={toggleSideMenu} navigation={navigation} />}
+        </>
     );
 };
 
@@ -88,6 +132,11 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 12,
         textAlign: 'center',
+    },
+    divider: {
+        borderBottomWidth: 1,
+        borderBottomColor: 'black',
+        marginBottom: 10,
     },
 
 });

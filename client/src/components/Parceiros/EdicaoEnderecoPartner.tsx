@@ -83,10 +83,10 @@ const EdicaoEnderecoPartner = ({ navigation, route }: Props) => {
 
       if (!response.ok) {
         throw new Error('Erro ao salvar os dados do parceiro');
+      } else {
+        Alert.alert('Edição Realizada com sucesso')
+        navigation.goBack();
       }
-
-      Alert.alert('Edição Realizada com sucesso')
-      navigation.goBack();
     } catch (error) {
       console.error('Erro ao salvar os dados do parceiro:', error);
       Alert.alert('Erro', 'Erro ao salvar os dados do parceiro. Por favor, tente novamente.');

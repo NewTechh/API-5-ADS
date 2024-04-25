@@ -25,14 +25,19 @@ function EdicaoDeConsultores(): express.Router {
 
     // Atualizar as informações do parceiro no banco de dados
     const queryText = `UPDATE ConsultorAlianca SET ${setClause} WHERE consultor_alianca_id = $1`;
-    await DB.query(queryText, [consultor_alianca_id, ...values]);
+    const result = await DB.query(queryText, [consultor_alianca_id, ...values]);
 
-    res.status(200).json({ message: 'Consultor atualizado com sucesso' });
+    const updatedConsultor = result.rows[0];
+
+    res.status(200).json({
+        message: 'Consultor atualizado com sucesso',
+        updatedFields: updatedConsultor,
+    });
     } catch (error: any) {
-    res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
     });
-
+    
     return router
 };
 

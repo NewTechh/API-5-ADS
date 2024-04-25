@@ -3,6 +3,7 @@ import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } fr
 import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from '../../services/IPAddress';
 import { TextInputMask } from "react-native-masked-text";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
   EditarConsultor: undefined
@@ -15,15 +16,20 @@ type Props = {
   route: any
 };
 
+type ConsultorData = {
+  [key: string]: any; // Aceita qualquer chave dinâmica
+}
+
 const EditarConsultor = ({ navigation, route }: Props) => {
   const { consultor } = route.params;
-  const [consultorData, setConsultorData] = useState({
+  const [consultorData, setConsultorData] = useState<ConsultorData>({
     consultor_alianca_email: ''
   });
+  const [consultorDataBeforeEdit, setConsultorDataBeforeEdit] = useState<ConsultorData>({}); // Ajuste da tipagem aqui
 
   useEffect(() => {
-    // Quando o componente monta, preencha os dados do parceiro nos campos de input
     setConsultorData(consultor);
+    setConsultorDataBeforeEdit(consultor); // Atualiza os dados antes da edição quando o componente monta
   }, []);
 
   const handleChange = (name: keyof typeof consultorData, value: string) => {
@@ -36,7 +42,6 @@ const EditarConsultor = ({ navigation, route }: Props) => {
   };
 
   const handleSubmit = async () => {
-
     // Verifica se algum campo está vazio
     for (const field in consultorData) {
       if (!consultorData[field as keyof typeof consultorData]) {
@@ -44,6 +49,7 @@ const EditarConsultor = ({ navigation, route }: Props) => {
         return;
       }
     }
+  
     try {
       const response = await fetch(`http://${getIpAddress()}:3001/PutConsultor/Consultores/${consultor.consultor_alianca_id}`, {
         method: 'PUT',
@@ -52,13 +58,51 @@ const EditarConsultor = ({ navigation, route }: Props) => {
         },
         body: JSON.stringify(consultorData)
       });
-
+  
       if (!response.ok) {
         throw new Error('Erro ao salvar os dados do consultor');
       }
-
-      Alert.alert('Edição Realizada com sucesso')
+  
+      const adminId = await AsyncStorage.getItem('usuario_id');
+  
+      const changes = [];
+      for (const field in consultorData) {
+        if (consultorData[field as keyof typeof consultorData] !== consultorDataBeforeEdit[field as keyof typeof consultorData]) {
+          // Verifica se o campo alterado é o email
+          if (field === 'consultor_alianca_email') {
+            changes.push(`O email foi alterado de ${consultorDataBeforeEdit[field as keyof typeof consultorData]} para ${consultorData[field as keyof typeof consultorData]}`);
+          } else {
+            // Para outros campos, adicione a lógica aqui
+          }
+        }
+      }
+      const registroLogAlteracao = changes.join('\n');
+  
+      // Obtendo informações do consultor de alianças do backend usando o ID
+      const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
+      const adminData = await adminResponse.json();
+  
+      // Construir mensagem de ação do registro de log
+      const registroLogAcao = `Administrador ${adminData.administrador_nome} editou os dados do consultor de alianças ${consultor.consultor_alianca_nome}`;
+  
+      // Enviar o registro de log para o backend
+      await fetch(`http://${getIpAddress()}:3001/Log/EdicaoConsultorLog/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          registro_log_acao: registroLogAcao,
+          registro_log_alteracao: registroLogAlteracao,
+          registro_log_fluxo: "Administrador --> Consultor de Aliança",
+          id_administrador: adminId,
+          id_consultor_alianca: consultor.consultoralianca_id,
+        })
+      });
+  
+      Alert.alert('Edição Realizada com sucesso');
       navigation.goBack();
+      console.log(registroLogAlteracao)
     } catch (error) {
       console.error('Erro ao salvar os dados do consultor:', error);
       Alert.alert('Erro', 'Erro ao salvar os dados do consultor. Por favor, tente novamente.');
@@ -67,7 +111,7 @@ const EditarConsultor = ({ navigation, route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Edição do Parceiro</Text>
+      <Text style={styles.title}>Edição do Consultor</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
