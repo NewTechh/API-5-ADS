@@ -74,12 +74,27 @@ export function NewPassword() {
 
             if (!response.ok) {
                 throw new Error('Erro ao atualizar senha');
+            } else {
+                const registroLogAcao = `Recuperação de senha`;
+                const registroLogAlteracao = `Realizado a recuperação da senha do usuário por meio de token`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Recuperação",
+                    })
+                });
+
+                const responseData = await response.json();
+                Alert.alert('Senha alterada com sucesso')
+                navigation.navigate('Login');
             }
-
-            const responseData = await response.json();
-            Alert.alert('Senha alterada com sucesso')
-            navigation.navigate('Login');
-
             reset();
             setErrorMessage('');
         } catch (error) {
