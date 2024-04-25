@@ -55,10 +55,26 @@ const EdicaoConsulSelf = ({ navigation, route }: Props) => {
 
       if (!response.ok) {
         throw new Error('Erro ao salvar os dados do consultor');
-      }
+      } else {
+        const registroLogAcao = `Edição de dados do consultor`;
+        const registroLogAlteracao = `Realizado a edição autônoma de dados do consultor ${consultor.consultor_alianca_nome}`;
+        
+        // Enviar o registro de log para o backend
+        await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                registro_log_acao: registroLogAcao,
+                registro_log_alteracao: registroLogAlteracao,
+                registro_log_fluxo: "Alteração autônoma",
+            })
+        });
 
-      Alert.alert('Edição Realizada com sucesso')
-      navigation.goBack();
+        Alert.alert('Edição Realizada com sucesso')
+        navigation.goBack();
+      }
     } catch (error) {
       console.error('Erro ao salvar os dados do consultor:', error);
       Alert.alert('Erro', 'Erro ao salvar os dados do consultor. Por favor, tente novamente.');

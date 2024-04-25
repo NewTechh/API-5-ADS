@@ -84,6 +84,22 @@ export function NewPassSelf() {
             });
     
             if (response.ok) {
+
+                const registroLogAcao = `Alteração de senha do usuário`;
+                const registroLogAlteracao = `Realizado a alteração de senha de um usuário de forma autônoma.`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Alteração autônoma",
+                    })
+                });
                 Alert.alert('Senha alterada com sucesso');
                 reset();
                 setErrorMessage('');

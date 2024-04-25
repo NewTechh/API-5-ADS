@@ -84,6 +84,23 @@ const EdicaoEnderecoPartner = ({ navigation, route }: Props) => {
       if (!response.ok) {
         throw new Error('Erro ao salvar os dados do parceiro');
       } else {
+
+        const registroLogAcao = `Edição de endereço do parceiro`;
+        const registroLogAlteracao = `Realizado a edição autônoma do endereço do parceiro ${parceiro.parceiro_nome}`;
+        
+        // Enviar o registro de log para o backend
+        await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                registro_log_acao: registroLogAcao,
+                registro_log_alteracao: registroLogAlteracao,
+                registro_log_fluxo: "Alteração autônoma",
+            })
+        });
+
         Alert.alert('Edição Realizada com sucesso')
         navigation.goBack();
       }

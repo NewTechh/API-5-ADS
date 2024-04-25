@@ -56,10 +56,27 @@ const EdicaoInfoPartner = ({ navigation, route }: Props) => {
 
       if (!response.ok) {
         throw new Error('Erro ao salvar os dados do parceiro');
-      }
+      } else {
 
-      Alert.alert('Edição Realizada com sucesso')
-      navigation.goBack();
+        const registroLogAcao = `Edição de dados do parceiro`;
+        const registroLogAlteracao = `Realizado a edição autônoma de dados do parceiro ${parceiro.parceiro_nome}`;
+        
+        // Enviar o registro de log para o backend
+        await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                registro_log_acao: registroLogAcao,
+                registro_log_alteracao: registroLogAlteracao,
+                registro_log_fluxo: "Alteração autônoma",
+            })
+        });
+
+        Alert.alert('Edição Realizada com sucesso')
+        navigation.goBack();
+      }
     } catch (error) {
       console.error('Erro ao salvar os dados do parceiro:', error);
       Alert.alert('Erro', 'Erro ao salvar os dados do parceiro. Por favor, tente novamente.');
