@@ -57,6 +57,7 @@ const ListConsultores = () => {
         });
         return unsubscribe;
     }, [navigation]);
+    
 
     const fetchConsultores = async () => {
         try {
@@ -73,7 +74,9 @@ const ListConsultores = () => {
         }
     };
 
-    const handleDelete = async (consultor_alianca_cpf: string) => {
+    const consultorIP = consultorData.find(consultor => consultor.consultor_alianca_id);
+
+    const handleDelete = async (consultor_alianca_id: string) => {
         Alert.alert(
             'Confirmação',
             'Tem certeza de que deseja excluir este Consultor de Aliança definitivamente? Essa ação é irreversível.',
@@ -85,15 +88,15 @@ const ListConsultores = () => {
                 },
                 {
                     text: 'Excluir',
-                    onPress: () => confirmDelete(consultor_alianca_cpf)
+                    onPress: () => confirmDelete(consultor_alianca_id)
                 }
             ]
         );
     };
 
-    const confirmDelete = async (consultor_alianca_cpf: string) => {
+    const confirmDelete = async (consultorIP: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/Consultores/${consultor_alianca_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/Consultores/${consultorIP}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
@@ -104,13 +107,13 @@ const ListConsultores = () => {
                 const adminData = await adminResponse.json();
     
                 // Encontrar o consultor com o CPF correspondente
-                const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_cpf === consultor_alianca_cpf);
+                const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_id === consultorIP);
     
                 if (!consultorExcluido) {
                     throw new Error('Consultor não encontrado');
                 }
     
-                const registroLogAcao = `Administrador ${adminData.administrador_nome} excluiu definitivamente o consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
+                const registroLogAcao = `Administrador ${adminData.administrador_nome} realizou a exclusão definitiva do consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
                 const registroLogAlteracao = `Exclusão Definitiva do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
                 
                 // Enviar o registro de log para o backend
@@ -138,35 +141,94 @@ const ListConsultores = () => {
     };
     
 
-    const logicalDeleteConsul= async (consultor_alianca_cpf: string) => {
+    const logicalDeleteConsul= async (consultorIP: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ExclusaoConsultor/${consultor_alianca_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ExclusaoConsultor/${consultorIP}`, {
                 method: 'PUT'
             });
             if (!response.ok) {
                 throw new Error('Erro ao excluir consultor logicamente');
-            }
+            } else {
+                const adminId = await AsyncStorage.getItem('usuario_id');
+                const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
+                const adminData = await adminResponse.json();
+    
+                // Encontrar o consultor com o CPF correspondente
+                const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_id === consultorIP);
+    
+                if (!consultorExcluido) {
+                    throw new Error('Consultor não encontrado');
+                }
+    
+                const registroLogAcao = `Administrador ${adminData.administrador_nome} realizou a exclusão lógica do consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
+                const registroLogAlteracao = `Exclusão Lógica do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/DeleteLogicalConsultorLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Administrador --> Consultor de Aliança",
+                        id_administrador: adminId,
+                        id_consultor_alianca: consultorExcluido.consultor_alianca_id
+                    })
+                });
 
-            Alert.alert('Sucesso','Exclusão Lógica realizada.')
-            console.log('Consultor excluído logicamente com sucesso');
-            fetchConsultores();
+                Alert.alert('Sucesso','Exclusão Lógica realizada.')
+                console.log('Consultor excluído logicamente com sucesso');
+                fetchConsultores();
+            }
         } catch (error) {
             console.error('Erro ao excluir consultor logicamente:', error);
             Alert.alert('Erro', 'Erro ao excluir consultor logicamente. Por favor, tente novamente.');
         }
     };
 
-    const reactivateConsul = async (consultor_alianca_cpf: string) => {
+    const reactivateConsul = async (consultorIP: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ReativacaoConsultor/${consultor_alianca_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ReativacaoConsultor/${consultorIP}`, {
                 method: 'PUT'
             });
             if (!response.ok) {
                 throw new Error('Erro ao reativar consultor');
+            } else {
+                const adminId = await AsyncStorage.getItem('usuario_id');
+                const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
+                const adminData = await adminResponse.json();
+    
+                // Encontrar o consultor com o CPF correspondente
+                const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_id === consultorIP);
+    
+                if (!consultorExcluido) {
+                    throw new Error('Consultor não encontrado');
+                }
+    
+                const registroLogAcao = `Administrador ${adminData.administrador_nome} reativou o consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
+                const registroLogAlteracao = `Reativação do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/DeleteLogicalConsultorLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Administrador --> Consultor de Aliança",
+                        id_administrador: adminId,
+                        id_consultor_alianca: consultorExcluido.consultor_alianca_id
+                    })
+                });
+
+                Alert.alert('Sucesso', 'Reativação realizada.')
+                console.log('Consultor reativado')
+                fetchConsultores();     
             }
-            Alert.alert('Sucesso', 'Reativação realizada.')
-            console.log('Consultor reativado')
-            fetchConsultores();     
         } catch (error) {
             console.error('Erro ao reativar consultor:', error);
             Alert.alert('Erro', 'Erro ao reativar consultor. Por favor, tente novamente.');
@@ -250,7 +312,7 @@ const ListConsultores = () => {
                                                 {
                                                     text: 'Exclusão Definitiva',
                                                     onPress: () => {
-                                                        handleDelete(consultor.consultor_alianca_cpf)
+                                                        handleDelete(consultor.consultor_alianca_id)
                                                     },
                                                 },
 
@@ -258,9 +320,9 @@ const ListConsultores = () => {
                                                     text: consultor.consultor_alianca_status ? 'Exclusão Lógica' : 'Reativar',
                                                     onPress: () => {
                                                         if (consultor.consultor_alianca_status) {
-                                                            logicalDeleteConsul(consultor.consultor_alianca_cpf);
+                                                            logicalDeleteConsul(consultor.consultor_alianca_id);
                                                         } else {
-                                                            reactivateConsul(consultor.consultor_alianca_cpf);
+                                                            reactivateConsul(consultor.consultor_alianca_id);
                                                         }
                                                     },
                                                 },
