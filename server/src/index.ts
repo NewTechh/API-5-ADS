@@ -67,6 +67,7 @@ app.use('/Auth', UpdatePasswordSelf())
 app.use('/Log', EdicaoParceiroLog())
 app.use('/Log', EdicaoConsultorLog())
 app.use('/Log', DeleteConsultorLog())
+app.use('/Log', DeleteParceiroLog())
 app.use('/Log', DeleteLogicalConsultorLog())
 app.use('/Log', ListarLog())
 

@@ -102,7 +102,6 @@ const EditarConsultor = ({ navigation, route }: Props) => {
   
       Alert.alert('Edição Realizada com sucesso');
       navigation.goBack();
-      console.log(registroLogAlteracao)
     } catch (error) {
       console.error('Erro ao salvar os dados do consultor:', error);
       Alert.alert('Erro', 'Erro ao salvar os dados do consultor. Por favor, tente novamente.');

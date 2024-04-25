@@ -8,6 +8,7 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 import getIpAddress from '../../services/IPAddress';
 import SideMenuConsultor from './Consultor/SideMenuConsultor';
 import FooterConsultor from './Consultor/FooterConsultor';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -16,6 +17,7 @@ type RootStackParamList = {
 }
 
 type Parceiro = {
+    parceiro_id: string,
     parceiro_nome: string;
     parceiro_cnpj_cpf: string;
     parceiro_status: boolean; // Adicionando o campo de status do parceiro
@@ -65,7 +67,9 @@ const ListPartner = () => {
         }
     };
 
-    const handleDelete = async (parceiro_cnpj_cpf: string) => {
+    const parceiroID = parceiros.find(parceiros => parceiros.parceiro_id);
+
+    const handleDelete = async (parceiro_id: string) => {
         Alert.alert(
             'Confirmação',
             'Tem certeza de que deseja excluir este parceiro definitivamente? Essa ação é irreversível.',
@@ -77,57 +81,145 @@ const ListPartner = () => {
                 },
                 {
                     text: 'Excluir',
-                    onPress: () => confirmDelete(parceiro_cnpj_cpf)
+                    onPress: () => confirmDelete(parceiro_id)
                 }
             ]
         );
     };
     
-    const confirmDelete = async (parceiro_cnpj_cpf: string) => {
+    const confirmDelete = async (parceiroID: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/Parceiros/${parceiro_cnpj_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/Parceiros/${parceiroID}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
                 throw new Error('Erro ao excluir parceiro');
+            } else {
+                const consulId = await AsyncStorage.getItem('usuario_id');
+                const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
+                const consulData = await consulResponse.json();
+    
+                // Encontrar o consultor com o CPF correspondente
+                const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
+    
+                if (!parceiroExcluido) {
+                    throw new Error('Parceiro não encontrado');
+                }
+    
+                const registroLogAcao = `Consultor de Aliança ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
+                const registroLogAlteracao = `Exclusão Definitiva do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/DeleteLogParceiro`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Consultor de Alianças --> Parceiro",
+                        id_consultor: consulId
+                    })
+                });
+    
+                fetchParceiros();
+                console.log('Parceiro excluído com sucesso');
             }
-            fetchParceiros();
-            console.log('Parceiro excluído com sucesso');
         } catch (error) {
             console.error('Erro ao excluir parceiro:', error);
             Alert.alert('Erro', 'Erro ao excluir parceiro. Por favor, tente novamente.');
         }
     };
 
-    const logicalDeletePartner = async (parceiro_cnpj_cpf: string) => {
+    const logicalDeletePartner = async (parceiroID: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ExclusaoParceiro/${parceiro_cnpj_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ExclusaoParceiro/${parceiroID}`, {
                 method: 'PUT'
             });
             if (!response.ok) {
                 throw new Error('Erro ao excluir parceiro logicamente');
-            }
-
-            Alert.alert('Sucesso','Exclusão Lógica realizada.')
-            console.log('Parceiro excluído logicamente com sucesso');
-            fetchParceiros();
+            }   else {
+                    const consulId = await AsyncStorage.getItem('usuario_id');
+                    const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
+                    const consulData = await consulResponse.json();
+        
+                    // Encontrar o consultor com o CPF correspondente
+                    const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
+        
+                    if (!parceiroExcluido) {
+                        throw new Error('Parceiro não encontrado');
+                    }
+        
+                    const registroLogAcao = `Consultor de Aliança ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
+                    const registroLogAlteracao = `Exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
+                    
+                    // Enviar o registro de log para o backend
+                    await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            registro_log_acao: registroLogAcao,
+                            registro_log_alteracao: registroLogAlteracao,
+                            registro_log_fluxo: "Consultor de Alianças --> Parceiro",
+                            id_consultor: consulId,
+                            id_parceiro: parceiroExcluido.parceiro_id
+                        })
+                    });
+        
+                    Alert.alert('Sucesso','Exclusão Lógica realizada.')
+                    console.log('Parceiro excluído logicamente com sucesso');
+                    fetchParceiros();
+                }
         } catch (error) {
             console.error('Erro ao excluir parceiro logicamente:', error);
             Alert.alert('Erro', 'Erro ao excluir parceiro logicamente. Por favor, tente novamente.');
         }
     };
 
-    const reactivatePartner = async (parceiro_cnpj_cpf: string) => {
+    const reactivatePartner = async (parceiroID: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ReativacaoParceiro/${parceiro_cnpj_cpf}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/ReativacaoParceiro/${parceiroID}`, {
                 method: 'PUT'
             });
             if (!response.ok) {
                 throw new Error('Erro ao reativar parceiro');
-            }
-            Alert.alert('Sucesso', 'Reativação realizada.')
-            console.log('Parceiro reativado')
-            fetchParceiros();     
+            } else {
+                    const consulId = await AsyncStorage.getItem('usuario_id');
+                    const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
+                    const consulData = await consulResponse.json();
+        
+                    // Encontrar o consultor com o CPF correspondente
+                    const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
+        
+                    if (!parceiroExcluido) {
+                        throw new Error('Parceiro não encontrado');
+                    }
+        
+                    const registroLogAcao = `Consultor de Aliança ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
+                    const registroLogAlteracao = `reativação do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
+                    
+                    // Enviar o registro de log para o backend
+                    await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            registro_log_acao: registroLogAcao,
+                            registro_log_alteracao: registroLogAlteracao,
+                            registro_log_fluxo: "Consultor de Alianças --> Parceiro",
+                            id_consultor: consulId,
+                            id_parceiro: parceiroExcluido.parceiro_id
+                        })
+                    });
+        
+                    Alert.alert('Sucesso', 'Reativação realizada.')
+                    console.log('Parceiro reativado')
+                    fetchParceiros();   
+                }  
         } catch (error) {
             console.error('Erro ao reativar parceiro:', error);
             Alert.alert('Erro', 'Erro ao reativar parceiro. Por favor, tente novamente.');
@@ -219,7 +311,7 @@ const ListPartner = () => {
                                                 {
                                                     text: 'Exclusão Definitiva',
                                                     onPress: () => {
-                                                        handleDelete(parceiro.parceiro_cnpj_cpf)
+                                                        handleDelete(parceiro.parceiro_id)
                                                     },
                                                 },
 
@@ -227,9 +319,9 @@ const ListPartner = () => {
                                                     text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
                                                     onPress: () => {
                                                         if (parceiro.parceiro_status) {
-                                                            logicalDeletePartner(parceiro.parceiro_cnpj_cpf);
+                                                            logicalDeletePartner(parceiro.parceiro_id);
                                                         } else {
-                                                            reactivatePartner(parceiro.parceiro_cnpj_cpf);
+                                                            reactivatePartner(parceiro.parceiro_id);
                                                         }
                                                     },
                                                 },
