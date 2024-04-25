@@ -70,12 +70,28 @@ export function SignUpAdm() {
 
             if (!response.ok) {
                 throw new Error('Erro ao cadastrar administrador');
-            }
+            } else {
+                const registroLogAcao = `Novo administrador Cadastrado`;
+                const registroLogAlteracao = `Cadastro realizado de um novo administrador`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Administrador --> Administrador",
+                    })
+                });
 
-            alert('Cadastro realizado!')
-            setErrorMessage('');
-            resetFields()
-            navigation.navigate('ListAdministrador')
+                alert('Cadastro realizado!')
+                setErrorMessage('');
+                resetFields()
+                navigation.navigate('ListAdministrador')
+            }
         } catch (error) {
             console.error(error);
             setErrorMessage('Erro ao cadastrar administrador');

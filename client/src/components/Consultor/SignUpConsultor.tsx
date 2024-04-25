@@ -67,6 +67,23 @@ export function SignUpConsultor() {
             });
 
             if (response.ok) {
+
+                const registroLogAcao = `Novo Consultor de Aliança Cadastrado`;
+                const registroLogAlteracao = `Cadastro realizado de um novo Consultor de Alianças`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Administrador --> Consultor de Aliança",
+                    })
+                });
+
                 alert('Cadastro realizado!')
                 setErrorMessage('');
                 resetFields()

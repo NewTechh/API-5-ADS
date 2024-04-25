@@ -29,11 +29,11 @@ function ExclusaoLogicaParceiro(): express.Router {
 
     const router = express.Router();
 
-    router.put('/ExclusaoParceiro/:parceiro_id', async (req, res) => {
+    router.put('/ExclusaoParceiro/:parceiroID', async (req, res) => {
         try {
-            const { parceiro_id } = req.params;
+            const { parceiroID } = req.params;
             
-            await DB.query(`UPDATE Parceiros SET parceiro_status = FALSE WHERE parceiro_cnpj_cpf = $1`, [parceiro_id]);
+            await DB.query(`UPDATE Parceiros SET parceiro_status = FALSE WHERE parceiro_id = $1`, [parceiroID]);
         
             res.status(200).json({ message: 'Exclusão Lógica do parceiro realizada.', status: false });
 
@@ -49,11 +49,11 @@ function ReativacaoParceiro(): express.Router {
 
     const router = express.Router();
 
-    router.put('/ReativacaoParceiro/:parceiro_id', async (req, res) => {
+    router.put('/ReativacaoParceiro/:parceiroID', async (req, res) => {
         try {
-            const { parceiro_id } = req.params;
+            const { parceiroID } = req.params;
         
-            await DB.query(`UPDATE Parceiros SET parceiro_status = TRUE WHERE parceiro_id = $1`, [parceiro_id]);
+            await DB.query(`UPDATE Parceiros SET parceiro_status = TRUE WHERE parceiro_id = $1`, [parceiroID]);
         
             res.status(200).json({ message: 'Reativação do parceiro realizada.', status: true });
 

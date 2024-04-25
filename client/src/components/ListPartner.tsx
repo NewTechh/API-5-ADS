@@ -106,7 +106,7 @@ const ListPartner = () => {
                     throw new Error('Parceiro não encontrado');
                 }
     
-                const registroLogAcao = `Consultor de Aliança ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
+                const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
                 const registroLogAlteracao = `Exclusão Definitiva do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
                 
                 // Enviar o registro de log para o backend
@@ -151,7 +151,7 @@ const ListPartner = () => {
                         throw new Error('Parceiro não encontrado');
                     }
         
-                    const registroLogAcao = `Consultor de Aliança ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
+                    const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome}`;
                     const registroLogAlteracao = `Exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
                     
                     // Enviar o registro de log para o backend
@@ -198,8 +198,8 @@ const ListPartner = () => {
                         throw new Error('Parceiro não encontrado');
                     }
         
-                    const registroLogAcao = `Consultor de Aliança ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
-                    const registroLogAlteracao = `reativação do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
+                    const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a reativação do parceiro ${parceiroExcluido.parceiro_nome}`;
+                    const registroLogAlteracao = `Reativação do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
                     
                     // Enviar o registro de log para o backend
                     await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {

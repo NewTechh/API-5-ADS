@@ -27,9 +27,10 @@ import UpdatePasswordSelf from './Authentication/ChangeSenhaSelf';
 import ListarLog from './RegistroLog/GetLogs';
 import EdicaoParceiroLog from './RegistroLog/EdicaoParceiroLog';
 import EdicaoConsultorLog from './RegistroLog/EdicaoConsultorLog';
-import DeleteParceiroLog from './RegistroLog/DeleteConsultorLog';
 import DeleteConsultorLog from './RegistroLog/DeleteConsultorLog';
 import DeleteLogicalConsultorLog from './RegistroLog/DeleteLogicalConsultor';
+import DeleteParceiroLog from './RegistroLog/DeleteParceiroLog';
+import SignUpLog from './RegistroLog/SignupLog';
 
 
 
@@ -68,6 +69,7 @@ app.use('/Log', EdicaoParceiroLog())
 app.use('/Log', EdicaoConsultorLog())
 app.use('/Log', DeleteConsultorLog())
 app.use('/Log', DeleteParceiroLog())
+app.use('/Log', SignUpLog())
 app.use('/Log', DeleteLogicalConsultorLog())
 app.use('/Log', ListarLog())
 

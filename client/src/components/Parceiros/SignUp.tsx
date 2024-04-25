@@ -97,6 +97,23 @@ export function SignUp() {
             });
 
             if (response.ok) {
+
+                const registroLogAcao = `Novo parceiro Cadastrado`;
+                const registroLogAlteracao = `Cadastro realizado de um novo parceiro`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Consultor de Alianças --> Parceiro",
+                    })
+                });
+
                 alert('Cadastro realizado!')
                 setErrorMessage('');
                 resetFields()
