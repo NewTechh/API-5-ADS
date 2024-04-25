@@ -8,6 +8,7 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 import getIpAddress from '../../services/IPAddress';
 import FooterAdmin from './Admin/FooterAdmin';
 import SideMenuAdmin from './Admin/SideMenuAdmin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -17,6 +18,7 @@ type RootStackParamList = {
 }
 
 type Consultor = {
+    consultor_alianca_id: string
     consultor_alianca_nome: string;
     consultor_alianca_cpf: string;
     consultor_alianca_status: boolean;
@@ -96,14 +98,45 @@ const ListConsultores = () => {
             });
             if (!response.ok) {
                 throw new Error('Erro ao excluir consultor');
+            } else {
+                const adminId = await AsyncStorage.getItem('usuario_id');
+                const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
+                const adminData = await adminResponse.json();
+    
+                // Encontrar o consultor com o CPF correspondente
+                const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_cpf === consultor_alianca_cpf);
+    
+                if (!consultorExcluido) {
+                    throw new Error('Consultor não encontrado');
+                }
+    
+                const registroLogAcao = `Administrador ${adminData.administrador_nome} excluiu definitivamente o consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
+                const registroLogAlteracao = `Exclusão Definitiva do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
+                
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/DeleteConsultorLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Administrador --> Consultor de Aliança",
+                        id_administrador: adminId
+                    })
+                });
+    
+                fetchConsultores();
+                console.log('Consultor excluído com sucesso');
             }
-            fetchConsultores();
-            console.log('Consultor excluído com sucesso');
+    
         } catch (error) {
             console.error('Erro ao excluir consultor:', error);
             Alert.alert('Erro', 'Erro ao excluir consultor. Por favor, tente novamente.');
         }
     };
+    
 
     const logicalDeleteConsul= async (consultor_alianca_cpf: string) => {
         try {
