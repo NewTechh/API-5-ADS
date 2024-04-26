@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native"
 
 const styles = StyleSheet.create({
     scrollView: {
-        flexGrow: 1, 
-        alignItems: 'center', 
+        flexGrow: 1,
+        alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#272424',
         paddingHorizontal: 16,
-      },
+    },
     title: {
         fontSize: 34,
         marginBottom: 50,
@@ -25,6 +25,20 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         fontWeight: 'bold',
     },
+    select: {
+        width: '100%',
+        height: 40,
+        backgroundColor: '#FFFFFF',
+        marginBottom: 8,
+        paddingLeft: 0,
+        borderRadius: 8,
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        paddingVertical: 10,
+      
+       
+    },
+
     button1: {
         width: '40%',
         height: 40,
@@ -79,7 +93,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         backgroundColor: '#FFFFFF',
     },
-    option: {
+    Option: {
         paddingVertical: 10,
         paddingHorizontal: 10,
         borderBottomWidth: 1,

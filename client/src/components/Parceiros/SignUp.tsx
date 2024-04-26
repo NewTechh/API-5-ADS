@@ -2,14 +2,13 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-nativ
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styles } from '../../styles/estilos'
 import { TextInputMask } from "react-native-masked-text";
 import getIpAddress from '../../../services/IPAddress';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-
-
+import { Picker } from '@react-native-picker/picker';
 
 type FormDataProps = {
     parceiro_nome: string;
@@ -23,6 +22,11 @@ type FormDataProps = {
     parceiro_cidade: string;
     parceiro_estado: string;
     parceiro_senha: string;
+}
+interface Trilha {
+    trilha_id: string;
+    trilha_nome: string;
+    selecionado: boolean;
 }
 
 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
@@ -68,6 +72,8 @@ export function SignUp() {
     const [estado, setEstado] = useState('');
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [trilhas, setTrilhas] = useState<Trilha[]>([]);
+    const [selectedTrilhaId, setSelectedTrilhaId] = useState<string>('');
     const navigation = useNavigation<ListPartnerScreenNavigationProp>();
 
     async function handleSignDados(data: FormDataProps) {
@@ -100,7 +106,7 @@ export function SignUp() {
 
                 const registroLogAcao = `Novo parceiro Cadastrado`;
                 const registroLogAlteracao = `Cadastro realizado de um novo parceiro`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
                     method: 'POST',
@@ -154,6 +160,36 @@ export function SignUp() {
             setErrorMessage('Erro ao buscar CEP. Por favor, tente novamente.');
         }
     }
+
+
+    const handlePress = (item: { trilha_id: string; trilha_nome: string; selecionado: boolean; }) => {
+        const updatedTrilhas = trilhas.map(trilha =>
+            trilha.trilha_id === item.trilha_id
+                ? { ...trilha, selecionado: !trilha.selecionado }
+                : trilha
+        );
+        setTrilhas(updatedTrilhas);
+    };
+
+
+    const fetchTrilhas = () => {
+        fetch(`http://${getIpAddress()}:3001/Tracks/listar`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Dados recebidos:", data);
+                setTrilhas(data)
+            })
+            .catch((error) => console.log(error))
+    };
+
+    useEffect(() => {
+        fetchTrilhas();
+    }, []);
 
     return (
 
@@ -375,6 +411,27 @@ export function SignUp() {
                 )}
             />
             {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
+
+            <View style={styles.select}>
+                <Picker
+                    selectedValue={selectedTrilhaId}
+                    onValueChange={(itemValue) => setSelectedTrilhaId(itemValue)}
+                    onFocus={() => fetchTrilhas()} // Chamada da função fetchTrilhas ao pressionar o Picker
+                >
+                    
+                    <Picker.Item label="Escolha a trilha adquirida pelo parceiro" value="" />
+                    
+                    {trilhas.map((trilha) => (
+                        <Picker.Item key={trilha.trilha_id} label={trilha.trilha_nome} value={trilha.trilha_id} />
+                    ))}
+                </Picker>
+            </View>
+
+
+
+
+
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ListPartner')}>
                     <Text style={styles.buttonText}>Cancelar</Text>
