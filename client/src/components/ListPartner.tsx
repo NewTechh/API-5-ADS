@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal, Alert 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import getIpAddress from '../../services/IPAddress';
 import SideMenuConsultor from './Consultor/SideMenuConsultor';
 import FooterConsultor from './Consultor/FooterConsultor';
@@ -38,6 +38,39 @@ const ListPartner = () => {
     const handleEditClick = (parceiro: Parceiro) => {
         navigation.navigate('EditarParceiro', { parceiro });
     };
+
+    const handleDeleteClick = (parceiro: Parceiro) => {
+        Alert.alert(
+            'Selecione o tipo de operação:',
+            'Esta ação pode ser irreversível, escolha com cuidado',
+            [
+                {
+                    text: 'Cancelar',
+                    onPress: () => {
+                        return
+                    },
+                },
+
+                {
+                    text: 'Exclusão Definitiva',
+                    onPress: () => {
+                        handleDelete(parceiro.parceiro_id)
+                    },
+                },
+
+                {
+                    text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
+                    onPress: () => {
+                        if (parceiro.parceiro_status) {
+                            logicalDeletePartner(parceiro.parceiro_id);
+                        } else {
+                            reactivatePartner(parceiro.parceiro_id);
+                        }
+                    },
+                },
+            ]
+        );
+    }
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
@@ -86,7 +119,7 @@ const ListPartner = () => {
             ]
         );
     };
-    
+
     const confirmDelete = async (parceiroID: string) => {
         try {
             const response = await fetch(`http://${getIpAddress()}:3001/DeleteParceiro/Parceiros/${parceiroID}`, {
@@ -98,17 +131,17 @@ const ListPartner = () => {
                 const consulId = await AsyncStorage.getItem('usuario_id');
                 const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
                 const consulData = await consulResponse.json();
-    
+
                 // Encontrar o consultor com o CPF correspondente
                 const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
-    
+
                 if (!parceiroExcluido) {
                     throw new Error('Parceiro não encontrado');
                 }
-    
+
                 const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a exclusão definitiva do parceiro ${parceiroExcluido.parceiro_nome}`;
                 const registroLogAlteracao = `Exclusão Definitiva do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/DeleteLogParceiro`, {
                     method: 'POST',
@@ -122,7 +155,7 @@ const ListPartner = () => {
                         id_consultor: consulId
                     })
                 });
-    
+
                 fetchParceiros();
                 console.log('Parceiro excluído com sucesso');
             }
@@ -139,40 +172,40 @@ const ListPartner = () => {
             });
             if (!response.ok) {
                 throw new Error('Erro ao excluir parceiro logicamente');
-            }   else {
-                    const consulId = await AsyncStorage.getItem('usuario_id');
-                    const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
-                    const consulData = await consulResponse.json();
-        
-                    // Encontrar o consultor com o CPF correspondente
-                    const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
-        
-                    if (!parceiroExcluido) {
-                        throw new Error('Parceiro não encontrado');
-                    }
-        
-                    const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome}`;
-                    const registroLogAlteracao = `Exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
-                    
-                    // Enviar o registro de log para o backend
-                    await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            registro_log_acao: registroLogAcao,
-                            registro_log_alteracao: registroLogAlteracao,
-                            registro_log_fluxo: "Consultor de Alianças --> Parceiro",
-                            id_consultor: consulId,
-                            id_parceiro: parceiroExcluido.parceiro_id
-                        })
-                    });
-        
-                    Alert.alert('Sucesso','Exclusão Lógica realizada.')
-                    console.log('Parceiro excluído logicamente com sucesso');
-                    fetchParceiros();
+            } else {
+                const consulId = await AsyncStorage.getItem('usuario_id');
+                const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
+                const consulData = await consulResponse.json();
+
+                // Encontrar o consultor com o CPF correspondente
+                const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
+
+                if (!parceiroExcluido) {
+                    throw new Error('Parceiro não encontrado');
                 }
+
+                const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome}`;
+                const registroLogAlteracao = `Exclusão lógica do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
+
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Consultor de Alianças --> Parceiro",
+                        id_consultor: consulId,
+                        id_parceiro: parceiroExcluido.parceiro_id
+                    })
+                });
+
+                Alert.alert('Sucesso', 'Exclusão Lógica realizada.')
+                console.log('Parceiro excluído logicamente com sucesso');
+                fetchParceiros();
+            }
         } catch (error) {
             console.error('Erro ao excluir parceiro logicamente:', error);
             Alert.alert('Erro', 'Erro ao excluir parceiro logicamente. Por favor, tente novamente.');
@@ -187,39 +220,39 @@ const ListPartner = () => {
             if (!response.ok) {
                 throw new Error('Erro ao reativar parceiro');
             } else {
-                    const consulId = await AsyncStorage.getItem('usuario_id');
-                    const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
-                    const consulData = await consulResponse.json();
-        
-                    // Encontrar o consultor com o CPF correspondente
-                    const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
-        
-                    if (!parceiroExcluido) {
-                        throw new Error('Parceiro não encontrado');
-                    }
-        
-                    const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a reativação do parceiro ${parceiroExcluido.parceiro_nome}`;
-                    const registroLogAlteracao = `Reativação do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
-                    
-                    // Enviar o registro de log para o backend
-                    await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            registro_log_acao: registroLogAcao,
-                            registro_log_alteracao: registroLogAlteracao,
-                            registro_log_fluxo: "Consultor de Alianças --> Parceiro",
-                            id_consultor: consulId,
-                            id_parceiro: parceiroExcluido.parceiro_id
-                        })
-                    });
-        
-                    Alert.alert('Sucesso', 'Reativação realizada.')
-                    console.log('Parceiro reativado')
-                    fetchParceiros();   
-                }  
+                const consulId = await AsyncStorage.getItem('usuario_id');
+                const consulResponse = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consulId}`);
+                const consulData = await consulResponse.json();
+
+                // Encontrar o consultor com o CPF correspondente
+                const parceiroExcluido = parceiros.find(parceiro => parceiro.parceiro_id === parceiroID);
+
+                if (!parceiroExcluido) {
+                    throw new Error('Parceiro não encontrado');
+                }
+
+                const registroLogAcao = `Consultor de Alianças ${consulData.consultor_alianca_nome} realizou a reativação do parceiro ${parceiroExcluido.parceiro_nome}`;
+                const registroLogAlteracao = `Reativação do parceiro ${parceiroExcluido.parceiro_nome} pelo Consultor de Alianças ${consulData.consultor_alianca_nome}`;
+
+                // Enviar o registro de log para o backend
+                await fetch(`http://${getIpAddress()}:3001/Log/EdicaoParceiroLog`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        registro_log_acao: registroLogAcao,
+                        registro_log_alteracao: registroLogAlteracao,
+                        registro_log_fluxo: "Consultor de Alianças --> Parceiro",
+                        id_consultor: consulId,
+                        id_parceiro: parceiroExcluido.parceiro_id
+                    })
+                });
+
+                Alert.alert('Sucesso', 'Reativação realizada.')
+                console.log('Parceiro reativado')
+                fetchParceiros();
+            }
         } catch (error) {
             console.error('Erro ao reativar parceiro:', error);
             Alert.alert('Erro', 'Erro ao reativar parceiro. Por favor, tente novamente.');
@@ -243,7 +276,7 @@ const ListPartner = () => {
             Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
         }
     };
-    
+
     const formatParceiroData = (parceiroData: any) => {
         return (
             `Email: ${parceiroData.parceiro_email}\n\n` +
@@ -265,10 +298,9 @@ const ListPartner = () => {
 
                 <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
                     <AntDesign
-                        name={'pluscircleo'}
+                        name={'adduser'}
                         size={35}
                         color='white'
-                    // onPress={}
                     />
                 </Pressable>
 
@@ -284,51 +316,26 @@ const ListPartner = () => {
                                 <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
                                 <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
                                 <View style={styles.actionButtons}>
-                                <Ionicons
-                                    style={styles.icon}
-                                    name="create"
-                                    size={24}
-                                    color="black"
-                                    onPress={() => {handleEditClick(parceiro)}}
-                                />
-                                <Ionicons
-                                    style={styles.icon}
-                                    name={parceiro.parceiro_status ? "trash-bin" : "power"}
-                                    size={24}
-                                    color="black"
-                                    onPress={() => {
-                                        Alert.alert(
-                                            'Selecione o tipo de operação:',
-                                            'Esta ação pode ser irreversível, escolha com cuidado',
-                                            [
-                                                {
-                                                    text: 'Cancelar',
-                                                    onPress: () => {
-                                                        return
-                                                    },
-                                                },
-
-                                                {
-                                                    text: 'Exclusão Definitiva',
-                                                    onPress: () => {
-                                                        handleDelete(parceiro.parceiro_id)
-                                                    },
-                                                },
-
-                                                {
-                                                    text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
-                                                    onPress: () => {
-                                                        if (parceiro.parceiro_status) {
-                                                            logicalDeletePartner(parceiro.parceiro_id);
-                                                        } else {
-                                                            reactivatePartner(parceiro.parceiro_id);
-                                                        }
-                                                    },
-                                                },
-                                            ]
-                                        );
-                                    }}
-                                />
+                                    <Entypo
+                                        style={styles.icon}
+                                        name="archive"
+                                        size={24}
+                                        color="black" 
+                                    />
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name="create"
+                                        size={24}
+                                        color="black"
+                                        onPress={() => { handleEditClick(parceiro) }}
+                                    />
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name={parceiro.parceiro_status ? "trash-bin" : "power"}
+                                        size={24}
+                                        color="black"
+                                        onPress={() => { handleDeleteClick(parceiro) }}
+                                    />
                                 </View>
                             </Pressable>
                         ))}
@@ -402,7 +409,7 @@ const styles = StyleSheet.create({
     },
     iconPlus: {
         marginLeft: 300, // Ajuste a margem esquerda conforme necessário
-        marginBottom: 7,
+        marginBottom: 10,
     },
 });
 
