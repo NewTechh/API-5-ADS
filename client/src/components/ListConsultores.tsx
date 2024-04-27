@@ -266,7 +266,7 @@ const ListConsultores = () => {
 
                 <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
                     <AntDesign
-                        name={'pluscircleo'}
+                        name={'adduser'}
                         size={35}
                         color='white'
                     // onPress={}
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     },
     iconPlus: {
         marginLeft: 300, // Ajuste a margem esquerda conforme necessário
-        marginBottom: 7,
+        marginBottom: 10,
     },
 });
 
