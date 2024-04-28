@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, Pressable, Modal, Alert } from 'react-native';
+import { View, Text, StatusBar, Pressable, Modal, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
-import getIpAddress from '../../services/IPAddress';
-import SideMenuConsultor from './Consultor/SideMenuConsultor';
-import FooterConsultor from './Consultor/FooterConsultor';
+import getIpAddress from '../../../services/IPAddress';
+import SideMenuConsultor from '../Consultor/SideMenuConsultor';
+import FooterConsultor from '../Consultor/FooterConsultor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from "./styles";
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -27,6 +28,7 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>
 
 const ListPartner = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalData, setModalData] = useState<Parceiro>('' as any);
     const navigation = useNavigation<ScreenNavigationProp>();
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
@@ -36,6 +38,7 @@ const ListPartner = () => {
     };
 
     const handleEditClick = (parceiro: Parceiro) => {
+        setModalVisible(false);
         navigation.navigate('EditarParceiro', { parceiro });
     };
 
@@ -43,31 +46,30 @@ const ListPartner = () => {
         Alert.alert(
             'Selecione o tipo de operação:',
             'Esta ação pode ser irreversível, escolha com cuidado',
-            [
-                {
-                    text: 'Cancelar',
-                    onPress: () => {
-                        return
-                    },
+            [{
+                text: 'Cancelar',
+                onPress: () => {
+                    return
                 },
+            },
 
-                {
-                    text: 'Exclusão Definitiva',
-                    onPress: () => {
-                        handleDelete(parceiro.parceiro_id)
-                    },
+            {
+                text: 'Exclusão Definitiva',
+                onPress: () => {
+                    handleDelete(parceiro.parceiro_id)
                 },
+            },
 
-                {
-                    text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
-                    onPress: () => {
-                        if (parceiro.parceiro_status) {
-                            logicalDeletePartner(parceiro.parceiro_id);
-                        } else {
-                            reactivatePartner(parceiro.parceiro_id);
-                        }
-                    },
+            {
+                text: parceiro.parceiro_status ? 'Exclusão Lógica' : 'Reativar',
+                onPress: () => {
+                    if (parceiro.parceiro_status) {
+                        logicalDeletePartner(parceiro.parceiro_id);
+                    } else {
+                        reactivatePartner(parceiro.parceiro_id);
+                    }
                 },
+            },
             ]
         );
     }
@@ -315,31 +317,91 @@ const ListPartner = () => {
                             <Pressable style={styles.row} key={index} onPress={() => handleParceiroClick(parceiro.parceiro_cnpj_cpf)}>
                                 <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
                                 <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
-                                <View style={styles.actionButtons}>
-                                    <Entypo
-                                        style={styles.icon}
-                                        name="archive"
-                                        size={24}
-                                        color="black" 
-                                    />
-                                    <Ionicons
-                                        style={styles.icon}
-                                        name="create"
-                                        size={24}
-                                        color="black"
-                                        onPress={() => { handleEditClick(parceiro) }}
-                                    />
-                                    <Ionicons
-                                        style={styles.icon}
-                                        name={parceiro.parceiro_status ? "trash-bin" : "power"}
+                                <Pressable
+                                    style={styles.buttonBars}
+                                    onPress={() => {
+                                        setModalVisible(!modalVisible);
+                                        setModalData(parceiro);
+                                    }}
+                                >
+                                    <AntDesign
+                                        name="bars"
                                         size={24}
                                         color="black"
-                                        onPress={() => { handleDeleteClick(parceiro) }}
                                     />
-                                </View>
+                                </Pressable>
                             </Pressable>
                         ))}
                     </View>
+
+                    <Modal
+                        visible={modalVisible}
+                        transparent={true}
+                        animationType='slide'
+                        onRequestClose={() => {
+                            setModalVisible(!modalVisible);
+                        }}>
+
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalView}>
+                                <Text style={{ fontSize: 25, fontWeight: '600', marginBottom: 20 }}>{modalData?.parceiro_nome}</Text>
+                                <Pressable
+                                    style={{ position: 'absolute', right: 1 }}
+                                    onPress={() => { setModalVisible(!modalVisible) }}
+                                >
+                                    <AntDesign name="close" size={40} color="black" />
+                                </Pressable>
+                                <Pressable
+                                    style={styles.modalButtonOptions}
+                                    onPress={() => { }}
+                                >
+                                    <Entypo
+                                        style={styles.icon}
+                                        name="archive"
+                                        size={30}
+                                        color="black"
+                                    />
+                                    <Text style={{ fontSize: 20 }}>Progresso</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.modalButtonOptions}
+                                    onPress={() => { handleEditClick(modalData) }}
+                                >
+                                    <AntDesign
+                                        style={styles.icon}
+                                        name="tag"
+                                        size={30}
+                                        color="black"
+                                    />
+                                    <Text style={{ fontSize: 20 }}>Trilhas</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.modalButtonOptions}
+                                    onPress={() => { handleEditClick(modalData) }}
+                                >
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name="create"
+                                        size={30}
+                                        color="black"
+                                    />
+                                    <Text style={{ fontSize: 20 }}>Editar</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.modalButtonOptions}
+                                    onPress={() => { handleDeleteClick(modalData) }}
+                                >
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name={modalData.parceiro_status ? "trash-bin" : "power"}
+                                        size={30}
+                                        color="black"
+                                    />
+                                    <Text style={{ fontSize: 20 }}>Deletar</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
                     <View style={styles.separator} />
                 </View>
             </View>
@@ -349,68 +411,5 @@ const ListPartner = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#312D2A',
-    },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginTop: 30,
-        marginBottom: 20,
-        textAlign: 'center',
-        color: 'white'
-    },
-    tableContainer: {
-        backgroundColor: '#f0f0f0',
-    },
-    headerRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        paddingBottom: 5,
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        padding: 10,
-        backgroundColor: 'white',
-        borderRadius: 5,
-    },
-    separator: {
-        height: 1,
-        backgroundColor: '#ccc',
-        marginBottom: 10,
-    },
-    header: {
-        flex: 1,
-        fontWeight: 'bold',
-        backgroundColor: 'black',
-        color: 'white',
-        fontSize: 16,
-        textAlign: 'center',
-    },
-    data: {
-        flex: 1,
-        fontSize: 12,
-        textAlign: 'center',
-    },
-    actionButtons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    icon: {
-        marginRight: 10,
-    },
-    iconPlus: {
-        marginLeft: 300, // Ajuste a margem esquerda conforme necessário
-        marginBottom: 10,
-    },
-});
 
 export default ListPartner;

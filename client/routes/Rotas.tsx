@@ -15,7 +15,7 @@ import UserScreen from '../src/components/Parceiros/UserScreen';
 import UserScreenConsultor from '../src/components/Consultor/UserScreenConsultor';
 import UserScreenAdmin from '../src/components/Admin/UserScreenAdmin';
 import EditarParceiro from '../src/components/EditarParceiro';
-import ListPartner from '../src/components/ListPartner';
+import ListPartner from '../src/components/ListPartner/ListPartner';
 import ListConsultores from '../src/components/ListConsultores';
 import ListAdministrador from '../src/components/ListAdministrador';
 import EditarConsultor from '../src/components/EditarConsultor';
