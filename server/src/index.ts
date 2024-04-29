@@ -31,6 +31,9 @@ import DeleteConsultorLog from './RegistroLog/DeleteConsultorLog';
 import DeleteLogicalConsultorLog from './RegistroLog/DeleteLogicalConsultor';
 import DeleteParceiroLog from './RegistroLog/DeleteParceiroLog';
 import SignUpLog from './RegistroLog/SignupLog';
+import CadastroDeParceirosTrilha from './User/PostUserTrack';
+import ListarTracksDoParceiro from './Expertise/PartnerTracks';
+import ListarQualificadoresPorExpParceiro from './Expertise/QualiByExp';
 
 
 
@@ -78,6 +81,7 @@ app.use('/Log', ListarLog())
 
 // Cadastro de Parceiros
 app.use('/PostParceiro', CadastroDeParceiros());
+app.use('/PostParceiro', CadastroDeParceirosTrilha());
 
 //Listar todos os dados de todos os parceiros.
 app.use('/GetParceiro', ListarTodosParceiros())
@@ -153,3 +157,5 @@ app.use('/Tracks', GetTrack())
 app.use('/Tracks', ListarExpertiseByTrackID())
 app.use('/Tracks', TrackProgress())
 app.use('/Tracks', LinkPartner())
+app.use('/Tracks', ListarTracksDoParceiro())
+app.use('/Tracks', ListarQualificadoresPorExpParceiro())
