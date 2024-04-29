@@ -1,18 +1,53 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    scrollView: {
+        flexGrow: 1,
+        backgroundColor: '#272424',
+        paddingHorizontal: 16,
+      },
+    title: {
+        flex: 1,
+        fontSize: 33,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 10,
+        textAlign: 'center',
+        color: 'white'
+    },
+
+    button: {
+        backgroundColor: '#FFFFFF',
+        width: '100%',
+        height: 50,
+        borderRadius: 6,
+        marginBottom: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 15, // Adicionado para espaçamento entre texto e ícone
+    },
+
+    buttonText: {
+        fontSize: 20,
+        color: '#000000',
+        fontWeight: 'bold',
+    },
+
+    buttonOption: {
+        paddingLeft: 5,
+    },
+
+    joinFields: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
     container: {
         flex: 1,
         padding: 20,
         backgroundColor: '#312D2A',
-    },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        marginTop: 30,
-        marginBottom: 20,
-        textAlign: 'center',
-        color: 'white'
     },
     tableContainer: {
         backgroundColor: '#f0f0f0',
@@ -60,8 +95,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     iconPlus: {
-        marginLeft: 300, // Ajuste a margem esquerda conforme necessário
-        marginBottom: 10,
+        right: 5, 
+        position: 'absolute',
     },
     buttonBars: {
         flex: 1,
@@ -86,6 +121,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 25,
+        fontWeight: '600',
+        marginBottom: 20,
     },
     modalButtonOptions: {
         flexDirection: 'row',
