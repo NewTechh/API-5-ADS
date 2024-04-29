@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StatusBar, Pressable, Modal, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Modal, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -294,17 +294,18 @@ const ListPartner = () => {
 
     return (
         <>
-            <View style={styles.container}>
-                <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-                <Text style={styles.title}>Parceiros Cadastrados</Text>
+            <ScrollView contentContainerStyle={styles.scrollView}>
 
-                <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
-                    <AntDesign
-                        name={'adduser'}
-                        size={35}
-                        color='white'
-                    />
-                </Pressable>
+                <View style={styles.joinFields}>
+                    <Text style={styles.title}>Parceiros{'\n'}Cadastrados</Text>
+                    <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
+                        <AntDesign
+                            name={'adduser'}
+                            size={35}
+                            color='white'
+                        />
+                    </Pressable>
+                </View>
 
                 <View style={styles.tableContainer}>
                     <View style={styles.headerRow}>
@@ -344,7 +345,7 @@ const ListPartner = () => {
 
                         <View style={styles.modalContainer}>
                             <View style={styles.modalView}>
-                                <Text style={{ fontSize: 25, fontWeight: '600', marginBottom: 20 }}>{modalData?.parceiro_nome}</Text>
+                                <Text style={styles.modalTitle}>{modalData?.parceiro_nome}</Text>
                                 <Pressable
                                     style={{ position: 'absolute', right: 1 }}
                                     onPress={() => { setModalVisible(!modalVisible) }}
@@ -404,7 +405,7 @@ const ListPartner = () => {
                     </Modal>
                     <View style={styles.separator} />
                 </View>
-            </View>
+            </ScrollView>
             <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
             {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
         </>
