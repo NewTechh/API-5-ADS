@@ -6,8 +6,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import getIpAddress from '../../../services/IPAddress';
-import SideMenuConsultor from '../Consultor/SideMenuConsultor';
-import FooterConsultor from '../Consultor/FooterConsultor';
+import SideMenuConsultor from './SideMenuConsultor';
+import FooterConsultor from './FooterConsultor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "./styles";
 
