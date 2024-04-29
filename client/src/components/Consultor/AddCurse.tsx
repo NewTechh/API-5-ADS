@@ -3,7 +3,7 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import styles from './styles';
 import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
 
-export function AddCurse() {
+export default function AddCurse() {
 
     const handlePress = () => {
         console.log("Botão pressionado!");
@@ -11,7 +11,6 @@ export function AddCurse() {
 
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
-            <Ionicons name="arrow-back" size={24} color="white" style={{ position: 'absolute', left: 10, top: 10 }} />
 
             <View style={styles.joinFields}>
                 <Text style={styles.title}>IaaS & PaaS</Text>

@@ -3,10 +3,21 @@ import { View, Text, Pressable, ScrollView } from "react-native";
 import styles from './styles';
 import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
 
-export default function Tracks() {
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-    const handlePress = () => {
-        console.log("Botão pressionado!");
+type RootStackParamList = {
+    Tracks: undefined;
+    AddCurse: undefined;
+}
+
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Tracks'>;
+
+export default function Tracks() {
+    const navigation = useNavigation<ScreenNavigationProp>();
+
+    const handlePressTrack = () => {
+        navigation.navigate('AddCurse');
     };
 
     return (
@@ -21,7 +32,7 @@ export default function Tracks() {
                     />
                 </Pressable>
             </View>
-            <Pressable onPress={handlePress} style={styles.button}>
+            <Pressable onPress={handlePressTrack} style={styles.button}>
                 <Text style={styles.buttonText}>IaaS & PaaS</Text>
 
                 <View style={{ flexDirection: 'row' }}>
@@ -35,7 +46,7 @@ export default function Tracks() {
                 </View>
             </Pressable>
 
-            <Pressable onPress={handlePress} style={styles.button}>
+            <Pressable onPress={handlePressTrack} style={styles.button}>
                 <Text style={styles.buttonText}>CX</Text>
 
                 <View style={{ flexDirection: 'row' }}>
