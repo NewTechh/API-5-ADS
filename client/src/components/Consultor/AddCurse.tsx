@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
-import { styles } from './styles';
+import styles from './styles';
 import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
 
-export function AddCurse() {
+export default function AddCurse() {
 
     const handlePress = () => {
         console.log("Botão pressionado!");
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <Ionicons name="arrow-back" size={24} color="white" style={{ position: 'absolute', left: 10, top: 10 }} />
+        <ScrollView contentContainerStyle={styles.scrollView}>
 
             <View style={styles.joinFields}>
                 <Text style={styles.title}>IaaS & PaaS</Text>
@@ -21,8 +20,6 @@ export function AddCurse() {
                         name={'pluscircleo'}
                         size={35}
                         color='white'
-
-                    // onPress={}
                     />
                 </Pressable>
             </View>

@@ -15,7 +15,7 @@ import UserScreen from '../src/components/Parceiros/UserScreen';
 import UserScreenConsultor from '../src/components/Consultor/UserScreenConsultor';
 import UserScreenAdmin from '../src/components/Admin/UserScreenAdmin';
 import EditarParceiro from '../src/components/EditarParceiro';
-import ListPartner from '../src/components/ListPartner';
+import ListPartner from '../src/components/Consultor/ListPartner';
 import ListConsultores from '../src/components/ListConsultores';
 import ListAdministrador from '../src/components/ListAdministrador';
 import EditarConsultor from '../src/components/EditarConsultor';
@@ -25,6 +25,8 @@ import EdicaoConsulSelf from '../src/components/Consultor/EdicaoConsulSelf';
 import EdicaoInfoPartner from '../src/components/Parceiros/EdicaoInfoPartner';
 import EdicaoEnderecoPartner from '../src/components/Parceiros/EdicaoEnderecoPartner';
 import TableLog from '../src/components/TableLog/TableLog';
+import Tracks from '../src/components/Consultor/Tracks';
+import AddCurse from '../src/components/Consultor/AddCurse';
 
 
 const Stack = createStackNavigator();
@@ -57,6 +59,8 @@ const Rotas = () => {
         <Stack.Screen name="NewPassSelf" component={NewPassSelf} options={{ headerShown: false }} />
         <Stack.Screen name="EditarEnderecoPartner" component={EdicaoEnderecoPartner} options={{ headerShown: false }} />
         <Stack.Screen name="TableLog" component={TableLog} options={{ headerShown: false }} />
+        <Stack.Screen name="Tracks" component={Tracks} options={{ headerShown: false }} />
+        <Stack.Screen name="AddCurse" component={AddCurse} options={{ headerShown: false }} />
 
       </Stack.Navigator>
     </NavigationContainer>
