@@ -35,6 +35,8 @@ import CadastroDeParceirosTrilha from './User/PostUserTrack';
 import ListarTracksDoParceiro from './Expertise/PartnerTracks';
 import ListarQualificadoresPorExpParceiro from './Expertise/QualiByExp';
 import GetExpProgress from './Expertise/GetExpProgress';
+import GraficoCountPartnerByTrack from './Dashboard/GraficoCountPartnerByTrack';
+import TabelaProgressoParceiros from './Dashboard/TabelaProgressoParceiros';
 
 
 
@@ -174,3 +176,10 @@ app.use('/Tracks', ListarTracksDoParceiro())
 
 //listar qualificadores de cada especializacao da trilha do parceiro
 app.use('/Tracks', ListarQualificadoresPorExpParceiro())
+
+
+//DASHBOARD
+//grafico: quantidade de parceiros em cada trilha
+app.use('/Dashboard', GraficoCountPartnerByTrack())
+//tabela: todos os parceiros e o progresso em cada trilha q eles estão vinculados
+app.use('/Dashboard', TabelaProgressoParceiros())
