@@ -10,29 +10,39 @@ function TrackProgress(): express.Router {
           const { parceiro_id } = req.params;
           const trackList = new Array;
 
-          const parceiro = await DB.query(`SELECT COUNT(id_especializacao), trilha_id, trilha_nome
-                                        FROM ParceiroEspecializacao pe
-                                        JOIN Especializacoes e
-                                        ON pe.id_especializacao = e.especializacao_id
-                                        JOIN Trilhas t
-                                        ON e.id_trilha = t.trilha_id
-                                        WHERE pe.id_parceiro = '${parceiro_id}' 
-                                        GROUP BY(trilha_id);`);
+          const parceiro = await DB.query(`SELECT COUNT(id_qualificador) , trilha_nome, trilha_id 
+                                          FROM ParceiroQualificador pq
+                                          JOIN Qualificadores q
+                                          ON q.qualificador_id = pq.id_qualificador
+                                          JOIN Especializacoes e
+                                          ON e.especializacao_id = q.id_especializacao
+                                          JOIN Trilhas t
+                                          ON t.trilha_id = e.id_trilha
+                                          JOIN ParceiroTrilha pt
+                                          ON pt.id_trilha = t.trilha_id
+                                          WHERE pt.id_parceiro = '${parceiro_id}'
+                                          GROUP BY(t.trilha_nome, t.trilha_id);`);
           
-          const total = await DB.query(`SELECT COUNT(especializacao_id), trilha_nome, id_trilha 
-                                        FROM Especializacoes 
-                                        JOIN Trilhas ON Trilhas.trilha_id = Especializacoes.id_trilha
-                                        GROUP BY(trilha_nome, id_trilha);`);
+          const total = await DB.query(`SELECT COUNT(qualificador_id) , trilha_nome, trilha_id 
+                                        FROM Qualificadores q
+                                        JOIN Especializacoes e
+                                        ON e.especializacao_id = q.id_especializacao
+                                        JOIN Trilhas t
+                                        ON t.trilha_id = e.id_trilha
+                                        JOIN ParceiroTrilha pt
+                                        ON pt.id_trilha = t.trilha_id
+                                        WHERE pt.id_parceiro = '${parceiro_id}'
+                                        GROUP BY(t.trilha_nome, t.trilha_id) ;`);
 
                                         
           for(let i =0; i< Number(total.rowCount) ; i++){
-            trackList.push({trilha_id: total.rows[i].id_trilha, trilha_nome: total.rows[i].trilha_nome, totalExp: total.rows[i].count, progresso: 0})
+            trackList.push({trilha_id: total.rows[i].trilha_id, trilha_nome: total.rows[i].trilha_nome, totalQ: total.rows[i].count, progresso: 0})
           }
           
           for(let i =0; i< Number(trackList.length) ; i++){
               for(let j = 0; j < Number((parceiro.rowCount)); j++ ){
                 if(trackList[i].trilha_id == parceiro.rows[j].trilha_id){
-                  trackList[i].progresso = (parceiro.rows[j].count / trackList[i].totalExp)
+                  trackList[i].progresso = (parceiro.rows[j].count / trackList[i].totalQ)
                 }
               }
           }

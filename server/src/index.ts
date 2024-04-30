@@ -34,6 +34,7 @@ import SignUpLog from './RegistroLog/SignupLog';
 import CadastroDeParceirosTrilha from './User/PostUserTrack';
 import ListarTracksDoParceiro from './Expertise/PartnerTracks';
 import ListarQualificadoresPorExpParceiro from './Expertise/QualiByExp';
+import GetExpProgress from './Expertise/GetExpProgress';
 
 
 
@@ -153,9 +154,23 @@ app.use('/DeleteAdmin', DeleteAdmin())
 
 
 // Trilhas de especialização
+//listar trilhas
 app.use('/Tracks', GetTrack())
+
+//listar especializacoes da trilha
 app.use('/Tracks', ListarExpertiseByTrackID())
+
+//listar trilha(s) vinculada(s) ao parceiro com o progresso
 app.use('/Tracks', TrackProgress())
+
+//listar especializacaoes da trilha com progresso do parceiro selecionado
+app.use('/Tracks', GetExpProgress())
+
+//vincular parceiro a qualificador
 app.use('/Tracks', LinkPartner())
+
+//listar trilha(s) vinculada ao parceiro------------------deletar dps q a TrackProgress for testada
 app.use('/Tracks', ListarTracksDoParceiro())
+
+//listar qualificadores de cada especializacao da trilha do parceiro
 app.use('/Tracks', ListarQualificadoresPorExpParceiro())
