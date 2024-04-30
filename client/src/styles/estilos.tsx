@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 34,
         marginBottom: 50,
+        textAlign: 'center',
         marginTop: 50,
         color: '#FFFFFF',
         fontWeight: 'bold'
@@ -70,40 +71,9 @@ const styles = StyleSheet.create({
         color: "#ff375b",
         marginBottom: 8,
     },
-
-    //select
-    customSelect: {
-        width: '80%',
-        height: 40,
-        borderWidth: 1,
-        borderColor: '#FFFFFF',
-        borderRadius: 8,
-        justifyContent: 'center',
-        paddingHorizontal: 10,
-        marginBottom: 10,
-        backgroundColor: '#FFFFFF',
-
-    },
-    optionsContainer: {
-        width: '100%',
-        borderWidth: 1,
-        borderColor: '#FFFFFF',
-        borderRadius: 5,
-        marginTop: 5,
-        marginBottom: 20,
-        backgroundColor: '#FFFFFF',
-    },
-    Option: {
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderBottomWidth: 1,
-    },
-    selectText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    optionText: {
-        fontWeight: 'bold',
+    text:{
+        color: '#696969',
+        fontSize: 14,
     },
     buttonContainer: {
         flexDirection: 'row',

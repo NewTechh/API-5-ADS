@@ -161,17 +161,6 @@ export function SignUp() {
         }
     }
 
-
-    const handlePress = (item: { trilha_id: string; trilha_nome: string; selecionado: boolean; }) => {
-        const updatedTrilhas = trilhas.map(trilha =>
-            trilha.trilha_id === item.trilha_id
-                ? { ...trilha, selecionado: !trilha.selecionado }
-                : trilha
-        );
-        setTrilhas(updatedTrilhas);
-    };
-
-
     const fetchTrilhas = () => {
         fetch(`http://${getIpAddress()}:3001/Tracks/listar`, {
             method: 'GET',
@@ -181,7 +170,6 @@ export function SignUp() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("Dados recebidos:", data);
                 setTrilhas(data)
             })
             .catch((error) => console.log(error))
@@ -391,6 +379,7 @@ export function SignUp() {
                     />
                 )}
             />
+          
             {errors.parceiro_estado && <Text style={styles.labelError}>{errors.parceiro_estado?.message}</Text>}
 
             <Controller
@@ -419,18 +408,16 @@ export function SignUp() {
                     onFocus={() => fetchTrilhas()} // Chamada da função fetchTrilhas ao pressionar o Picker
                 >
                     
-                    <Picker.Item label="Escolha a trilha adquirida pelo parceiro" value="" />
+                   <Picker.Item style={styles.text}  label="Escolha a trilha adquirida pelo parceiro" value="" /> 
                     
                     {trilhas.map((trilha) => (
-                        <Picker.Item key={trilha.trilha_id} label={trilha.trilha_nome} value={trilha.trilha_id} />
+                        <Picker.Item  key={trilha.trilha_id} 
+                        label={trilha.trilha_nome} 
+                        value={trilha.trilha_id} />
                     ))}
                 </Picker>
+               
             </View>
-
-
-
-
-
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ListPartner')}>
