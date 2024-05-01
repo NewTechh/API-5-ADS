@@ -71,7 +71,15 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: "white",
         textDecorationLine: 'underline',
-    }
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    cancelButton: {
+        marginRight: 10,
+    },
 })
 
 export { styles }

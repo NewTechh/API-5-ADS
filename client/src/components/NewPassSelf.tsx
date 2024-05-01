@@ -51,7 +51,7 @@ export function NewPassSelf() {
     };
 
     const handleback = () => {
-        return
+        navigation.goBack();
     };
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
@@ -64,17 +64,17 @@ export function NewPassSelf() {
         try {
             await Schema.validate(data);
             setErrorMessage('');
-    
+
             const userId = await AsyncStorage.getItem('usuario_id');
             const userType = await AsyncStorage.getItem('usuario_tipo');
-    
+
             const requestData = {
                 userId: userId,
                 userType: userType,
                 user_senha: data.senha,
                 user_senha_atual: data.senhaAtual
             };
-    
+
             const response = await fetch(`http://${getIpAddress()}:3001/Auth/updatePasswordSelf/${userId}`, {
                 method: 'PUT',
                 headers: {
@@ -82,12 +82,12 @@ export function NewPassSelf() {
                 },
                 body: JSON.stringify(requestData),
             });
-    
+
             if (response.ok) {
 
                 const registroLogAcao = `Alteração de senha do usuário`;
                 const registroLogAlteracao = `Realizado a alteração de senha de um usuário de forma autônoma.`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
                     method: 'POST',
@@ -195,10 +195,15 @@ export function NewPassSelf() {
             {errors.senhaRep && <Text style={styles.labelError}>{errors.senhaRep?.message}</Text>}
             <Text style={styles.labelError}>{errorMessage}</Text>
 
-            <Pressable style={styles.button} onPress={handleSubmit(handleNewPassword)}>
-                {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
-                <Text style={styles.buttonText}>Atualizar</Text>
-            </Pressable>
+            <View style={styles.buttonContainer}>
+                <Pressable style={[styles.button, styles.cancelButton]} onPress={handleback}>
+                    <Text style={styles.buttonText}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styles.button} onPress={handleSubmit(handleNewPassword)}>
+                    <Text style={styles.buttonText}>Atualizar</Text>
+                </Pressable>
+            </View>
+
         </ScrollView>
     )
 }

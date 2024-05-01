@@ -5,6 +5,8 @@ import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import FooterConsultor from "./FooterConsultor";
+import SideMenuConsultor from "./SideMenuConsultor";
 
 type RootStackParamList = {
     Tracks: undefined;
@@ -15,12 +17,18 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Tracks'>;
 
 export default function Tracks() {
     const navigation = useNavigation<ScreenNavigationProp>();
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
 
     const handlePressTrack = () => {
         navigation.navigate('AddCurse');
     };
 
     return (
+        <>
         <ScrollView contentContainerStyle={styles.scrollView}>
             <View style={styles.joinFields}>
                 <Text style={styles.title}>Trilhas</Text>
@@ -59,7 +67,9 @@ export default function Tracks() {
                     </Pressable>
                 </View>
             </Pressable>
-
         </ScrollView>
+        <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
+        {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
+        </>
     )
 }

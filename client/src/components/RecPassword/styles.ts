@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         marginLeft: 10, 
     },
     button: {
-        width: '100%',
+        width: '50%',
         height: 40,
         backgroundColor: '#C74634',
         borderRadius: 100,
@@ -70,7 +70,15 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: "white",
         textDecorationLine: 'underline',
-    }
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    cancelButton: {
+        marginRight: 10,
+    },
 })
 
 export { styles }

@@ -32,10 +32,10 @@ const Schema = yup.object().shape({
     administrador_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
     administrador_funcao: yup.string().required("Informe a Função"),
     administrador_setor: yup.string()
-    .required("Informe o Setor")
-    .test('is-valid-setor', 'O Setor deve ser A, B, C ou D', (value) => {
-        return ['A', 'B', 'C', 'D'].includes(value);
-    }),
+        .required("Informe o Setor")
+        .test('is-valid-setor', 'O Setor deve ser A, B, C ou D', (value) => {
+            return ['A', 'B', 'C', 'D'].includes(value);
+        }),
     administrador_matricula: yup.string().required("Informe a Matricula"),
     administrador_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
@@ -49,6 +49,10 @@ export function SignUpAdm() {
         setShowPassword(!showPassword);
     };
 
+    const handleback = () => {
+        navigation.goBack();
+    };
+
     const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(Schema)
     });
@@ -56,10 +60,10 @@ export function SignUpAdm() {
     const [errorMessage, setErrorMessage] = useState('');
 
     async function handleNewAdm(data: FormDataProps) {
-        
+
         try {
             await Schema.validate(data);
-            
+
             const response = await fetch(`http://${getIpAddress()}:3001/PostAdmin/CadastroADMIN`, {
                 method: 'POST',
                 headers: {
@@ -73,7 +77,7 @@ export function SignUpAdm() {
             } else {
                 const registroLogAcao = `Novo administrador Cadastrado`;
                 const registroLogAlteracao = `Cadastro realizado de um novo administrador`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
                     method: 'POST',
@@ -208,10 +212,15 @@ export function SignUpAdm() {
 
             {errors.administrador_senha && <Text style={styles.labelError}>{errors.administrador_senha?.message}</Text>}
 
-            <Pressable style={styles.button} onPress={handleSubmit(handleNewAdm)}>
-                {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
-                <Text style={styles.buttonText}>Cadastrar</Text>
-            </Pressable>
+            <View style={styles.buttonContainer}>
+                <Pressable style={[styles.button, styles.cancelButton]} onPress={handleback}>
+                    <Text style={styles.buttonText}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={styles.button} onPress={handleSubmit(handleNewAdm)}>
+                    {errorMessage ? <Text style={styles.labelError}>{errorMessage}</Text> : null}
+                    <Text style={styles.buttonText}>Cadastrar</Text>
+                </Pressable>
+            </View>
         </ScrollView>
     )
 }

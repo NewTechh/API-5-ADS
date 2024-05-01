@@ -16,8 +16,8 @@ import UserScreenConsultor from '../src/components/Consultor/UserScreenConsultor
 import UserScreenAdmin from '../src/components/Admin/UserScreenAdmin';
 import EditarParceiro from '../src/components/EditarParceiro';
 import ListPartner from '../src/components/Consultor/ListPartner';
-import ListConsultores from '../src/components/ListConsultores';
-import ListAdministrador from '../src/components/ListAdministrador';
+import ListConsultores from '../src/components/Admin/ListConsultores';
+import ListAdministrador from '../src/components/Admin/ListAdministrador';
 import EditarConsultor from '../src/components/EditarConsultor';
 import EditarAdminSelf from '../src/components/Admin/EdicaoAdminSelf';
 import { NewPassSelf } from '../src/components/NewPassSelf';
