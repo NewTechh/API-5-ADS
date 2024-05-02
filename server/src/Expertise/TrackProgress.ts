@@ -49,7 +49,7 @@ function TrackProgress(): express.Router {
           
 
           
-          if (parceiro.rows.length === 0) {
+          if (total.rows.length === 0) {
             res.status(404).json({ message: 'dados não encontrados' });
           } else {
             res.status(200).json(trackList);
