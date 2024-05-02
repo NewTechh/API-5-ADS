@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser'
 import CadastroDeParceiros from './User/PostUser';
-import { ListarTodosParceiros, ListarParceiroID } from './User/GetUser';
+import { ListarTodosParceiros, ListarParceiroID, ListarTodosParceirosComTrilhas } from './User/GetUser';
 import EdicaoDeParceiros from './User/PutUser';
 import CadastroDeAdmin from './Admin/PostAdmin';
 import { ListarAdminID, ListarTodosAdministradores } from './Admin/GetAdmin';
@@ -88,6 +88,9 @@ app.use('/PostParceiro', CadastroDeParceirosTrilha());
 
 //Listar todos os dados de todos os parceiros.
 app.use('/GetParceiro', ListarTodosParceiros())
+
+//Listar dados dos parceiros + trilha adquirida por eles
+app.use('/GetParceiro', ListarTodosParceirosComTrilhas())
 
 //Listar apenas os dados do usuário logado
 app.use('/GetParceiro', ListarParceiroID());
