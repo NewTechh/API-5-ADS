@@ -305,7 +305,7 @@ const ListPartner = () => {
             <ScrollView contentContainerStyle={styles.scrollView}>
 
                 <View style={styles.joinFields}>
-                    <Text style={styles.title}>Parceiros Cadastrados</Text>
+                    <Text style={styles.title}>Parceiros{'\n'}Cadastrados</Text>
                     <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
                         <AntDesign
                             name={'adduser'}

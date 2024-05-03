@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../src/components/LoginScreen';
 import DashboardPartner from '../src/components/DashboardPartner';
-import { SignUp } from '../src/components/Parceiros/SignUp';
+import { SignUp } from '../src/components/Consultor/SignUp';
 import { SignUpConsultor } from '../src/components/Consultor/SignUpConsultor';
 import { RecPassword } from '../src/components/RecPassword/RecPassword';
 import { NewPassword } from '../src/components/RecPassword/NewPassword';
