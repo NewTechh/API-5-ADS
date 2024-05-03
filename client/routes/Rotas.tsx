@@ -27,6 +27,7 @@ import EdicaoEnderecoPartner from '../src/components/Parceiros/EdicaoEnderecoPar
 import TableLog from '../src/components/TableLog/TableLog';
 import Tracks from '../src/components/Consultor/Tracks';
 import AddCurse from '../src/components/Consultor/AddCurse';
+import Trilhas from '../src/components/Consultor/Trilhas';
 
 
 const Stack = createStackNavigator();
@@ -61,7 +62,7 @@ const Rotas = () => {
         <Stack.Screen name="TableLog" component={TableLog} options={{ headerShown: false }} />
         <Stack.Screen name="Tracks" component={Tracks} options={{ headerShown: false }} />
         <Stack.Screen name="AddCurse" component={AddCurse} options={{ headerShown: false }} />
-
+        <Stack.Screen name="Trilhas" component={Trilhas} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

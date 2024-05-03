@@ -10,7 +10,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 
+
 type FormDataProps = {
+    trilha_id: string;
     parceiro_nome: string;
     parceiro_email: string;
     parceiro_cnpj_cpf: string;
@@ -45,6 +47,7 @@ const signUpSchema = yup.object().shape({
     parceiro_cidade: yup.string().required("Informe a cidade"),
     parceiro_estado: yup.string().required("Informe o estado"),
     parceiro_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
+    trilha_id: yup.string().required("Informe a trilha")
 });
 
 type RootStackParamList = {
@@ -77,7 +80,7 @@ export function SignUp() {
     const navigation = useNavigation<ListPartnerScreenNavigationProp>();
 
     async function handleSignDados(data: FormDataProps) {
-
+        console.log('Dados do formulário:', data);
         function resetFields() {
             setUsernameValue('');
             setEmail('');
@@ -90,18 +93,19 @@ export function SignUp() {
             setCidade('');
             setEstado('');
             setSenha('');
+            setSelectedTrilhaId('');
             reset();
         }
 
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/PostParceiro/CadastroParceiros`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/PostParceiro/CadastroParceirosTrilha`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data),
             });
-
+            console.log('Cadastro realizado com sucesso!');
             if (response.ok) {
 
                 const registroLogAcao = `Novo parceiro Cadastrado`;
@@ -379,7 +383,7 @@ export function SignUp() {
                     />
                 )}
             />
-          
+
             {errors.parceiro_estado && <Text style={styles.labelError}>{errors.parceiro_estado?.message}</Text>}
 
             <Controller
@@ -401,23 +405,24 @@ export function SignUp() {
             />
             {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
 
-            <View style={styles.select}>
-                <Picker
-                    selectedValue={selectedTrilhaId}
-                    onValueChange={(itemValue) => setSelectedTrilhaId(itemValue)}
-                    onFocus={() => fetchTrilhas()} // Chamada da função fetchTrilhas ao pressionar o Picker
-                >
-                    
-                   <Picker.Item style={styles.text}  label="Escolha a trilha adquirida pelo parceiro" value="" /> 
-                    
-                    {trilhas.map((trilha) => (
-                        <Picker.Item  key={trilha.trilha_id} 
-                        label={trilha.trilha_nome} 
-                        value={trilha.trilha_id} />
-                    ))}
-                </Picker>
-               
-            </View>
+            <Controller 
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                    <Picker style={styles.select}
+                        selectedValue={value}
+                        onValueChange={(itemValue) => onChange(itemValue)}
+                        onFocus={() => fetchTrilhas()}
+                    >
+                        <Picker.Item style={styles.text} label="Escolha a trilha adquirida pelo parceiro" value="" />
+
+                        {trilhas.map((trilha) => (
+                            <Picker.Item key={trilha.trilha_id} label={trilha.trilha_nome} value={trilha.trilha_id} />
+                        ))}
+                    </Picker>
+                )}
+                name="trilha_id"
+                rules={{ required: true }}
+            />
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ListPartner')}>

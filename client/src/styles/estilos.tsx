@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: '#FFFFFF',
         marginBottom: 8,
-        paddingLeft: 0,
+    
         borderRadius: 8,
         fontWeight: 'bold',
         justifyContent: 'center',
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     text:{
         color: '#696969',
         fontSize: 14,
+        
     },
     buttonContainer: {
         flexDirection: 'row',

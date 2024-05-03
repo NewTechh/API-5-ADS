@@ -14,6 +14,7 @@ import styles from "./styles";
 type RootStackParamList = {
     SignUpAdm: undefined;
     Cadastro: undefined;
+    Trilhas: { parceiro_id: string };
     EditarParceiro: { parceiro: Parceiro };
 }
 
@@ -22,6 +23,8 @@ type Parceiro = {
     parceiro_nome: string;
     parceiro_cnpj_cpf: string;
     parceiro_status: boolean; // Adicionando o campo de status do parceiro
+    trilha_id: string;
+    trilha_nome: string;
 }
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
@@ -76,6 +79,11 @@ const ListPartner = () => {
 
     const handleSignUp = () => {
         navigation.navigate('Cadastro');
+        setModalVisible(false);
+    };
+
+    const handleTrilhas = (parceiro_id: string) => {
+        navigation.navigate('Trilhas', { parceiro_id });
         setModalVisible(false);
     };
 
@@ -288,16 +296,16 @@ const ListPartner = () => {
             `Bairro: ${parceiroData.parceiro_bairro}\n\n` +
             `CEP: ${parceiroData.parceiro_cep}\n\n` +
             `Cidade: ${parceiroData.parceiro_cidade}\n\n` +
-            `Estado: ${parceiroData.parceiro_estado}`
+            `Estado: ${parceiroData.parceiro_estado} \n\n`
         );
     };
-
+    
     return (
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
 
                 <View style={styles.joinFields}>
-                    <Text style={styles.title}>Parceiros{'\n'}Cadastrados</Text>
+                    <Text style={styles.title}>Parceiros Cadastrados</Text>
                     <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
                         <AntDesign
                             name={'adduser'}
@@ -366,7 +374,7 @@ const ListPartner = () => {
                                 </Pressable>
                                 <Pressable
                                     style={styles.modalButtonOptions}
-                                    onPress={() => { handleEditClick(modalData) }}
+                                    onPress={() => { handleTrilhas(modalData?.parceiro_id) }}
                                 >
                                     <AntDesign
                                         style={styles.icon}
