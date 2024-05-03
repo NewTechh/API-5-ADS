@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FooterConsultor from './Consultor/FooterConsultor';
 import SideMenuConsultor from './Consultor/SideMenuConsultor';
+import getIpAddress from '../../services/IPAddress';
 
 type RootStackParamList = {
   Dashboard: undefined;
 }
+
+type PartnerCountData = {
+  trilha_nome: string;
+  count: number;
+};
+
+type PartnerProgress = {
+  parceiro_nome: string;
+  trilha_nome: string;
+  trackList: any;
+};
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
 
@@ -17,9 +29,36 @@ const DashboardPartner = () => {
   const chartWidth = screenWidth - 40;
   const navigation = useNavigation<ScreenNavigationProp>();
   const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+  const [partnerCountData, setPartnerCountData] = useState<PartnerCountData[]>([]);
+  const [partnerProgress, setPartnerProgress] = useState<PartnerProgress[]>([]);
 
   const toggleSideMenu = () => {
     setIsSideMenuVisible(!isSideMenuVisible);
+  };
+
+  useEffect(() => {
+    fetchPartnerProgress();
+    fetchPartnerCountByTrack();
+  }, []);
+
+  const fetchPartnerProgress = async () => {
+    try {
+      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/ParceirosProgresso`);
+      const data = await response.json();
+      setPartnerProgress(data);
+    } catch (error) {
+      console.error('Erro ao obter progresso dos parceiros:', error);
+    }
+  };
+
+  const fetchPartnerCountByTrack = async () => {
+    try {
+      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/graficoParceirosPorTrilha`);
+      const data = await response.json();
+      setPartnerCountData(data);
+    } catch (error) {
+      console.error('Erro ao obter contagem de parceiros por trilha:', error);
+    }
   };
 
   const data = [
@@ -60,23 +99,6 @@ const DashboardPartner = () => {
     }
   ];
 
-  const barChartData = {
-    labels: ["Product Area", "Qualifiers", "Regional Market"],
-    datasets: [
-      {
-        data: [20, 15, 25],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`
-      }
-    ]
-  };
-
-  // Dados de exemplo para o progresso dos parceiros
-  const partnerProgress = [
-    { name: "José Souza", cnpj: "1234567890001-01", progress: 70 },
-    { name: "Roberta Almeida", cnpj: "9876543210001-02", progress: 40 },
-    { name: "Junior Santos", cnpj: "4567891230001-03", progress: 90 }
-  ];
-
   return (
     <>
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -88,18 +110,18 @@ const DashboardPartner = () => {
             <Text style={styles.header}>Progresso</Text>
           </View>
           {partnerProgress.map((partner, index) => (
-            <View key={index}>
-              <View style={styles.row}>
-                <Text style={styles.data}>{partner.name}</Text>
-                <Text style={styles.data}>{partner.cnpj}</Text>
-                <Text style={styles.data}>{partner.progress}%</Text>
-              </View>
-              <View style={styles.progressBar}>
-                <View style={[styles.progress, { width: `${partner.progress}%` }]} />
-              </View>
-              <View style={styles.separator} />
+          <View key={index}>
+            <View style={styles.row}>
+              <Text style={styles.data}>{partner.parceiro_nome}</Text>
+              <Text style={styles.data}>{partner.trilha_nome}</Text>
+              <Text style={styles.data}>{(partner.trackList * 100).toFixed(2)}%</Text>
             </View>
-          ))}
+            <View style={styles.progressBar}>
+              <View style={[styles.progress, { width: `${partner.trackList * 100}%` }]} />
+            </View>
+            <View style={styles.separator} />
+          </View>
+        ))}
         </View>
         <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
         <PieChart
@@ -118,7 +140,12 @@ const DashboardPartner = () => {
 
         <Text style={styles.title}>Demandas por Área:</Text>
         <BarChart
-          data={barChartData}
+          data={{
+            labels: partnerCountData.map(item => item.trilha_nome), // Usando os dados de contagem de parceiros por trilha
+            datasets: [{
+              data: partnerCountData.map(item => item.count), // Usando os dados de contagem de parceiros por trilha
+            }],
+          }}
           width={chartWidth}
           height={220}
           yAxisSuffix=""
