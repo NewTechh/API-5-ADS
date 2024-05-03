@@ -408,7 +408,8 @@ export function SignUp() {
             <Controller 
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <Picker style={styles.select}
+                    <View style={styles.select}>
+                    <Picker 
                         selectedValue={value}
                         onValueChange={(itemValue) => onChange(itemValue)}
                         onFocus={() => fetchTrilhas()}
@@ -419,6 +420,7 @@ export function SignUp() {
                             <Picker.Item key={trilha.trilha_id} label={trilha.trilha_nome} value={trilha.trilha_id} />
                         ))}
                     </Picker>
+                </View>
                 )}
                 name="trilha_id"
                 rules={{ required: true }}
