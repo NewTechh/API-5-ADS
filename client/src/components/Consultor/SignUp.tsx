@@ -31,14 +31,14 @@ interface Trilha {
     selecionado: boolean;
 }
 
-const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
 const telefoneRegex = /^\([1-9]{2}\) 9?[0-9]{4}-[0-9]{4}$/;
 const cepRegex = /^\d{5}-\d{3}$/;
 
 const signUpSchema = yup.object().shape({
     parceiro_nome: yup.string().required("Informe o Nome"),
     parceiro_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
-    parceiro_cnpj_cpf: yup.string().matches(cpfRegex, "CPF inválido").required("Informe o CPF/CNPJ"),
+    parceiro_cnpj_cpf: yup.string().matches(cnpjRegex, "CNPJ inválido").required("Informe o CNPJ"),
     parceiro_telefone: yup.string().matches(telefoneRegex, "Telefone inválido").required("Informe o número de telefone"),
     parceiro_logradouro: yup.string().required("Informe o logradouro"),
     parceiro_logradouro_numero: yup.string().required("Informe o número do logradouro"),
@@ -238,8 +238,8 @@ export function SignUp() {
                             onChange(text)
                         }}
                         value={cnpj}
-                        placeholder="CPF/CNPJ"
-                        type={"cpf"}
+                        placeholder="CNPJ"
+                        type={"cnpj"}
                     />
                 )}
             />

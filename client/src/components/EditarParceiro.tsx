@@ -208,7 +208,7 @@ const EditarParceiro = ({ navigation, route }: Props) => {
 
       <View style={styles.buttonWrapper}>
         <TouchableOpacity style={styles.button} onPress={handleBack}>
-          <Text style={styles.buttonText}>Voltar</Text>
+          <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Salvar</Text>
