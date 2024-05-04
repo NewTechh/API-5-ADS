@@ -25,7 +25,7 @@ import EdicaoConsulSelf from '../src/components/Consultor/EdicaoConsulSelf';
 import EdicaoInfoPartner from '../src/components/Parceiros/EdicaoInfoPartner';
 import EdicaoEnderecoPartner from '../src/components/Parceiros/EdicaoEnderecoPartner';
 import TableLog from '../src/components/TableLog/TableLog';
-import Tracks from '../src/components/Consultor/Tracks';
+import ManageTracks  from '../src/components/Consultor/ManageTracks';
 import AddCurse from '../src/components/Consultor/AddCurse';
 import Trilhas from '../src/components/Consultor/Trilhas';
 import DetalhesEspecializacao from '../src/components/Consultor/ExpertiseList';
@@ -62,7 +62,7 @@ const Rotas = () => {
         <Stack.Screen name="NewPassSelf" component={NewPassSelf} options={{ headerShown: false }} />
         <Stack.Screen name="EditarEnderecoPartner" component={EdicaoEnderecoPartner} options={{ headerShown: false }} />
         <Stack.Screen name="TableLog" component={TableLog} options={{ headerShown: false }} />
-        <Stack.Screen name="Tracks" component={Tracks} options={{ headerShown: false }} />
+        <Stack.Screen name="ManageTracks" component={ManageTracks} options={{ headerShown: false }} />
         <Stack.Screen name="AddCurse" component={AddCurse} options={{ headerShown: false }} />
         <Stack.Screen name="Trilhas" component={Trilhas} options={{ headerShown: false }} />
         <Stack.Screen name="EspecializacoesTrilha" component={EspecializacoesTrilha} options={{ headerShown: false }} />

@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         backgroundColor: '#272424',
         paddingHorizontal: 16,
-      },
+    },
     title: {
         flex: 1,
         fontSize: 33,
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     iconPlus: {
-        right: 5, 
+        right: 5,
         position: 'absolute',
     },
     buttonBars: {
@@ -129,6 +129,33 @@ const styles = StyleSheet.create({
     modalButtonOptions: {
         flexDirection: 'row',
         marginVertical: 8,
+    },
+    input: {
+        height: 40,
+        backgroundColor: '#ffffff',
+        paddingHorizontal: 8,
+        marginBottom: 8,
+        borderRadius: 8,
+        fontSize: 17,
+        borderWidth: 1,
+        borderColor: 'black',
+    },
+    labelError: {
+        alignSelf: "flex-start",
+        color: "#ff375b",
+        marginBottom: 8,
+    },
+    confirmButton: {
+        height: 40,
+        backgroundColor: '#C74634',
+        borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    confirmButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
 });
 
