@@ -360,18 +360,7 @@ const ListPartner = () => {
                                 >
                                     <AntDesign name="close" size={40} color="black" />
                                 </Pressable>
-                                <Pressable
-                                    style={styles.modalButtonOptions}
-                                    onPress={() => { }}
-                                >
-                                    <Entypo
-                                        style={styles.icon}
-                                        name="archive"
-                                        size={30}
-                                        color="black"
-                                    />
-                                    <Text style={{ fontSize: 20 }}>Progresso</Text>
-                                </Pressable>
+                                
                                 <Pressable
                                     style={styles.modalButtonOptions}
                                     onPress={() => { handleTrilhas(modalData?.parceiro_id) }}
@@ -382,7 +371,7 @@ const ListPartner = () => {
                                         size={30}
                                         color="black"
                                     />
-                                    <Text style={{ fontSize: 20 }}>Trilhas</Text>
+                                    <Text style={{ fontSize: 20 }}>Trilha(s)</Text>
                                 </Pressable>
                                 <Pressable
                                     style={styles.modalButtonOptions}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, View, Text, Pressable } from "react-native";
 import styles from "./styles";
+import * as Progress from 'react-native-progress';
 import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from "../../../services/IPAddress";
 import SideMenuConsultor from './SideMenuConsultor';
@@ -9,8 +10,9 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 
 
 type Trilha = {
-    id_trilha: string;
+    trilha_id: string;
     trilha_nome: string;
+    progresso: number
 };
 
 
@@ -44,7 +46,7 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
     const fetchTrilhasDoParceiro = async (parceiro_id: string) => {
         try {
 
-            const response = await fetch(`http://${getIpAddress()}:3001/Tracks/TrilhasDoParceiro/${parceiro_id}`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/Tracks/Progress/${parceiro_id}`, {
                 method: "GET",
             });
             if (!response.ok) {
@@ -66,9 +68,10 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 {trilhas.map((trilha, index) => (
-                    <View key={index} style={styles.joinFields}>
-                        <Pressable style={styles.button} onPress={() => handleTrilhaPress(trilha.id_trilha)}>
+                    <View key={trilha.trilha_id} style={styles.joinFields}>
+                        <Pressable style={styles.button} onPress={() => handleTrilhaPress(trilha.trilha_id)}>
                             <Text style={styles.buttonText}>{trilha.trilha_nome}</Text>
+                            <Progress.Bar progress={trilha.progresso} width={50} color={'#17E753'} />
                         </Pressable>
                     </View>
                 ))}

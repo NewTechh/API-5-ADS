@@ -19,7 +19,7 @@ type PartnerCountData = {
 type PartnerProgress = {
   parceiro_nome: string;
   trilha_nome: string;
-  trackList: any;
+  progresso: number;
 };
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
@@ -106,7 +106,7 @@ const DashboardPartner = () => {
         <View style={styles.tableContainer}>
           <View style={styles.headerRow}>
             <Text style={styles.header}>Nome</Text>
-            <Text style={styles.header}>CNPJ</Text>
+            <Text style={styles.header}>Trilha</Text>
             <Text style={styles.header}>Progresso</Text>
           </View>
           {partnerProgress.map((partner, index) => (
@@ -114,10 +114,10 @@ const DashboardPartner = () => {
             <View style={styles.row}>
               <Text style={styles.data}>{partner.parceiro_nome}</Text>
               <Text style={styles.data}>{partner.trilha_nome}</Text>
-              <Text style={styles.data}>{(partner.trackList * 100).toFixed(2)}%</Text>
+              <Text style={styles.data}>{(partner.progresso * 100).toFixed(2)}%</Text>
             </View>
             <View style={styles.progressBar}>
-              <View style={[styles.progress, { width: `${partner.trackList * 100}%` }]} />
+              <View style={[styles.progress, { width: `${partner.progresso * 100}%` }]} />
             </View>
             <View style={styles.separator} />
           </View>
@@ -138,7 +138,7 @@ const DashboardPartner = () => {
           paddingLeft="5"
         />
 
-        <Text style={styles.title}>Demandas por Área:</Text>
+        <Text style={styles.title}>Parceiros por Trilha:</Text>
         <BarChart
           data={{
             labels: partnerCountData.map(item => item.trilha_nome), // Usando os dados de contagem de parceiros por trilha
