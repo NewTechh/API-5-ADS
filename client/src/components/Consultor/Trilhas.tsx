@@ -5,11 +5,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import getIpAddress from "../../../services/IPAddress";
 import SideMenuConsultor from './SideMenuConsultor';
 import FooterConsultor from './FooterConsultor';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 
-type RootStackParamList = {
-    Trilhas: { parceiro_id: string };
-}
 
 type Trilha = {
     id_trilha: string;
@@ -19,10 +16,15 @@ type Trilha = {
 
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Trilhas'>;
+type TrilhasRouteProp = RouteProp<RootStackParamList, 'Trilhas'>;
 
 interface TrilhasProps {
     navigation: ScreenNavigationProp;
-    route: { params: { parceiro_id: string } };
+    route: TrilhasRouteProp;
+}
+type RootStackParamList = {
+    Trilhas: { parceiro_id: string };
+    EspecializacoesTrilha: { trilha_id: string, parceiro_id: string };
 }
 
 const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
@@ -34,6 +36,7 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
     useEffect(() => {
         fetchTrilhasDoParceiro(parceiro_id);
     }, [parceiro_id]);
+
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
@@ -53,13 +56,18 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
             console.error("Erro ao carregar trilhas:", error);
         }
     };
+    
+    const handleTrilhaPress = (trilha_id: string) => {
+        navigation.navigate('EspecializacoesTrilha', { trilha_id, parceiro_id });
+    };
+    
 
     return (
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 {trilhas.map((trilha, index) => (
                     <View key={index} style={styles.joinFields}>
-                        <Pressable style={styles.button}>
+                        <Pressable style={styles.button} onPress={() => handleTrilhaPress(trilha.id_trilha)}>
                             <Text style={styles.buttonText}>{trilha.trilha_nome}</Text>
                         </Pressable>
                     </View>
