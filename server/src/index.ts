@@ -37,6 +37,9 @@ import ListarQualificadoresPorExpParceiro from './Expertise/QualiByExp';
 import GetExpProgress from './Expertise/GetExpProgress';
 import GraficoCountPartnerByTrack from './Dashboard/GraficoCountPartnerByTrack';
 import TabelaProgressoParceiros from './Dashboard/TabelaProgressoParceiros';
+import CadastroTrilha from "./Track/PostTrack";
+import DeletarTrilha from './Track/DeleteTrack';
+import EdicaoTrilha from './Track/PutTrack';
 
 
 
@@ -186,3 +189,13 @@ app.use('/Tracks', ListarQualificadoresPorExpParceiro())
 app.use('/Dashboard', GraficoCountPartnerByTrack())
 //tabela: todos os parceiros e o progresso em cada trilha q eles estão vinculados
 app.use('/Dashboard', TabelaProgressoParceiros())
+
+// CRUD - Trilhas
+//listar Trilhas
+app.use('/Tracks', GetTrack())
+// Cadastro da Trilha
+app.use('/PostTrack', CadastroTrilha())
+// Exclusão definitiva da trilha
+app.use('/DeleteTrack', DeletarTrilha())
+// Edição da Trilha
+app.use('/PutTrack', EdicaoTrilha())
