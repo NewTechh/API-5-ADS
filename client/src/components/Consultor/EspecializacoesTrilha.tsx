@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import getIpAddress from '../../../services/IPAddress';
+import * as Progress from 'react-native-progress';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 interface Especializacao {
   id: string;
   especializacao_nome: string;
   especializacao_id: string;
+  progresso: number;
 }
 
 interface RouteParams {
@@ -28,7 +30,7 @@ const EspecializacoesTrilha: React.FC = () => {
   useEffect(() => {
     const fetchEspecializacoes = async () => {
       try {
-        const response = await fetch(`http://${getIpAddress()}:3001/Tracks/Expertises/${trilha_id}`);
+        const response = await fetch(`http://${getIpAddress()}:3001/Tracks/Progress/${trilha_id}/${parceiro_id}`);
         if (!response.ok) {
           throw new Error('Erro ao carregar especializações da trilha');
         }
@@ -52,6 +54,7 @@ const handleTrilhaPress = (especializacao_id: string) => {
   const renderEspecializacaoItem = ({ item }: { item: Especializacao }) => (
     <Pressable style={styles.especializacaoItem} onPress={() => handleTrilhaPress(item.especializacao_id)} >
       <Text style={styles.nome}>{item.especializacao_nome}</Text>
+      <Progress.Bar progress={item.progresso} width={380} color={'#17E753'} />
     </Pressable>
   );
 
@@ -60,7 +63,7 @@ const handleTrilhaPress = (especializacao_id: string) => {
       <FlatList
         data={especializacoes}
         renderItem={renderEspecializacaoItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.especializacao_id}
       />
     </View>
   );
