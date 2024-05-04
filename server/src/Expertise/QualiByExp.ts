@@ -10,6 +10,7 @@ function ListarQualificadoresPorExpParceiro(): express.Router {
     router.get('/Qualificadores/:especializacao_id/:parceiro_id', async (req, res) => {
         try {
           const { especializacao_id , parceiro_id } = req.params;
+          const resultado = new Array;
       
           const todosQ = await DB.query(`SELECT * FROM Qualificadores WHERE id_especializacao = '${especializacao_id}' ;`);
 
@@ -18,7 +19,7 @@ function ListarQualificadoresPorExpParceiro(): express.Router {
           for(let i =0; i< Number(todosQ.rowCount) ; i++){
             resultado.push({id: todosQ.rows[i].qualificador_id, titulo: todosQ.rows[i].qualificador_titulo, descricao: todosQ.rows[i].qualificador_descricao, concluido: false})
           }
-
+          
           for(let i =0; i< Number(resultado.length) ; i++){
             for(let j = 0; j < Number((qConcluidos.rowCount)); j++ ){
               if(resultado[i].id == qConcluidos.rows[j].id_qualificador){
@@ -26,7 +27,7 @@ function ListarQualificadoresPorExpParceiro(): express.Router {
               }
             }
         }
-
+        
       
         if (todosQ.rows.length === 0) {
             res.status(404).json({ message: 'dados não encontrados' });

@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
 import getIpAddress from '../../../services/IPAddress';
 import * as Progress from 'react-native-progress';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Especializacao {
   id: string;
@@ -16,16 +17,24 @@ interface RouteParams {
   parceiro_id: string;
 }
 
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Especializacoes'>;
+
 type RootStackParamList = {
-    Trilhas: { parceiro_id: string };
-   
+  Especializacoes: {
+    trilha_id: string,
+    parceiro_id: string
+  },
+  DetalhesEspecializacao: {
+    especializacao_id: string,
+    parceiro_id: string
+  }
 }
 
 const EspecializacoesTrilha: React.FC = () => {
   const route = useRoute();
   const { trilha_id, parceiro_id } = route.params as RouteParams;
   const [especializacoes, setEspecializacoes] = useState<Especializacao[]>([]);
-  const navigation = useNavigation();
+  const navigation = useNavigation<ScreenNavigationProp>();
 
   useEffect(() => {
     const fetchEspecializacoes = async () => {

@@ -5,9 +5,9 @@ function LinkPartner(): express.Router {
 
     const router = express.Router();
 
-    router.post('/Vincular', async (req, res) => {
+    router.post('/Vincular/:qualificador_id/:parceiro_id', async (req, res) => {
         try {
-          const { qualificador_id, parceiro_id } = req.body;
+          const { qualificador_id, parceiro_id } = req.params;
       
           await DB.query(`INSERT INTO ParceiroQualificador(id_parceiro, id_qualificador) VALUES ('${parceiro_id}', '${qualificador_id}');`);
       

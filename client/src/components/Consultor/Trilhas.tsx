@@ -15,8 +15,6 @@ type Trilha = {
     progresso: number
 };
 
-
-
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Trilhas'>;
 type TrilhasRouteProp = RouteProp<RootStackParamList, 'Trilhas'>;
 
