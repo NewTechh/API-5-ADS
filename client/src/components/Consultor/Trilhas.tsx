@@ -40,7 +40,7 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
-    
+
     const fetchTrilhasDoParceiro = async (parceiro_id: string) => {
         try {
 
@@ -56,11 +56,11 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
             console.error("Erro ao carregar trilhas:", error);
         }
     };
-    
+
     const handleTrilhaPress = (trilha_id: string) => {
         navigation.navigate('EspecializacoesTrilha', { trilha_id, parceiro_id });
     };
-    
+
 
     return (
         <>
@@ -69,7 +69,9 @@ const Trilhas: React.FC<TrilhasProps> = ({ route }) => {
                     <View key={trilha.trilha_id} style={styles.joinFields}>
                         <Pressable style={styles.button} onPress={() => handleTrilhaPress(trilha.trilha_id)}>
                             <Text style={styles.buttonText}>{trilha.trilha_nome}</Text>
-                            <Progress.Bar progress={trilha.progresso} width={50} color={'#17E753'} />
+                            <Progress.Bar progress={trilha.progresso} style={{ borderRadius: 10, }} width={150} height={15} borderWidth={2} color={'#17E753'}>
+                                <Text style={styles.progressText}>{Math.round(trilha.progresso * 100)}%</Text>
+                            </Progress.Bar>
                         </Pressable>
                     </View>
                 ))}

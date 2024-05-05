@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import FooterConsultor from './Consultor/FooterConsultor';
 import SideMenuConsultor from './Consultor/SideMenuConsultor';
 import getIpAddress from '../../services/IPAddress';
-
+import * as Progress from 'react-native-progress';
 type RootStackParamList = {
   Dashboard: undefined;
 }
@@ -110,18 +110,21 @@ const DashboardPartner = () => {
             <Text style={styles.header}>Progresso</Text>
           </View>
           {partnerProgress.map((partner, index) => (
-          <View key={index}>
-            <View style={styles.row}>
-              <Text style={styles.data}>{partner.parceiro_nome}</Text>
-              <Text style={styles.data}>{partner.trilha_nome}</Text>
-              <Text style={styles.data}>{(partner.progresso * 100).toFixed(2)}%</Text>
+            <View key={index}>
+              <View style={styles.row}>
+                <Text style={styles.data}>{partner.parceiro_nome}</Text>
+                <Text style={styles.data}>{partner.trilha_nome}</Text>
+                <View >
+                  <Progress.Bar style={{ borderRadius: 10, marginLeft: 10, marginTop: 6, marginRight: 10, }}
+                    progress={partner.progresso} width={110} height={15} borderWidth={1} color={'#17E753'} >
+                    <Text style={styles.bar}>{Math.round(partner.progresso * 100)}%</Text>
+                  </Progress.Bar>
+                </View>
+              </View>
+
+
             </View>
-            <View style={styles.progressBar}>
-              <View style={[styles.progress, { width: `${partner.progresso * 100}%` }]} />
-            </View>
-            <View style={styles.separator} />
-          </View>
-        ))}
+          ))}
         </View>
         <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
         <PieChart
@@ -213,6 +216,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     textAlign: 'center',
+  },
+  bar: {
+    position: 'absolute',
+    justifyContent: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginLeft: 45,
+    marginTop: -3,
   },
   data: {
     flex: 1,

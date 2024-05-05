@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Button, Pressable } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button, Pressable, ScrollView } from 'react-native';
 import getIpAddress from '../../../services/IPAddress';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import SideMenuConsultor from './SideMenuConsultor';
+import FooterConsultor from './FooterConsultor';
 
 
 type RootStackParamList = {
@@ -17,7 +19,12 @@ const DetalhesEspecializacao: React.FC<{ route: any }> = ({ route }) => {
     const navigation = useNavigation<ScreenNavigationProp>();
     const { especializacao_id, parceiro_id } = route.params;
     const [qualificadores, setQualificadores] = useState<{ id: string; titulo: string; descricao: string; concluido: boolean }[]>([]);
+    const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
+    const toggleSideMenu = () => {
+        setIsSideMenuVisible(!isSideMenuVisible);
+    };
+    
     useEffect(() => {
         const fetchQualificadores = async () => {
             try {
@@ -55,22 +62,24 @@ const DetalhesEspecializacao: React.FC<{ route: any }> = ({ route }) => {
     };
 
     const renderQualificadorItem = ({ item }: { item: { id: string; titulo: string; descricao: string; concluido: boolean } }) => (
-        <View style={styles.qualificadorItem}>
+        <Pressable style={styles.botaoQualificador} onPress={() => handleConcluidoPress(item.id)}>
+       <View style={styles.qualificadorItem}>
             <Text style={styles.titulo}>{item.titulo}</Text>
             <Text style={styles.descricao}>{item.descricao}</Text>
-            <Text style={styles.concluido}>{item.concluido ? 'Concluído' : <Pressable onPress={() => handleConcluidoPress(item.id)}>
-                <Text style={styles.naoconcluido}>Marcar como concluído</Text>
-            </Pressable>}</Text>
-        </View>
+            <Text style={styles.concluido}>{item.concluido ? 'Concluído' : 'Marcar como concluído'}</Text>
+        </View> 
+        </Pressable>
     );
 
-    return (
+    return ( 
         <View style={styles.container}>
             <FlatList
                 data={qualificadores}
                 renderItem={renderQualificadorItem}
                 keyExtractor={(item) => item.id}
             />
+         <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
         </View>
     );
 };
@@ -78,12 +87,21 @@ const DetalhesEspecializacao: React.FC<{ route: any }> = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#272424',
     },
     qualificadorItem: {
         padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#CCCCCC',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10
+    }, 
+    botaoQualificador: {
+        alignItems: 'center',
+        marginBottom: 10,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
     },
     titulo: {
         fontSize: 18,
@@ -102,7 +120,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#dddddd',
         fontSize: 16,
         color: 'blue'
-    }
+    },
+   
 });
 
 export default DetalhesEspecializacao;

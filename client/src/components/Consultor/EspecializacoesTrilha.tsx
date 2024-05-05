@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Pressable, ScrollView } from 'react-native';
 import getIpAddress from '../../../services/IPAddress';
 import * as Progress from 'react-native-progress';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import SideMenuConsultor from './SideMenuConsultor';
+import FooterConsultor from './FooterConsultor';
 
 interface Especializacao {
   id: string;
@@ -35,6 +37,7 @@ const EspecializacoesTrilha: React.FC = () => {
   const { trilha_id, parceiro_id } = route.params as RouteParams;
   const [especializacoes, setEspecializacoes] = useState<Especializacao[]>([]);
   const navigation = useNavigation<ScreenNavigationProp>();
+  const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
 
   useEffect(() => {
     const fetchEspecializacoes = async () => {
@@ -45,8 +48,8 @@ const EspecializacoesTrilha: React.FC = () => {
         }
         const data = await response.json();
         setEspecializacoes(data);
-        
-        
+
+
       } catch (error) {
         console.error('Erro ao carregar especializações da trilha:', error);
       }
@@ -55,15 +58,21 @@ const EspecializacoesTrilha: React.FC = () => {
     fetchEspecializacoes();
   }, [trilha_id]);
 
-const handleTrilhaPress = (especializacao_id: string) => {
+  const handleTrilhaPress = (especializacao_id: string) => {
     navigation.navigate('DetalhesEspecializacao', { especializacao_id, parceiro_id });
-};
+  };
 
- 
+  const toggleSideMenu = () => {
+    setIsSideMenuVisible(!isSideMenuVisible);
+  };
+
   const renderEspecializacaoItem = ({ item }: { item: Especializacao }) => (
     <Pressable style={styles.especializacaoItem} onPress={() => handleTrilhaPress(item.especializacao_id)} >
       <Text style={styles.nome}>{item.especializacao_nome}</Text>
-      <Progress.Bar progress={item.progresso} width={380} color={'#17E753'} />
+      <Progress.Bar style={{ borderRadius: 10, marginTop: 10, }} progress={item.progresso} borderWidth={2} width={250} height={20} color={'#17E753'}>
+        <Text style={styles.progressText}>{Math.round(item.progresso * 100)}%</Text>
+      </Progress.Bar>
+
     </Pressable>
   );
 
@@ -74,6 +83,8 @@ const handleTrilhaPress = (especializacao_id: string) => {
         renderItem={renderEspecializacaoItem}
         keyExtractor={(item) => item.especializacao_id}
       />
+      <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
+      {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
     </View>
   );
 };
@@ -81,17 +92,31 @@ const handleTrilhaPress = (especializacao_id: string) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#272424', 
   },
   especializacaoItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
-    color: 'black'
+    alignItems: 'center',
+    marginBottom: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginTop: 15,
   },
   nome: {
     fontSize: 18,
-    color: 'black'
+    color: 'black',
+
+  },
+  progressText: {
+    position: 'absolute',
+    justifyContent: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginLeft: 110,
+    marginTop: -1,
   },
 });
 

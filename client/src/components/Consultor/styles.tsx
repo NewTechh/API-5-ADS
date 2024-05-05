@@ -28,7 +28,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 15, // Adicionado para espaçamento entre texto e ícone
     },
-
+    progressText: {
+        position: 'absolute',
+        justifyContent: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'black',
+        textAlign: 'center',
+        marginLeft: 65,
+        marginTop: -4,
+    },
     buttonText: {
         fontSize: 20,
         color: '#000000',
