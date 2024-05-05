@@ -87,7 +87,7 @@ do relacionamento com os parceiros.</p> </b>
 <br>
 
 <h5>Modelo Lógico<h5>
-<img align="center"src="Imagens/ERD.png" height= "600" width= "1100"/>
+<img align="center"src="Imagens/SPRINT2-2024-05-05_15-11.png" height= "600" width= "1100"/>
 <br>
 
 <h2>Equipe 👾</h2>
