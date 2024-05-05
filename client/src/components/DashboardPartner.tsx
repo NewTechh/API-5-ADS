@@ -123,6 +123,7 @@ const DashboardPartner = () => {
           </View>
         ))}
         </View>
+        {/*}
         <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
         <PieChart
           data={data}
@@ -137,6 +138,7 @@ const DashboardPartner = () => {
           backgroundColor="transparent"
           paddingLeft="5"
         />
+        */}
 
         <Text style={styles.title}>Parceiros por Trilha:</Text>
         <BarChart
