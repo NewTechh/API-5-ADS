@@ -8,8 +8,13 @@ function DeleteUser(): express.Router {
         const { parceiro_id } = req.params;
 
         try {
-            await DB.query('DELETE FROM Parceiros WHERE parceiro_id = $1; ', [parceiro_id]);
-            res.status(200).json({ message: 'Consultor excluído com sucesso' });
+            const result = await DB.query('DELETE FROM Parceiros WHERE parceiro_id = $1', [parceiro_id]);
+
+            if (result.rowCount === 0) {
+                res.status(404).json({ message: 'Parceiro não encontrado para exclusão' });
+            } else {
+                res.status(200).json({ message: 'Parceiro excluído com sucesso' });
+            }
         } catch (error: any) {
             res.status(500).json({ error: error.message });
         }
