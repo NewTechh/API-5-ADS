@@ -23,6 +23,9 @@ type RootStackParamList = {
   ListPartner: undefined;
   Dashboard: undefined;
   ListConsultores: undefined;
+  ParceiroHome: undefined;
+  ConsultorHome: undefined;
+  AdminHome: undefined;
 };
 
 type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
@@ -84,11 +87,11 @@ const LoginScreen = () => {
         resetFields()
 
         if (userType === 'Parceiro') {
-          navigation.navigate('Cursos')
+          navigation.navigate('ParceiroHome')
         } else if (userType === 'Administrador') {
-          navigation.navigate('ListConsultores')
+          navigation.navigate('AdminHome')
         } else if (userType === 'Consultor de Aliança') {
-          navigation.navigate('ListPartner')
+          navigation.navigate('ConsultorHome')
         }
 
       } else if (response.status === 404) {

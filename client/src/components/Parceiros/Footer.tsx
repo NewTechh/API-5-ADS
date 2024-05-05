@@ -14,7 +14,7 @@ const Footer: React.FC<FooterProps> = ({ onPressMenu, navigation }) => {
             <TouchableOpacity onPress={onPressMenu}>
                 <Ionicons name="menu" size={32} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Cursos')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ParceiroHome')}>
                 <Ionicons name="home" size={32} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('UserScreen')}>

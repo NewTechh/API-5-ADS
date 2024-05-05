@@ -30,6 +30,9 @@ import AddCurse from '../src/components/Consultor/AddCurse';
 import Trilhas from '../src/components/Consultor/Trilhas';
 import DetalhesEspecializacao from '../src/components/Consultor/ExpertiseList';
 import EspecializacoesTrilha from '../src/components/Consultor/EspecializacoesTrilha';
+import AdminHome from '../src/components/Admin/AdminHome';
+import ParceiroHome from '../src/components/Parceiros/ParceiroHome';
+import ConsultorHome from '../src/components/Consultor/ConsultorHome';
 
 
 const Stack = createStackNavigator();
@@ -67,6 +70,9 @@ const Rotas = () => {
         <Stack.Screen name="Trilhas" component={Trilhas} options={{ headerShown: false }} />
         <Stack.Screen name="EspecializacoesTrilha" component={EspecializacoesTrilha} options={{ headerShown: false }} />
         <Stack.Screen name="DetalhesEspecializacao" component={DetalhesEspecializacao} options={{ headerShown: false }} />
+        <Stack.Screen name="AdminHome" component={AdminHome} options={{ headerShown: false }} />
+        <Stack.Screen name="ParceiroHome" component={ParceiroHome} options={{ headerShown: false }} />
+        <Stack.Screen name="ConsultorHome" component={ConsultorHome} options={{ headerShown: false }} />
         </Stack.Navigator>
     </NavigationContainer>
   );

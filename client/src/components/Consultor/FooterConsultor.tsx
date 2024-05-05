@@ -14,7 +14,7 @@ const FooterConsultor: React.FC<FooterProps> = ({ onPressMenu, navigation }) => 
             <TouchableOpacity onPress={onPressMenu}>
                 <Ionicons name="menu" size={32} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('ListPartner')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ConsultorHome')}>
                 <Ionicons name="home" size={32} color="black" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('UserScreenConsultor')}>
