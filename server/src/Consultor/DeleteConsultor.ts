@@ -7,14 +7,11 @@ function DeleteConsultor(): express.Router {
     router.delete('/Consultores/:consultor_alianca_id', async (req, res) => {
         const { consultor_alianca_id } = req.params;
         try {
+            const result = await DB.query('DELETE FROM ConsultorAlianca WHERE consultor_alianca_id = $1', [consultor_alianca_id]);
 
-            const Resulte = await DB.query('SELECT * FROM RegistroLog WHERE id_consultor_alianca = $1 ', [consultor_alianca_id]);
-            if (Resulte.rowCount === 0) {
-                await DB.query('DELETE FROM ConsultorAlianca WHERE consultor_alianca_id = $1; ', [consultor_alianca_id])
-                res.status(200).json({ message: 'Consultor excluído com sucesso' });
+            if (result.rowCount === 0) {
+                res.status(404).json({ message: 'Consultor não encontrado para exclusão' });
             } else {
-                await DB.query('DELETE FROM RegistroLog WHERE id_consultor_alianca = $1; ', [consultor_alianca_id]);
-                await DB.query('DELETE FROM ConsultorAlianca WHERE consultor_alianca_id = $1; ', [consultor_alianca_id]);
                 res.status(200).json({ message: 'Consultor excluído com sucesso' });
             }
         } catch (error: any) {
