@@ -43,7 +43,7 @@ CREATE TABLE Especializacoes(
 	especializacao_subgrupo DESC100,
 	especializacao_nome DESC100 NOT NULL,
 	id_trilha UUID NOT NULL,
-	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id)
+	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id) ON DELETE CASCADE
 );
 
 -- DDL SPRINT 2
@@ -62,23 +62,23 @@ CREATE TABLE Qualificadores(
 	qualificador_titulo DESC100 NOT NULL,
 	qualificador_descricao VARCHAR(500) NOT NULL,
 	id_especializacao UUID NOT NULL,
-	FOREIGN KEY (id_especializacao) REFERENCES Especializacoes(especializacao_id)
+	FOREIGN KEY (id_especializacao) REFERENCES Especializacoes(especializacao_id) ON DELETE CASCADE
 );
 -- obs: em uma próxima sprint podem ser adicionados links dos cursos/certificações (prioridade baixa)
 
 CREATE TABLE ParceiroQualificador(
 	id_parceiro UUID NOT NULL,
 	id_qualificador UUID NOT NULL,
-	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id),
-	FOREIGN KEY (id_qualificador) REFERENCES Qualificadores(qualificador_id),
+	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_qualificador) REFERENCES Qualificadores(qualificador_id) ON DELETE CASCADE,
 	PRIMARY KEY (id_parceiro, id_qualificador)
 );
 
 CREATE TABLE ParceiroTrilha(
 	id_parceiro UUID NOT NULL,
 	id_trilha UUID NOT NULL,
-	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id),
-	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id),
+	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id) ON DELETE CASCADE,
 	PRIMARY KEY (id_parceiro, id_trilha)
 );
 
@@ -93,12 +93,12 @@ CREATE TABLE RegistroLog(
 	id_trilha UUID NULL,
 	id_especializacao UUID NULL,
 	id_qualificador UUID NULL,
-	FOREIGN KEY (id_administrador) REFERENCES Administradores (administrador_id),
-	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id),
-	FOREIGN KEY (id_consultor_alianca) REFERENCES ConsultorAlianca(consultor_alianca_id),
-	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id),
-	FOREIGN KEY (id_especializacao) REFERENCES Especializacoes(especializacao_id),
-	FOREIGN KEY (id_qualificador) REFERENCES Qualificadores(qualificador_id)
+	FOREIGN KEY (id_administrador) REFERENCES Administradores (administrador_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_parceiro) REFERENCES Parceiros(parceiro_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_consultor_alianca) REFERENCES ConsultorAlianca(consultor_alianca_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_trilha) REFERENCES Trilhas(trilha_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_especializacao) REFERENCES Especializacoes(especializacao_id) ON DELETE CASCADE,
+	FOREIGN KEY (id_qualificador) REFERENCES Qualificadores(qualificador_id) ON DELETE CASCADE
 );
 
 -- DML
