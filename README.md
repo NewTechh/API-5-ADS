@@ -44,7 +44,7 @@ do relacionamento com os parceiros.</p> </b>
 <h2>Cronograma das Sprints 📆</h2>
 <br>
 <br>
-<img align="center" src="Imagens/cronograma.png"/>
+<img align="center" src="Imagens/cronograma2.jpg"/>
 
 <br>
 <br>
@@ -78,7 +78,7 @@ do relacionamento com os parceiros.</p> </b>
 <h2>Backlog 📊</h2><br>
  O product backlog é uma lista ordenada que tem como função documentar de forma clara todos os requisitos do desenvolvimento de um projeto. Itens que precisem de maior refinamento geralmente têm uma importância menor e ficam mais abaixo no Product Backlog.  
 <br>
-<img align="center" src="Imagens/backlog.png"/>
+<img align="center" src="Imagens/backlog2.jpg"/>
 <br>
 <br>
 <br>
