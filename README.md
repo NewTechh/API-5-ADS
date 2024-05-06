@@ -50,7 +50,7 @@ do relacionamento com os parceiros.</p> </b>
 <br>
 <h2>Demonstração completa de nosso sistema 💻</h2><br>
 <h3> Video Sprint Review 1: <a href="https://youtu.be/Wta7mGWDcBE?si=ktAhCTTZvtMGwAHO">Clique aqui</a></h3>
-<h3> Video Sprint Review 2: <a href="">Clique aqui</a></h3>
+<h3> Video Sprint Review 2: <a href="https://youtu.be/CRgsnU3LqM0">Clique aqui</a></h3>
 <img align="center" src="#"/>
 <br>
 <br>
