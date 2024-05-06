@@ -159,7 +159,9 @@ const DashboardPartner = () => {
             backgroundGradientFrom: "#1E2923",
             backgroundGradientTo: "#08130D",
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            barPercentage: 0.5
+            barPercentage: 0.5,
+            formatYLabel: value => `${Math.round(Number(value))}`, // Formata o valor como número inteiro
+            formatXLabel: label => label.split(' ').join(''), // Quebra de linha nos rótulos do eixo X
           }}
           style={{
             marginVertical: 8,
