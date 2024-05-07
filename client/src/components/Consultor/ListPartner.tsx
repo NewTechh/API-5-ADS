@@ -4,7 +4,7 @@ import { View, Text, ScrollView, Pressable, Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
+import { Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import getIpAddress from '../../../services/IPAddress';
 import SideMenuConsultor from './SideMenuConsultor';
 import FooterConsultor from './FooterConsultor';
@@ -371,7 +371,7 @@ const ListPartner = () => {
                                         size={30}
                                         color="black"
                                     />
-                                    <Text style={{ fontSize: 20 }}>Trilha(s)</Text>
+                                    <Text style={{ fontSize: 20 }}>Tracks</Text>
                                 </Pressable>
                                 <Pressable
                                     style={styles.modalButtonOptions}
@@ -396,6 +396,18 @@ const ListPartner = () => {
                                         color="black"
                                     />
                                     <Text style={{ fontSize: 20 }}>Deletar</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.modalButtonOptions}
+                                >
+                                    <MaterialCommunityIcons
+                                        style={styles.icon}
+                                        name="file-document"
+                                        size={30}
+                                        color="black"
+                                    />
+
+                                    <Text style={{ fontSize: 20 }}>Relatório</Text>
                                 </Pressable>
                             </View>
                         </View>
