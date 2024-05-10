@@ -1,4 +1,4 @@
-<h1> Aprendizado por Projeto Integrado do 5º semestre da Faculdade de Tecnologia de São José dos Campos - "Professor Jessen Vidal". </h1>
+<h1> New Tech </h1>
 
 <br> <br>
 
