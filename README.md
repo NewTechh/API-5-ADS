@@ -1,7 +1,5 @@
 <h1> New Tech </h1>
 
-<br> <br>
-
 <h2> O Projeto 💼 </h2>
 
 <p>Desenvolver um sistema de gestão de parceiros para a Oracle. Este sistema será responsável por
