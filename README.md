@@ -23,19 +23,19 @@ do relacionamento com os parceiros.</p> </b>
  
 <h3> Requisitos Funcionais: </h3>
 
-<p> ● Desenvolver uma interface de cadastro de parceiros; </p>
-<p> ● Desenvolver uma interface de desenvolvimento de parceiros;  </p>
-<p> ● Desenvolver um Dashboard de indicadores de desempenho de parceiros; </p>
-<p> ● Desenvolver um Relatório Analítico de parceiros por produto implementado.</p>
+<p> :heavy_check_mark: Desenvolver uma interface de cadastro de parceiros; </p>
+<p> :heavy_check_mark: Desenvolver uma interface de desenvolvimento de parceiros;  </p>
+<p> :heavy_check_mark: Desenvolver um Dashboard de indicadores de desempenho de parceiros; </p>
+<p> :hourglass: Desenvolver um Relatório Analítico de parceiros por produto implementado.</p>
 
 <br><br>
 
 <h3> Requisitos Não Funcionais: </h3> 
 
- <p> ● Manual do Usuário; </p>
- <p> ● Documentação técnica da estruturação do sistema; </p>
- <p> ● Documentação API – Application Programming Interface; </p>
- <p> ● Modelagem de Banco de Dados ou Arquivo de dados. </p>
+ <p> :hourglass: Manual do Usuário; </p>
+ <p> :hourglass: Documentação técnica da estruturação do sistema; </p>
+ <p> :hourglass: Documentação API – Application Programming Interface; </p>
+ <p> :heavy_check_mark: Modelagem de Banco de Dados ou Arquivo de dados. </p>
 
  <br>
  <br>
