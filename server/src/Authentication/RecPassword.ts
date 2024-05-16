@@ -64,7 +64,7 @@ function EnviarToken(): express.Router {
             tokensAtivos.set(email, token);
 
             // Enviar o token por e-mail
-            // await enviarTokenPorEmail(email, token);
+            await enviarTokenPorEmail(email, token);
 
             res.status(200).json({ message: 'Token enviado com sucesso' });
         } catch (error) {
