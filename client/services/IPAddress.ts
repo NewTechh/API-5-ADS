@@ -2,7 +2,7 @@
 
 function getIpAddress() {
 
-    const ip = '192.168.165.16'
+    const ip = '192.168..'
 
 
     return ip

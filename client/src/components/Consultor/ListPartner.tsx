@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Pressable, Modal, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Modal, Alert, TextInput } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
 import { Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import getIpAddress from '../../../services/IPAddress';
 import SideMenuConsultor from './SideMenuConsultor';
@@ -35,7 +34,7 @@ const ListPartner = () => {
     const navigation = useNavigation<ScreenNavigationProp>();
     const [parceiros, setParceiros] = useState<Parceiro[]>([]);
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
-
+    const [searchText, setSearchText] = useState('');
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
@@ -299,7 +298,12 @@ const ListPartner = () => {
             `Estado: ${parceiroData.parceiro_estado} \n\n`
         );
     };
-    
+
+    const filteredParceiros = parceiros.filter(parceiro =>
+        parceiro.parceiro_nome.toLowerCase().includes(searchText.toLowerCase()) ||
+        parceiro.parceiro_cnpj_cpf.includes(searchText)
+    );
+
     return (
         <>
             <ScrollView contentContainerStyle={styles.scrollView}>
@@ -314,7 +318,31 @@ const ListPartner = () => {
                         />
                     </Pressable>
                 </View>
-
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
+                    <TextInput
+                        style={{
+                            height: 30,
+                            flex: 1,
+                            borderWidth: 1,
+                            backgroundColor: '#FFFFFF',
+                            paddingHorizontal: 34,
+                            borderRadius: 5,
+                        }}
+                        placeholder="Pesquisar por nome ou CNPJ"
+                        value={searchText}
+                        onChangeText={setSearchText}
+                    />
+                    <AntDesign
+                        name="search1"
+                        size={19}
+                        color="rgba(0, 0, 0, 0.5)"
+                        style={{
+                            position: 'absolute',
+                            left: 10,
+                            top: 5,
+                        }}
+                    />
+                </View>
                 <View style={styles.tableContainer}>
                     <View style={styles.headerRow}>
                         <Text style={styles.header}>Nome</Text>
@@ -322,7 +350,7 @@ const ListPartner = () => {
                         <Text style={styles.header}>Ações</Text>
                     </View>
                     <View>
-                        {parceiros && parceiros.map && parceiros.map((parceiro, index) => (
+                        {filteredParceiros.map((parceiro, index) => (
                             <Pressable style={styles.row} key={index} onPress={() => handleParceiroClick(parceiro.parceiro_cnpj_cpf)}>
                                 <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
                                 <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
@@ -360,7 +388,7 @@ const ListPartner = () => {
                                 >
                                     <AntDesign name="close" size={40} color="black" />
                                 </Pressable>
-                                
+
                                 <Pressable
                                     style={styles.modalButtonOptions}
                                     onPress={() => { handleTrilhas(modalData?.parceiro_id) }}
@@ -414,6 +442,8 @@ const ListPartner = () => {
                     </Modal>
                     <View style={styles.separator} />
                 </View>
+
+
             </ScrollView>
             <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
             {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
