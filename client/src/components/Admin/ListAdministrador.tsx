@@ -17,11 +17,13 @@ type RootStackParamList = {
 }
 
 type Administrador = {
+    administrador_id: string
     administrador_nome: string;
     administrador_email: string;
     administrador_cpf: string;
     administrador_status: boolean;
     administrador_funcao: string;
+    administrador_matricula: string;
     administrador_setor: string;
 }
 
@@ -37,9 +39,9 @@ const ListAdministradores = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
 
-    // const handleEditClick = (administrador: Administrador) => {
-    //     navigation.navigate('EditarAdministrador', { administrador });
-    // };
+    const handleEditClick = (administrador: Administrador) => {
+        navigation.navigate('EditarAdministrador', { administrador });
+    };
 
     const handleSignUp = () => {
         navigation.navigate('SignUpAdm');
@@ -69,97 +71,99 @@ const ListAdministradores = () => {
         }
     };
 
-    // const handleDelete = async (administrador_cpf: string) => {
-    //     Alert.alert(
-    //         'Confirmação',
-    //         'Tem certeza de que deseja excluir este administrador definitivamente? Essa ação é irreversível.',
-    //         [
-    //             {
-    //                 text: 'Cancelar',
-    //                 onPress: () => console.log('Exclusão cancelada'),
-    //                 style: 'cancel'
-    //             },
-    //             {
-    //                 text: 'Excluir',
-    //                 onPress: () => confirmDelete(administrador_cpf)
-    //             }
-    //         ]
-    //     );
-    // };
+    const handleDelete = async (administradorID: string) => {
+        Alert.alert(
+            'Confirmação',
+            'Tem certeza de que deseja excluir este administrador definitivamente? Essa ação é irreversível.',
+            [
+                {
+                    text: 'Cancelar',
+                    onPress: () => console.log('Exclusão cancelada'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Excluir',
+                    onPress: () => confirmDelete(administradorID)
+                }
+            ]
+        );
+    };
 
-    // const confirmDelete = async (administrador_cpf: string) => {
-    //     try {
-    //         const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/Administradores/${administrador_cpf}`, {
-    //             method: 'DELETE'
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao excluir Administrador');
-    //         }
-    //         fetchAdministradores();
-    //         console.log('Administrador excluído com sucesso');
-    //     } catch (error) {
-    //         console.error('Erro ao excluir Administrador:', error);
-    //         Alert.alert('Erro', 'Erro ao excluir Administrador. Por favor, tente novamente.');
-    //     }
-    // };
+    const confirmDelete = async (administradorID: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/Administradores/${administradorID}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao excluir Administrador');
+            }
+            fetchAdministradores();
+            console.log('Administrador excluído com sucesso');
+        } catch (error) {
+            console.error('Erro ao excluir Administrador:', error);
+            Alert.alert('Erro', 'Erro ao excluir Administrador. Por favor, tente novamente.');
+        }
+    };
 
-    // const logicalDeleteAdmin= async (administrador_cpf: string) => {
-    //     try {
-    //         const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/ExclusaoAdmin/${administrador_cpf}`, {
-    //             method: 'PUT'
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao excluir Administrador logicamente');
-    //         }
+    const logicalDeleteAdmin= async (administradorID: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/ExclusaoAdmin/${administradorID}`, {
+                method: 'PUT'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao excluir Administrador logicamente');
+            }
 
-    //         Alert.alert('Sucesso','Exclusão Lógica realizada.')
-    //         console.log('Administrador excluído logicamente com sucesso');
-    //         fetchAdministradores();
-    //     } catch (error) {
-    //         console.error('Erro ao excluir Administrador logicamente:', error);
-    //         Alert.alert('Erro', 'Erro ao excluir Administrador logicamente. Por favor, tente novamente.');
-    //     }
-    // };
+            Alert.alert('Sucesso','Exclusão Lógica realizada.')
+            console.log('Administrador excluído logicamente com sucesso');
+            fetchAdministradores();
+        } catch (error) {
+            console.error('Erro ao excluir Administrador logicamente:', error);
+            Alert.alert('Erro', 'Erro ao excluir Administrador logicamente. Por favor, tente novamente.');
+        }
+    };
 
-    // const reactivateAdmin = async (administrador_cpf: string) => {
-    //     try {
-    //         const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/ReativacaoAdmin/${administrador_cpf}`, {
-    //             method: 'PUT'
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao reativar Administrador');
-    //         }
-    //         Alert.alert('Sucesso', 'Reativação realizada.')
-    //         console.log('Administrador reativado')
-    //         fetchAdministradores();     
-    //     } catch (error) {
-    //         console.error('Erro ao reativar Administrador:', error);
-    //         Alert.alert('Erro', 'Erro ao reativar Administrador. Por favor, tente novamente.');
-    //     }
-    // };
+    const reactivateAdmin = async (administradorID: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/ReativacaoAdmin/${administradorID}`, {
+                method: 'PUT'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao reativar Administrador');
+            }
+            Alert.alert('Sucesso', 'Reativação realizada.')
+            console.log('Administrador reativado')
+            fetchAdministradores();     
+        } catch (error) {
+            console.error('Erro ao reativar Administrador:', error);
+            Alert.alert('Erro', 'Erro ao reativar Administrador. Por favor, tente novamente.');
+        }
+    };
 
-    // const handleAdministradorClick = async (administradorCPF: string) => {
-    //     try {
-    //         const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/ConsultarPorCPF/${administradorCPF}`, {
-    //             method: 'GET'
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Erro ao buscar administrador');
-    //         }
-    //         const administradorData = await response.json();
-    //         const formattedData = formatAdministradorData(administradorData);
-    //         Alert.alert(`Dados Adicionais do Administrador de Aliança:`, formattedData);
-    //     } catch (error) {
-    //         console.error('Erro ao buscar Administrador:', error);
-    //         Alert.alert('Erro', 'Erro ao buscar dados do Administrador. Por favor, tente novamente.');
-    //     }
-    // };
+    const handleAdministradorClick = async (administradorID: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${administradorID}`, {
+                method: 'GET'
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao buscar administrador');
+            }
+            const administradorData = await response.json();
+            const formattedData = formatAdministradorData(administradorData);
+            Alert.alert(`Dados Adicionais do Administrador:`, formattedData);
+        } catch (error) {
+            console.error('Erro ao buscar Administrador:', error);
+            Alert.alert('Erro', 'Erro ao buscar dados do Administrador. Por favor, tente novamente.');
+        }
+    };
     
-    // const formatAdministradorData = (administradorData: any) => {
-    //     return (
-    //         `Email: ${administradorData.administrador_email}`
-    //     );
-    // };
+    const formatAdministradorData = (administradorData: any) => {
+        return (
+            `Email: ${administradorData.administrador_email}\n\n` +
+            `Função: ${administradorData.administrador_funcao}\n\n` +
+            `Setor: ${administradorData.administrador_setor}\n\n`
+        );
+    };
 
     return (
         <>
@@ -179,18 +183,17 @@ const ListAdministradores = () => {
                 <View style={styles.tableContainer}>
                     <View style={styles.headerRow}>
                         <Text style={styles.header}>Nome</Text>
-                        <Text style={styles.header}>Função</Text>
-                        <Text style={styles.header}>Setor</Text>
+                        <Text style={styles.header}>Matrícula</Text>
+                        <Text style={styles.header}>Ações</Text>
                         {/* <Text style={styles.header}>Ações</Text> */}
                     </View>
                     <View>
                         {administradorData && administradorData.map && administradorData.map((administrador, index) => (
-                            <Pressable style={styles.row} key={index}>
+                            <Pressable style={styles.row} key={index} onPress={() => handleAdministradorClick(administrador.administrador_id)}>
                                 <Text style={styles.data}>{administrador.administrador_nome}</Text>
-                                <Text style={styles.data}>{administrador.administrador_funcao}</Text>
-                                <Text style={styles.data}>{administrador.administrador_setor}</Text>
+                                <Text style={styles.data}>{administrador.administrador_matricula}</Text>
                                 <View style={styles.actionButtons}>
-                                {/* <Ionicons
+                                <Ionicons
                                     style={styles.icon}
                                     name="create"
                                     size={24}
@@ -217,7 +220,7 @@ const ListAdministradores = () => {
                                                 {
                                                     text: 'Exclusão Definitiva',
                                                     onPress: () => {
-                                                        handleDelete(administrador.administrador_cpf)
+                                                        handleDelete(administrador.administrador_id)
                                                     },
                                                 },
 
@@ -225,16 +228,16 @@ const ListAdministradores = () => {
                                                     text: administrador.administrador_status ? 'Exclusão Lógica' : 'Reativar',
                                                     onPress: () => {
                                                         if (administrador.administrador_status) {
-                                                            logicalDeleteAdmin(administrador.administrador_cpf);
+                                                            logicalDeleteAdmin(administrador.administrador_id);
                                                         } else {
-                                                            reactivateAdmin(administrador.administrador_cpf);
+                                                            reactivateAdmin(administrador.administrador_id);
                                                         }
                                                     },
                                                 },
                                             ]
                                         );
                                     }}
-                                /> */}
+                                />
                                 </View>
                             </Pressable>
                         ))}

@@ -4,11 +4,11 @@ import DB from '../ConnectionDB/db';
 function DeleteAdmin(): express.Router {
     const router = express.Router();
 
-    router.delete('/Administradores/:administrador_cpf', async (req, res) => {
-        const { administrador_cpf } = req.params;
+    router.delete('/Administradores/:administrador_id', async (req, res) => {
+        const { administrador_id } = req.params;
 
         try {
-            const result = await DB.query('DELETE FROM Administradores WHERE administrador_cpf = $1', [administrador_cpf]);
+            const result = await DB.query('DELETE FROM Administradores WHERE administrador_id = $1', [administrador_id]);
 
             if (result.rowCount === 0) {
                 res.status(404).json({ message: 'Adminisrador não encontrado para exclusão' });
@@ -27,11 +27,11 @@ function ExclusaoLogicaAdmin(): express.Router {
 
     const router = express.Router();
 
-    router.put('/ExclusaoAdmin/:administrador_cpf', async (req, res) => {
+    router.put('/ExclusaoAdmin/:administrador_id', async (req, res) => {
         try {
-            const { administrador_cpf } = req.params;
+            const { administrador_id } = req.params;
         
-            await DB.query(`UPDATE Administradores SET administrador_status = FALSE WHERE administrador_cpf = '${administrador_cpf}'`);
+            await DB.query(`UPDATE Administradores SET administrador_status = FALSE WHERE administrador_id = '${administrador_id}'`);
         
             res.status(200).json({ message: 'Exclusão Lógica do administrador realizada.' });
 
@@ -47,11 +47,11 @@ function ReativacaoAdmin(): express.Router {
 
     const router = express.Router();
 
-    router.put('/ReativacaoAdmin/:administrador_cpf', async (req, res) => {
+    router.put('/ReativacaoAdmin/:administrador_id', async (req, res) => {
         try {
-            const { administrador_cpf } = req.params;
+            const { administrador_id } = req.params;
         
-            await DB.query(`UPDATE Administradores SET administrador_status = TRUE WHERE administrador_cpf = '${administrador_cpf}'`);
+            await DB.query(`UPDATE Administradores SET administrador_status = TRUE WHERE administrador_id = '${administrador_id}'`);
         
             res.status(200).json({ message: 'Reativação do administrador realizada.' });
 

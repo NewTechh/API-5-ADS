@@ -83,7 +83,6 @@ const LoginScreen = () => {
         console.log(userId)
         console.log(userType)
 
-        alert('Login Realizado!')
         resetFields()
 
         if (userType === 'Parceiro') {

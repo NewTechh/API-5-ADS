@@ -33,6 +33,7 @@ import EspecializacoesTrilha from '../src/components/Consultor/EspecializacoesTr
 import AdminHome from '../src/components/Admin/AdminHome';
 import ParceiroHome from '../src/components/Parceiros/ParceiroHome';
 import ConsultorHome from '../src/components/Consultor/ConsultorHome';
+import EditarAdministrador from '../src/components/EditarAdministrador';
 
 
 const Stack = createStackNavigator();
@@ -59,6 +60,7 @@ const Rotas = () => {
         <Stack.Screen name="Token" component={Token} options={{ headerShown: false }} />
         <Stack.Screen name="EditarParceiro" component={EditarParceiro} options={{ headerShown: false }} />
         <Stack.Screen name="EditarConsultor" component={EditarConsultor} options={{ headerShown: false }} />
+        <Stack.Screen name="EditarAdministrador" component={EditarAdministrador} options={{ headerShown: false }} />
         <Stack.Screen name="EditarAdminSelf" component={EditarAdminSelf} options={{ headerShown: false }} />
         <Stack.Screen name="EditarConsulSelf" component={EdicaoConsulSelf} options={{ headerShown: false }} />
         <Stack.Screen name="EditarInfoPartner" component={EdicaoInfoPartner} options={{ headerShown: false }} />
