@@ -40,6 +40,7 @@ import TabelaProgressoParceiros from './Dashboard/TabelaProgressoParceiros';
 import CadastroTrilha from "./Track/PostTrack";
 import DeletarTrilha from './Track/DeleteTrack';
 import EdicaoTrilha from './Track/PutTrack';
+import InsertRelatorio from './ConnectionDB/InsertAndEmail';
 
 
 
@@ -59,6 +60,10 @@ app.listen(port, () => {
 
 
 
+// Insert no MongoDB e envio de Relatório por Email
+app.use('/PostRelatorio', InsertRelatorio())
+
+
 // Authentication
 
 app.use('/Auth', Login());
@@ -73,7 +78,6 @@ app.use('/Auth', UpdatePassword());
 app.use('/Auth', UpdatePasswordSelf())
 
 // Log
-
 app.use('/Log', EdicaoParceiroLog())
 app.use('/Log', EdicaoConsultorLog())
 app.use('/Log', DeleteConsultorLog())

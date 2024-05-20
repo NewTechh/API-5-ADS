@@ -267,11 +267,79 @@ const ListPartner = () => {
             Alert.alert('Erro', 'Erro ao reativar parceiro. Por favor, tente novamente.');
         }
     };
+    const generateRelatorio = async (parceiroID: string) => {
 
+        const consultor_alianca_id = await AsyncStorage.getItem('usuario_id');
 
-    const handleParceiroClick = async (parceiroCPF: string) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/ConsultaPorCPF/${parceiroCPF}`, {
+            const response0 = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores/${consultor_alianca_id}`, {
+                method: 'GET'
+            });
+
+            if (!response0.ok) {
+                throw new Error('Erro ao buscar parceiro');
+            }
+
+            const consultorData = await response0.json();
+
+            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/Parceiros/${parceiroID}`, {
+                method: 'GET'
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao buscar parceiro');
+            }
+
+            const parceiroData = await response.json();
+
+            const response2 = await fetch(`http://${getIpAddress()}:3001/Tracks/Progress/${parceiroData.parceiro_id}`, {
+                method: 'GET'
+            });
+
+            if (!response2.ok) {
+                throw new Error('Erro ao buscar parceiro');
+            }
+
+            const parceiroProgressTrilha = await response2.json();
+            
+            const response3 = await fetch(`http://${getIpAddress()}:3001/Tracks/Progress/${parceiroProgressTrilha[0].trilha_id}/${parceiroData.parceiro_id}`);
+
+            if (!response3.ok) {
+              throw new Error('Erro ao carregar especializações da trilha');
+            }
+
+            const especializacao = await response3.json();
+
+
+            // Envia os dados do parceiro para a rota de inserção no banco de dados
+            const insercaoResponse = await fetch(`http://${getIpAddress()}:3001/PostRelatorio/InsertRelatorio`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    consultorData: consultorData,
+                    parceiroData: parceiroData,
+                    parceiroProgressTrilha: parceiroProgressTrilha,
+                    especializacao: especializacao
+                })
+            });
+    
+            if (!insercaoResponse.ok) {
+                throw new Error('Erro ao inserir dados do parceiro no banco');
+            } else {
+                Alert.alert('Sucesso', 'Relatório enviado no email.')
+            }
+    
+        } catch (error) {
+            console.error('Erro ao buscar parceiro:', error);
+            Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
+        }
+    };
+
+    const handleParceiroClick = async (parceiroID: string) => {
+        try {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/Parceiros/${parceiroID}`, {
                 method: 'GET'
             });
             if (!response.ok) {
@@ -279,6 +347,7 @@ const ListPartner = () => {
             }
             const parceiroData = await response.json();
             const formattedData = formatParceiroData(parceiroData);
+    
             Alert.alert(`Dados Adicionais do Parceiro:\n\n`, formattedData);
         } catch (error) {
             console.error('Erro ao buscar parceiro:', error);
@@ -351,7 +420,7 @@ const ListPartner = () => {
                     </View>
                     <View>
                         {filteredParceiros.map((parceiro, index) => (
-                            <Pressable style={styles.row} key={index} onPress={() => handleParceiroClick(parceiro.parceiro_cnpj_cpf)}>
+                            <Pressable style={styles.row} key={index} onPress={() => handleParceiroClick(parceiro.parceiro_id)}>
                                 <Text style={styles.data}>{parceiro.parceiro_nome}</Text>
                                 <Text style={styles.data}>{parceiro.parceiro_cnpj_cpf}</Text>
                                 <Pressable
@@ -427,6 +496,7 @@ const ListPartner = () => {
                                 </Pressable>
                                 <Pressable
                                     style={styles.modalButtonOptions}
+                                    onPress={() => { generateRelatorio(modalData.parceiro_id) }}
                                 >
                                     <MaterialCommunityIcons
                                         style={styles.icon}
