@@ -34,7 +34,7 @@ import AdminHome from '../src/components/Admin/AdminHome';
 import ParceiroHome from '../src/components/Parceiros/ParceiroHome';
 import ConsultorHome from '../src/components/Consultor/ConsultorHome';
 import EditarAdministrador from '../src/components/EditarAdministrador';
-
+import NotificationScreen from '../src/components/Consultor/NotificationScreen';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +75,7 @@ const Rotas = () => {
         <Stack.Screen name="AdminHome" component={AdminHome} options={{ headerShown: false }} />
         <Stack.Screen name="ParceiroHome" component={ParceiroHome} options={{ headerShown: false }} />
         <Stack.Screen name="ConsultorHome" component={ConsultorHome} options={{ headerShown: false }} />
+        <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     </NavigationContainer>
   );

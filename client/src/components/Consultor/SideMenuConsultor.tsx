@@ -71,6 +71,10 @@ const SideMenuConsultor: React.FC<SideMenuProps> = ({ onClose, navigation }) => 
                         <Ionicons name="trail-sign-outline" size={24} color="black" />
                         <Text style={styles.menuText}>Trilhas</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('NotificationScreen')} style={styles.menuItem}>
+                    <Ionicons name="notifications-outline" size={24} color="black" />
+                        <Text style={styles.menuText}>Notificações</Text>
+                    </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.exitButton}>
                     <Ionicons name="log-out-outline" size={24} color="black" />
