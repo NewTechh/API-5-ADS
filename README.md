@@ -43,7 +43,7 @@ do relacionamento com os parceiros.</p> </b>
 <h2>Cronograma das Sprints 📆</h2>
 <br>
 <br>
-<img align="center" src="Imagens/cronograma2.jpg"/>
+<img align="center" src="Imagens/cronograma3.jpg"/>
 
 <br>
 <br>
