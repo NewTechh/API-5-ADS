@@ -1,10 +1,10 @@
 import express from 'express';
 import DB from '../ConnectionDB/db';
 
-function GraficoCountPartnerByTrack(): express.Router{
+function Grafico5CadastrosPorTrilha(): express.Router{
     const router = express.Router();
 
-    router.get('/graficoParceirosPorTrilha', async (_, res) => {
+    router.get('/Grafico5CadastrosPorTrilha', async (_, res) => {
         try {
         const result = await DB.query(`SELECT COUNT(id_parceiro) , trilha_nome , trilha_id
                                         FROM ParceiroTrilha pt
@@ -26,4 +26,4 @@ function GraficoCountPartnerByTrack(): express.Router{
 
 }
 
-export default GraficoCountPartnerByTrack;
+export default Grafico5CadastrosPorTrilha;

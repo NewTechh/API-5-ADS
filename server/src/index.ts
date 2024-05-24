@@ -35,12 +35,16 @@ import CadastroDeParceirosTrilha from './User/PostUserTrack';
 import ListarTracksDoParceiro from './Expertise/PartnerTracks';
 import ListarQualificadoresPorExpParceiro from './Expertise/QualiByExp';
 import GetExpProgress from './Expertise/GetExpProgress';
-import GraficoCountPartnerByTrack from './Dashboard/GraficoCountPartnerByTrack';
-import TabelaProgressoParceiros from './Dashboard/TabelaProgressoParceiros';
 import CadastroTrilha from "./Track/PostTrack";
 import DeletarTrilha from './Track/DeleteTrack';
 import EdicaoTrilha from './Track/PutTrack';
 import InsertRelatorio from './ConnectionDB/InsertAndEmail';
+import Grafico1ParceirosCadastrados from './Dashboard/Grafico1ParceirosCadastrados';
+import Grafico2TaxaDeConclusao from './Dashboard/Grafico2TaxaDeConclusao';
+import Tabela4ProgressoDetalhes from './Dashboard/Tabela4ProgressoDetalhes';
+import Tabela3ProgressoParceiros from './Dashboard/Tabela3ProgressoParceiros';
+import Grafico5CadastrosPorTrilha from './Dashboard/Grafico5CadastrosPorTrilha';
+import Grafico6TrilhasConcluidas from './Dashboard/Grafico6TrilhasConcluidas';
 
 
 
@@ -189,10 +193,18 @@ app.use('/Tracks', ListarQualificadoresPorExpParceiro())
 
 
 //DASHBOARD
-//grafico: quantidade de parceiros em cada trilha
-app.use('/Dashboard', GraficoCountPartnerByTrack())
-//tabela: todos os parceiros e o progresso em cada trilha q eles estão vinculados
-app.use('/Dashboard', TabelaProgressoParceiros())
+
+app.use('/Dashboard', Grafico1ParceirosCadastrados())
+
+app.use('/Dashboard', Grafico2TaxaDeConclusao())
+
+app.use('/Dashboard', Tabela3ProgressoParceiros())
+
+app.use('/Dashboard', Tabela4ProgressoDetalhes())
+
+app.use('/Dashboard', Grafico5CadastrosPorTrilha())
+
+app.use('/Dashboard', Grafico6TrilhasConcluidas())
 
 // CRUD - Trilhas
 //listar Trilhas

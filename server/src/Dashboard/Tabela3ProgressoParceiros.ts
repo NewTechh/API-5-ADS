@@ -1,11 +1,11 @@
 import express from "express";
 import DB from "../ConnectionDB/db";
 
-function TabelaProgressoParceiros(): express.Router {
+function Tabela3ProgressoParceiros(): express.Router {
 
     const router = express.Router();
 
-    router.get('/ParceirosProgresso', async (req, res) => {
+    router.get('/Tabela3ProgressoParceiros', async (req, res) => {
         try {
           
           const resultado = new Array;
@@ -70,4 +70,4 @@ function TabelaProgressoParceiros(): express.Router {
     return router;
 };
 
-export default TabelaProgressoParceiros;
+export default Tabela3ProgressoParceiros;
