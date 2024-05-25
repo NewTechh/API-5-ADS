@@ -194,13 +194,13 @@ app.use('/Tracks', ListarQualificadoresPorExpParceiro())
 
 //DASHBOARD
 
-app.use('/Dashboard', Grafico1ParceirosCadastrados())
-
-app.use('/Dashboard', Grafico2TaxaDeConclusao())
-
 app.use('/Dashboard', Tabela3ProgressoParceiros())
 
 app.use('/Dashboard', Tabela4ProgressoDetalhes())
+
+app.use('/Dashboard', Grafico1ParceirosCadastrados())
+
+app.use('/Dashboard', Grafico2TaxaDeConclusao())
 
 app.use('/Dashboard', Grafico5CadastrosPorTrilha())
 
