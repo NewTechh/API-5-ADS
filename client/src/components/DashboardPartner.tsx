@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native';
-import { BarChart, PieChart } from 'react-native-chart-kit';
+import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable, TouchableOpacity, GestureResponderEvent } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FooterConsultor from './Consultor/FooterConsultor';
 import SideMenuConsultor from './Consultor/SideMenuConsultor';
 import getIpAddress from '../../services/IPAddress';
 import * as Progress from 'react-native-progress';
+import { PieChart } from 'react-native-svg-charts';
+
+
+
 type RootStackParamList = {
   Dashboard: undefined;
+  DetalhesParceiros: undefined;
 }
 
 type PartnerCountData = {
   trilha_nome: string;
+  pconcluido: number;
   count: number;
 };
 
@@ -20,6 +25,7 @@ type PartnerProgress = {
   parceiro_nome: string;
   trilha_nome: string;
   progresso: number;
+  count: number;
 };
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Dashboard'>;
@@ -31,6 +37,9 @@ const DashboardPartner = () => {
   const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
   const [partnerCountData, setPartnerCountData] = useState<PartnerCountData[]>([]);
   const [partnerProgress, setPartnerProgress] = useState<PartnerProgress[]>([]);
+  const [parceiroTrilha, setParceiroTrilha] = useState<PartnerProgress[]>([]);
+  const [selectedTrack1, setSelectedTrack1] = useState<string | null>(null);
+  const [selectedTrack2, setSelectedTrack2] = useState<string | null>(null);
 
   const toggleSideMenu = () => {
     setIsSideMenuVisible(!isSideMenuVisible);
@@ -39,11 +48,12 @@ const DashboardPartner = () => {
   useEffect(() => {
     fetchPartnerProgress();
     fetchPartnerCountByTrack();
+    GraficoParceirosPorTrilha()
   }, []);
 
   const fetchPartnerProgress = async () => {
     try {
-      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/ParceirosProgresso`);
+      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/Tabela3ProgressoParceiros`);
       const data = await response.json();
       setPartnerProgress(data);
     } catch (error) {
@@ -53,121 +63,163 @@ const DashboardPartner = () => {
 
   const fetchPartnerCountByTrack = async () => {
     try {
-      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/graficoParceirosPorTrilha`);
+      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/Grafico2TaxaDeConclusao`);
       const data = await response.json();
       setPartnerCountData(data);
+    } catch (error) {
+      console.error('Erro ao obter a contagem de parceiros concluidos:', error);
+    }
+  };
+
+
+  const GraficoParceirosPorTrilha = async () => {
+    try {
+      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/Grafico5CadastrosPorTrilha`);
+      const data = await response.json();
+      setParceiroTrilha(data);
     } catch (error) {
       console.error('Erro ao obter contagem de parceiros por trilha:', error);
     }
   };
 
-  const data = [
-    {
-      name: "OCP",
-      population: 8,
-      color: "#F44336",
-      legendFontColor: "white",
-      legendFontSize: 13
+
+  const handleLegendPress1 = (track: string) => {
+    setSelectedTrack1(selectedTrack1 === track ? null : track);
+  };
+
+  const handleSectorPress1 = (event: GestureResponderEvent, track: string) => {
+    setSelectedTrack1(selectedTrack1 === track ? null : track);
+  };
+
+
+  const handleLegendPress2 = (track: string) => {
+    setSelectedTrack2(selectedTrack2 === track ? null : track);
+  };
+
+  const handleSectorPress2 = (event: GestureResponderEvent, track: string) => {
+    setSelectedTrack2(selectedTrack2 === track ? null : track);
+  };
+
+  const colors = ['#33FF57', '#FF5733', '#3366FF', '#FF33CC', '#FFFF33'];
+  const colors2 = ['#909090', '#2D572C', '#3366FF', '#CDA434', '#828282'];
+
+  const TrilhasConcluidas = partnerCountData.map((item: any, index: any) => ({
+    value: Number(item.pconcluido),
+    label: item.trilha_nome,
+    key: index, // Usado como identificador único
+    svg: {
+      fill: colors[index % colors.length],
+      onPress: (event: GestureResponderEvent) => handleSectorPress1(event, item.trilha_nome),
+      ...(selectedTrack1 === item.trilha_nome && { transform: [{ scale: 1.1 }] })
     },
-    {
-      name: "Marketing",
-      population: 10,
-      color: "#9C27B0",
-      legendFontColor: "white",
-      legendFontSize: 13
+  }));
+
+  const ParceirosPorTrilhas = parceiroTrilha.map((item: any, index: any) => ({
+    value: Number(item.count),
+    label: item.trilha_nome,
+    key: index, // Usado como identificador único
+    svg: {
+      fill: colors2[index % colors2.length],
+      onPress: (event: GestureResponderEvent) => handleSectorPress2(event, item.trilha_nome),
+      ...(selectedTrack2 === item.trilha_nome && { transform: [{ scale: 1.1 }] })
     },
-    {
-      name: "Oracle DB",
-      population: 15,
-      color: "#2196F3",
-      legendFontColor: "white",
-      legendFontSize: 13
-    },
-    {
-      name: "ZFS Storage",
-      population: 30,
-      color: "#4CAF50",
-      legendFontColor: "white",
-      legendFontSize: 13
-    },
-    {
-      name: "CC",
-      population: 37,
-      color: "#FFEB3B",
-      legendFontColor: "white",
-      legendFontSize: 13
-    }
-  ];
+  }));
 
   return (
     <>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <Text style={styles.title}>Progresso de Parceiros</Text>
-        <View style={styles.tableContainer}>
-          <View style={styles.headerRow}>
-            <Text style={styles.header}>Nome</Text>
-            <Text style={styles.header}>Trilha</Text>
-            <Text style={styles.header}>Progresso</Text>
-          </View>
-          {partnerProgress.map((partner, index) => (
-            <View key={index}>
-              <View style={styles.row}>
-                <Text style={styles.data}>{partner.parceiro_nome}</Text>
-                <Text style={styles.data}>{partner.trilha_nome}</Text>
-                <View >
-                  <Progress.Bar style={{ borderRadius: 10, marginLeft: 10, marginTop: 6, marginRight: 10, }}
-                    progress={partner.progresso} width={110} height={15} borderWidth={1} color={'#17E753'} >
-                    <Text style={styles.bar}>{Math.round(partner.progresso * 100)}%</Text>
-                  </Progress.Bar>
-                </View>
-              </View>
-
-
+      <ScrollView style={styles.scrollView}>
+        <ScrollView>
+          <Text style={styles.title}>Progresso de Parceiros</Text>
+          <View style={styles.tableContainer}>
+            <View style={styles.headerRow}>
+              <Text style={styles.header}>Nome</Text>
+              <Text style={styles.header}>Trilha</Text>
+              <Text style={styles.header}>Progresso</Text>
             </View>
-          ))}
-        </View>
-        {/*}
-        <Text style={styles.title}>Top 5 Cursos Procurados:</Text>
-        <PieChart
-          data={data}
-          width={chartWidth}
-          height={160}
-          chartConfig={{
-            backgroundGradientFrom: "#1E2923",
-            backgroundGradientTo: "#08130D",
-            color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`
-          }}
-          accessor="population"
-          backgroundColor="transparent"
-          paddingLeft="5"
-        />
-        */}
+            {partnerProgress.map((partner, index) => (
+              <View key={index}>
+                <Pressable onPress={() => navigation.navigate('DetalhesParceiros')}>
+                  <View style={styles.row}>
 
-        <Text style={styles.title}>Parceiros por Trilha:</Text>
-        <BarChart
-          data={{
-            labels: partnerCountData.map(item => item.trilha_nome), // Usando os dados de contagem de parceiros por trilha
-            datasets: [{
-              data: partnerCountData.map(item => item.count), // Usando os dados de contagem de parceiros por trilha
-            }],
-          }}
-          width={chartWidth}
-          height={220}
-          yAxisSuffix=""
-          yAxisLabel=""
-          chartConfig={{
-            backgroundGradientFrom: "#1E2923",
-            backgroundGradientTo: "#08130D",
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            barPercentage: 0.5,
-            formatYLabel: value => `${Math.round(Number(value))}`, // Formata o valor como número inteiro
-            formatXLabel: label => label.split(' ').join(''), // Quebra de linha nos rótulos do eixo X
-          }}
-          style={{
-            marginVertical: 8,
-            borderRadius: 16
-          }}
-        />
+                    <Text style={styles.data}>{partner.parceiro_nome}</Text>
+                    <Text style={styles.data}>{partner.trilha_nome}</Text>
+                    <View style={styles.progressContainer} >
+                      <Progress.Bar
+                        style={styles.progressBar}
+                        progress={partner.progresso}
+                        width={110}
+                        height={15}
+
+                        borderWidth={1}
+                        color={'#17E753'}
+                      />
+                      <View style={styles.progressBarContent}>
+                        <Text style={styles.bar}>{Math.round(partner.progresso * 100)}%</Text>
+                      </View>
+                    </View>
+                  </View>
+                </Pressable>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+        <Text style={styles.title}> Trilhas concluidas pelos parceiros:</Text>
+
+        <View style={{ flex: 1, height: 200 }}>
+          <PieChart
+            style={{ flex: 1 }}
+            data={TrilhasConcluidas}
+            innerRadius={'50%'} // Define o tamanho do buraco central
+            padAngle={0.06} // Define o espaçamento entre os setores
+
+          />
+          <View style={styles.legendContainer}>
+            {partnerCountData.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.legendItem,
+                  selectedTrack1 === item.trilha_nome && styles.selectedLegendItem
+                ]}
+                onPress={() => handleLegendPress1(item.trilha_nome)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.legendColorBox, { backgroundColor: colors[index % colors.length] }]} />
+                <Text style={{ color: '#fff' }}>{item.trilha_nome} {item.pconcluido}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+
+        <Text style={styles.title}>Parceiros por trilhas:</Text>
+
+        <View style={{ flex: 1, height: 200 }}>
+          <PieChart
+            style={{ flex: 1 }}
+            data={ParceirosPorTrilhas}
+            innerRadius={'50%'} // Define o tamanho do buraco central
+            padAngle={0.06} // Define o espaçamento entre os setores
+
+          />
+          <View style={styles.legendContainer}>
+            {parceiroTrilha.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.legendItem,
+                  selectedTrack2 === item.trilha_nome && styles.selectedLegendItem
+                ]}
+                onPress={() => handleLegendPress2(item.trilha_nome)}
+                activeOpacity={0.7}
+              >
+                <View style={[styles.legendColorBox, { backgroundColor: colors2[index % colors2.length] }]} />
+                <Text style={{ color: '#fff' }}>{item.trilha_nome}: {item.count} </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
       </ScrollView>
       <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
       {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
@@ -179,74 +231,103 @@ const DashboardPartner = () => {
 const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
-    alignItems: 'center',
     backgroundColor: '#272424',
     paddingHorizontal: 16,
   },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    marginTop: 30,
-    marginBottom: 20,
-    textAlign: 'center',
-    color: 'white',
-  },
+
   tableContainer: {
-    backgroundColor: '#f1f1f1',
-    width: "100%",
+    backgroundColor: '#f0f0f0',
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  title: {
+    flex: 1,
+    fontSize: 33,
+    fontWeight: 'bold',
+    marginTop: 15,
+    marginBottom: 10,
+    textAlign: 'center',
+    color: 'white'
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    alignItems: 'center',
+    backgroundColor: '#ccc',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingBottom: 5,
+    borderBottomColor: '#999',
+  }, selectedLegendItem: {
+    transform: [{ scale: 1.1 }], // Aplica uma escala maior ao item selecionado na legenda
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#ccc',
-    marginBottom: 10,
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#999',
   },
   header: {
-    flex: 1,
-    fontWeight: 'bold',
-    backgroundColor: 'black',
-    color: 'white',
     fontSize: 16,
-    textAlign: 'center',
-  },
-  bar: {
-    position: 'absolute',
-    justifyContent: 'center',
-    fontSize: 14,
     fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
-    marginLeft: 45,
-    marginTop: -3,
+    flex: 1,
   },
   data: {
-    flex: 1,
     fontSize: 16,
+    color: 'black',
+    textAlign: 'center',
+    flex: 1,
+  },
+  bar: {
+    fontSize: 16,
+    color: 'black',
     textAlign: 'center',
   },
-  progressBar: {
-    height: 10,
-    backgroundColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 5,
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  progress: {
+
+  progressBar: {
+    borderRadius: 10,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  progressBarContent: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  legendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    marginTop: 10,
+
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+  legendColorBox: {
+    width: 20,
     height: 10,
-    backgroundColor: 'green',
-    borderRadius: 5,
+    marginRight: 5,
+
   },
 });
+
 
 export default DashboardPartner;
