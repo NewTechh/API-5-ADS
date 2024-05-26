@@ -8,11 +8,12 @@ import getIpAddress from '../../services/IPAddress';
 import * as Progress from 'react-native-progress';
 import { PieChart } from 'react-native-svg-charts';
 
+import { Text as SvgText } from 'react-native-svg';
 
 
 type RootStackParamList = {
   Dashboard: undefined;
-  DetalhesParceiros: undefined;
+  DetalhesParceiros: { parceiro_id: string };
 }
 
 type PartnerCountData = {
@@ -23,6 +24,7 @@ type PartnerCountData = {
 
 type PartnerProgress = {
   parceiro_nome: string;
+  parceiro_id: string 
   trilha_nome: string;
   progresso: number;
   count: number;
@@ -40,6 +42,9 @@ const DashboardPartner = () => {
   const [parceiroTrilha, setParceiroTrilha] = useState<PartnerProgress[]>([]);
   const [selectedTrack1, setSelectedTrack1] = useState<string | null>(null);
   const [selectedTrack2, setSelectedTrack2] = useState<string | null>(null);
+  const [selectedTrack3, setSelectedTrack3] = useState<string | null>(null);
+  const [partnerDetails, setPartnerDetails] = useState<any>(null);
+  
 
   const toggleSideMenu = () => {
     setIsSideMenuVisible(!isSideMenuVisible);
@@ -82,6 +87,16 @@ const DashboardPartner = () => {
     }
   };
 
+  const DetalhesParceiro = async (parceiroId: string) => {
+    try {
+      const response = await fetch(`http://${getIpAddress()}:3001/Dashboard/Detalhes/${parceiroId}`);
+      const data = await response.json();
+      setPartnerDetails(data);
+    } catch (error) {
+      console.error('Erro ao obter detalhes do parceiro:', error);
+    }
+  };
+
 
   const handleLegendPress1 = (track: string) => {
     setSelectedTrack1(selectedTrack1 === track ? null : track);
@@ -99,6 +114,7 @@ const DashboardPartner = () => {
   const handleSectorPress2 = (event: GestureResponderEvent, track: string) => {
     setSelectedTrack2(selectedTrack2 === track ? null : track);
   };
+
 
   const colors = ['#33FF57', '#FF5733', '#3366FF', '#FF33CC', '#FFFF33'];
   const colors2 = ['#909090', '#2D572C', '#3366FF', '#CDA434', '#828282'];
@@ -124,7 +140,31 @@ const DashboardPartner = () => {
       ...(selectedTrack2 === item.trilha_nome && { transform: [{ scale: 1.1 }] })
     },
   }));
-
+  const Labels = ({ slices }) => {
+    return slices.map((slice:any, index:any) => {
+      const { pieCentroid, data } = slice;
+      return (
+        <SvgText
+          key={index}
+          x={pieCentroid[0]}
+          y={pieCentroid[1]}
+          fill={'white'}
+          textAnchor={'middle'}
+          alignmentBaseline={'middle'}
+          fontSize={12}
+          stroke={'black'}
+          strokeWidth={0.2}
+        >
+          {data.value}%
+        </SvgText>
+      );
+    });
+  };
+  const navigateToPartnerDetails = (parceiroId: string) => {
+    DetalhesParceiro(parceiroId); // Chame a função DetalhesParceiro passando o ID do parceiro
+    navigation.navigate('DetalhesParceiros', { parceiro_id: parceiroId });
+  };
+  
   return (
     <>
       <ScrollView style={styles.scrollView}>
@@ -138,7 +178,7 @@ const DashboardPartner = () => {
             </View>
             {partnerProgress.map((partner, index) => (
               <View key={index}>
-                <Pressable onPress={() => navigation.navigate('DetalhesParceiros')}>
+                <Pressable onPress={() => navigateToPartnerDetails(partner.parceiro_id)}>
                   <View style={styles.row}>
 
                     <Text style={styles.data}>{partner.parceiro_nome}</Text>
@@ -165,14 +205,16 @@ const DashboardPartner = () => {
         </ScrollView>
         <Text style={styles.title}> Trilhas concluidas pelos parceiros:</Text>
 
-        <View style={{ flex: 1, height: 200 }}>
+        <View style={{ flex: 1, height: 200,}}>
           <PieChart
             style={{ flex: 1 }}
             data={TrilhasConcluidas}
             innerRadius={'50%'} // Define o tamanho do buraco central
             padAngle={0.06} // Define o espaçamento entre os setores
 
-          />
+          > 
+          <Labels slices={TrilhasConcluidas} />
+          </PieChart>
           <View style={styles.legendContainer}>
             {partnerCountData.map((item, index) => (
               <TouchableOpacity
@@ -201,7 +243,11 @@ const DashboardPartner = () => {
             innerRadius={'50%'} // Define o tamanho do buraco central
             padAngle={0.06} // Define o espaçamento entre os setores
 
-          />
+
+            > 
+            <Labels slices={TrilhasConcluidas} />
+            </PieChart>
+          
           <View style={styles.legendContainer}>
             {parceiroTrilha.map((item, index) => (
               <TouchableOpacity
