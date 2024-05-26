@@ -45,6 +45,7 @@ import Tabela4ProgressoDetalhes from './Dashboard/Tabela4ProgressoDetalhes';
 import Tabela3ProgressoParceiros from './Dashboard/Tabela3ProgressoParceiros';
 import Grafico5CadastrosPorTrilha from './Dashboard/Grafico5CadastrosPorTrilha';
 import Grafico6TrilhasConcluidas from './Dashboard/Grafico6TrilhasConcluidas';
+import Grafico7TempoMedioConclusao from './Dashboard/Grafico7TempoMedioConclusao';
 
 
 
@@ -205,6 +206,8 @@ app.use('/Dashboard', Grafico2TaxaDeConclusao())
 app.use('/Dashboard', Grafico5CadastrosPorTrilha())
 
 app.use('/Dashboard', Grafico6TrilhasConcluidas())
+
+app.use('/Dashboard', Grafico7TempoMedioConclusao())
 
 // CRUD - Trilhas
 //listar Trilhas
