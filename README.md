@@ -26,7 +26,7 @@ do relacionamento com os parceiros.</p> </b>
 <p> :heavy_check_mark: Desenvolver uma interface de cadastro de parceiros; </p>
 <p> :heavy_check_mark: Desenvolver uma interface de desenvolvimento de parceiros;  </p>
 <p> :heavy_check_mark: Desenvolver um Dashboard de indicadores de desempenho de parceiros; </p>
-<p> :hourglass: Desenvolver um Relatório Analítico de parceiros por produto implementado.</p>
+<p> :heavy_check_mark: Desenvolver um Relatório Analítico de parceiros por produto implementado.</p>
 
 <br><br>
 
@@ -50,6 +50,7 @@ do relacionamento com os parceiros.</p> </b>
 <h2>Demonstração completa de nosso sistema 💻</h2><br>
 <h3> Video Sprint Review 1: <a href="https://youtu.be/Wta7mGWDcBE?si=ktAhCTTZvtMGwAHO">Clique aqui</a></h3>
 <h3> Video Sprint Review 2: <a href="https://youtu.be/CRgsnU3LqM0">Clique aqui</a></h3>
+<h3> Video Sprint Review 3: <a href="">Clique aqui</a></h3>
 <img align="center" src="#"/>
 <br>
 <br>
