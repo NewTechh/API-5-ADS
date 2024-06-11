@@ -31,6 +31,8 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>
 
 const ListAdministradores = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 8;
     const navigation = useNavigation<ScreenNavigationProp>();
     const [administradorData, setAdministradorData] = useState<Administrador[]>([]);
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
@@ -49,26 +51,33 @@ const ListAdministradores = () => {
     };
 
     useEffect(() => {
-        fetchAdministradores();
+        fetchAdministradores(currentPage);
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchAdministradores();
+            fetchAdministradores(currentPage);
         });
         return unsubscribe;
-    }, [navigation]);
+    }, [currentPage, navigation]);
 
-    const fetchAdministradores = async () => {
+    const fetchAdministradores = async (page = 1) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores?page=${page}`, {
                 method: 'GET'
             });
             if (!response.ok) {
-                throw new Error('Erro ao carregar Administradores.');
+                throw new Error('Erro ao carregar parceiros');
             }
             const data = await response.json();
             setAdministradorData(data);
         } catch (error) {
             console.error(error);
         }
+    };
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        setCurrentPage(currentPage - 1);
     };
 
     const handleDelete = async (administradorID: string) => {
@@ -242,6 +251,22 @@ const ListAdministradores = () => {
                             </Pressable>
                         ))}
                     </View>
+                    <View style={styles.pagination}>
+                <Pressable
+                    style={[styles.pageButton, { marginRight: 10 }]}
+                    disabled={currentPage === 1}
+                    onPress={handlePrevPage}
+                >
+                    <Text style={styles.buttonText}>Anterior</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.pageButton}
+                    disabled={administradorData.length < pageSize}
+                    onPress={handleNextPage}
+                >
+                    <Text style={styles.buttonText}>Próxima</Text>
+                </Pressable>
+            </View>
                     <View style={styles.separator} />
                 </View>
             </View>
@@ -267,6 +292,22 @@ const styles = StyleSheet.create({
     },
     tableContainer: {
         backgroundColor: '#f0f0f0',
+    },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    pageButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#007bff',
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     headerRow: {
         flexDirection: 'row',

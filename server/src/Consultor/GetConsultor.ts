@@ -24,25 +24,28 @@ function ListarConsultorID(): express.Router {
     return router;
 };
 
-function ListarTodosConsultores(): express.Router{
-    const router = express.Router();
+function ListarTodosConsultores(): express.Router {
+  const router = express.Router();
 
-    router.get('/Consultores', async (_, res) => {
-        try {
-        const result = await DB.query('SELECT * FROM ConsultorAlianca;');
-    
-        if (result.rows.length === 0) {
-            res.status(404).json({ message: 'Consultores não encontrados' });
-        } else {
-            res.status(200).json(result.rows);
-        }
-        } catch (error: any) {
-        res.status(500).json({ error: error.message });
-        }
-    });
+  router.get('/Consultores', async (req, res) => {
+      try {
+          const page = parseInt(req.query.page as string) || 1; // Página atual (padrão: 1)
+          const pageSize = 8; // Tamanho da página fixo em 8
+          const offset = (page - 1) * pageSize; // Calcular o offset
 
-    return router;
+          const result = await DB.query('SELECT * FROM ConsultorAlianca LIMIT $1 OFFSET $2;', [pageSize, offset]);
 
+          if (result.rows.length === 0) {
+              res.status(404).json({ message: 'Consultores não encontrados' });
+          } else {
+              res.status(200).json(result.rows);
+          }
+      } catch (error: any) {
+          res.status(500).json({ error: error.message });
+      }
+  });
+
+  return router;
 }
 
 export {ListarConsultorID, ListarTodosConsultores}

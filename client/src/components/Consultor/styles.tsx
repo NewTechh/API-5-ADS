@@ -6,6 +6,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#272424',
         paddingHorizontal: 16,
     },
+        pagination: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    pageButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#007bff',
+        borderRadius: 5,
+    },
     title: {
         flex: 1,
         fontSize: 33,
@@ -165,6 +176,22 @@ const styles = StyleSheet.create({
     confirmButtonText: {
         color: 'white',
         fontWeight: 'bold',
+    },
+
+    paginationContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+    },
+    paginationButton: {
+        padding: 10,
+        backgroundColor: '#007BFF',
+        borderRadius: 5,
+    },
+    paginationText: {
+        fontSize: 16,
+        color: '#FFFFFF',
     },
 });
 

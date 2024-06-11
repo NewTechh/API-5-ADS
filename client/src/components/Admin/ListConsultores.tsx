@@ -28,6 +28,8 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>
 
 const ListConsultores = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 8;
     const navigation = useNavigation<ScreenNavigationProp>();
     const [consultorData, setConsultorData] = useState<Consultor[]>([]);
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
@@ -51,21 +53,31 @@ const ListConsultores = () => {
     };
 
     useEffect(() => {
-        fetchConsultores();
+        fetchConsultores(currentPage);
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchConsultores();
+            fetchConsultores(currentPage);
         });
         return unsubscribe;
-    }, [navigation]);
+    }, [currentPage, navigation]);
+
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
     
 
-    const fetchConsultores = async () => {
+    const fetchConsultores = async (page = 1) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetConsultor/Consultores?page=${page}`, {
                 method: 'GET'
             });
             if (!response.ok) {
-                throw new Error('Erro ao carregar consultores.');
+                throw new Error('Erro ao carregar consultores');
             }
             const data = await response.json();
             setConsultorData(data);
@@ -334,6 +346,22 @@ const ListConsultores = () => {
                             </Pressable>
                         ))}
                     </View>
+                    <View style={styles.pagination}>
+                <Pressable
+                    style={[styles.pageButton, { marginRight: 10 }]}
+                    disabled={currentPage === 1}
+                    onPress={handlePrevPage}
+                >
+                    <Text style={styles.buttonText}>Anterior</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.pageButton}
+                    disabled={consultorData.length < pageSize}
+                    onPress={handleNextPage}
+                >
+                    <Text style={styles.buttonText}>Próxima</Text>
+                </Pressable>
+            </View>
                     <View style={styles.separator} />
                 </View>
             </View>
@@ -348,6 +376,22 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: '#312D2A',
+    },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    pageButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#007bff',
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     title: {
         fontSize: 30,

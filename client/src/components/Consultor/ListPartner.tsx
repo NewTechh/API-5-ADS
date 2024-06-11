@@ -29,6 +29,8 @@ type Parceiro = {
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>;
 
 const ListPartner = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 8;
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState<Parceiro>('' as any);
     const navigation = useNavigation<ScreenNavigationProp>();
@@ -42,6 +44,14 @@ const ListPartner = () => {
     const handleEditClick = (parceiro: Parceiro) => {
         setModalVisible(false);
         navigation.navigate('EditarParceiro', { parceiro });
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        setCurrentPage(currentPage - 1);
     };
 
     const handleDeleteClick = (parceiro: Parceiro) => {
@@ -87,16 +97,16 @@ const ListPartner = () => {
     };
 
     useEffect(() => {
-        fetchParceiros();
+        fetchParceiros(currentPage);
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchParceiros();
+            fetchParceiros(currentPage);
         });
         return unsubscribe;
-    }, [navigation]);
+    }, [currentPage, navigation]);
 
-    const fetchParceiros = async () => {
+    const fetchParceiros = async (page = 1) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/Parceiros`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/GetParceiro/Parceiros?page=${page}`, {
                 method: 'GET'
             });
             if (!response.ok) {
@@ -510,6 +520,23 @@ const ListPartner = () => {
                             </View>
                         </View>
                     </Modal>
+                                {/* Adicione os botões de próxima página e anterior */}
+            <View style={styles.pagination}>
+                <Pressable
+                    style={[styles.pageButton, { marginRight: 10 }]}
+                    disabled={currentPage === 1}
+                    onPress={handlePrevPage}
+                >
+                    <Text style={styles.buttonText}>Anterior</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.pageButton}
+                    disabled={parceiros.length < pageSize}
+                    onPress={handleNextPage}
+                >
+                    <Text style={styles.buttonText}>Próxima</Text>
+                </Pressable>
+            </View>
                     <View style={styles.separator} />
                 </View>
 

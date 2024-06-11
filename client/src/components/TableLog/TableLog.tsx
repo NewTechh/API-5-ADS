@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, ScrollView, Pressable } from 'react-native';
 import FooterAdmin from '../Admin/FooterAdmin';
 import SideMenuAdmin from '../Admin/SideMenuAdmin';
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +23,8 @@ type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SignUpAdm'>
 const TableLog = () => {
 
     const [isSideMenuVisible, setIsSideMenuVisible] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 5;
     const [registrosLogs, setRegistrosLogs] = useState<RegistroLog[]>([]);
     const navigation = useNavigation<ScreenNavigationProp>();
 
@@ -31,26 +33,34 @@ const TableLog = () => {
     };
 
     useEffect(() => {
-        fetchLog();
+        fetchLog(currentPage);
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchLog();
+            fetchLog(currentPage);
         });
         return unsubscribe;
-    }, [navigation]);
+    }, [currentPage, navigation]);
 
-    const fetchLog = async () => {
+    const fetchLog = async (page = 1) => {
         try {
-            const response = await fetch(`http://${getIpAddress()}:3001/Log/Logs`, {
+            const response = await fetch(`http://${getIpAddress()}:3001/Log/Logs?page=${page}`, {
                 method: 'GET'
             });
             if (!response.ok) {
-                throw new Error('Erro ao carregar Logs.');
+                throw new Error('Erro ao carregar logs');
             }
             const data = await response.json();
             setRegistrosLogs(data);
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        setCurrentPage(currentPage - 1);
     };
 
     return (
@@ -76,6 +86,22 @@ const TableLog = () => {
                             </View>
                         ))}
                     </View>
+                    <View style={styles.pagination}>
+                <Pressable
+                    style={[styles.pageButton, { marginRight: 10 }]}
+                    disabled={currentPage === 1}
+                    onPress={handlePrevPage}
+                >
+                    <Text style={styles.buttonText}>Anterior</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.pageButton}
+                    disabled={registrosLogs.length < pageSize}
+                    onPress={handleNextPage}
+                >
+                    <Text style={styles.buttonText}>Próxima</Text>
+                </Pressable>
+            </View>
                     <View style={styles.separator} />
                 </View>
             </ScrollView>
@@ -98,6 +124,22 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: 'center',
         color: 'white'
+    },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    pageButton: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#007bff',
+        borderRadius: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     tableContainer: {
         backgroundColor: '#f0f0f0',
