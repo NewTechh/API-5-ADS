@@ -12,10 +12,15 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     pageButton: {
-        paddingVertical: 10,
+        paddingVertical: 8,
         paddingHorizontal: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: '#C74634',
         borderRadius: 5,
+    },
+    pagebuttonText: {
+        fontSize: 15,
+        color: 'white',
+        fontWeight: 'bold',
     },
     title: {
         flex: 1,

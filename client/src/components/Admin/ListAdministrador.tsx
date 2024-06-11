@@ -13,7 +13,7 @@ type RootStackParamList = {
     SignUpAdm: undefined;
     CadastroAdministrador: undefined;
     EditarAdministrador: { administrador: Administrador };
-    
+
 }
 
 type Administrador = {
@@ -114,7 +114,7 @@ const ListAdministradores = () => {
         }
     };
 
-    const logicalDeleteAdmin= async (administradorID: string) => {
+    const logicalDeleteAdmin = async (administradorID: string) => {
         try {
             const response = await fetch(`http://${getIpAddress()}:3001/DeleteAdmin/ExclusaoAdmin/${administradorID}`, {
                 method: 'PUT'
@@ -123,7 +123,7 @@ const ListAdministradores = () => {
                 throw new Error('Erro ao excluir Administrador logicamente');
             }
 
-            Alert.alert('Sucesso','Exclusão Lógica realizada.')
+            Alert.alert('Sucesso', 'Exclusão Lógica realizada.')
             console.log('Administrador excluído logicamente com sucesso');
             fetchAdministradores();
         } catch (error) {
@@ -142,7 +142,7 @@ const ListAdministradores = () => {
             }
             Alert.alert('Sucesso', 'Reativação realizada.')
             console.log('Administrador reativado')
-            fetchAdministradores();     
+            fetchAdministradores();
         } catch (error) {
             console.error('Erro ao reativar Administrador:', error);
             Alert.alert('Erro', 'Erro ao reativar Administrador. Por favor, tente novamente.');
@@ -165,7 +165,7 @@ const ListAdministradores = () => {
             Alert.alert('Erro', 'Erro ao buscar dados do Administrador. Por favor, tente novamente.');
         }
     };
-    
+
     const formatAdministradorData = (administradorData: any) => {
         return (
             `Email: ${administradorData.administrador_email}\n\n` +
@@ -202,73 +202,74 @@ const ListAdministradores = () => {
                                 <Text style={styles.data}>{administrador.administrador_nome}</Text>
                                 <Text style={styles.data}>{administrador.administrador_matricula}</Text>
                                 <View style={styles.actionButtons}>
-                                <Ionicons
-                                    style={styles.icon}
-                                    name="create"
-                                    size={24}
-                                    color="black"
-                                    onPress={() => {handleEditClick(administrador)}}
-                                />
-                                <Ionicons
-                                    style={styles.icon}
-                                    name={administrador.administrador_status ? "trash-bin" : "power"}
-                                    size={24}
-                                    color="black"
-                                    onPress={() => {
-                                        Alert.alert(
-                                            'Selecione o tipo de operação:',
-                                            'Esta ação pode ser irreversível, escolha com cuidado',
-                                            [
-                                                {
-                                                    text: 'Cancelar',
-                                                    onPress: () => {
-                                                        return
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name="create"
+                                        size={24}
+                                        color="black"
+                                        onPress={() => { handleEditClick(administrador) }}
+                                    />
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name={administrador.administrador_status ? "trash-bin" : "power"}
+                                        size={24}
+                                        color="black"
+                                        onPress={() => {
+                                            Alert.alert(
+                                                'Selecione o tipo de operação:',
+                                                'Esta ação pode ser irreversível, escolha com cuidado',
+                                                [
+                                                    {
+                                                        text: 'Cancelar',
+                                                        onPress: () => {
+                                                            return
+                                                        },
                                                     },
-                                                },
 
-                                                {
-                                                    text: 'Exclusão Definitiva',
-                                                    onPress: () => {
-                                                        handleDelete(administrador.administrador_id)
+                                                    {
+                                                        text: 'Exclusão Definitiva',
+                                                        onPress: () => {
+                                                            handleDelete(administrador.administrador_id)
+                                                        },
                                                     },
-                                                },
 
-                                                {
-                                                    text: administrador.administrador_status ? 'Exclusão Lógica' : 'Reativar',
-                                                    onPress: () => {
-                                                        if (administrador.administrador_status) {
-                                                            logicalDeleteAdmin(administrador.administrador_id);
-                                                        } else {
-                                                            reactivateAdmin(administrador.administrador_id);
-                                                        }
+                                                    {
+                                                        text: administrador.administrador_status ? 'Exclusão Lógica' : 'Reativar',
+                                                        onPress: () => {
+                                                            if (administrador.administrador_status) {
+                                                                logicalDeleteAdmin(administrador.administrador_id);
+                                                            } else {
+                                                                reactivateAdmin(administrador.administrador_id);
+                                                            }
+                                                        },
                                                     },
-                                                },
-                                            ]
-                                        );
-                                    }}
-                                />
+                                                ]
+                                            );
+                                        }}
+                                    />
                                 </View>
                             </Pressable>
                         ))}
                     </View>
-                    <View style={styles.pagination}>
-                <Pressable
-                    style={[styles.pageButton, { marginRight: 10 }]}
-                    disabled={currentPage === 1}
-                    onPress={handlePrevPage}
-                >
-                    <Text style={styles.buttonText}>Anterior</Text>
-                </Pressable>
-                <Pressable
-                    style={styles.pageButton}
-                    disabled={administradorData.length < pageSize}
-                    onPress={handleNextPage}
-                >
-                    <Text style={styles.buttonText}>Próxima</Text>
-                </Pressable>
-            </View>
-                    <View style={styles.separator} />
                 </View>
+
+                <View style={styles.pagination}>
+                    <Pressable
+                        style={[styles.pageButton, { marginRight: 10 }]}
+                        disabled={currentPage === 1}
+                        onPress={handlePrevPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Anterior</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.pageButton}
+                        disabled={administradorData.length < pageSize}
+                        onPress={handleNextPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Próxima</Text>
+                    </Pressable>
+                </View>
+
             </View>
             <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
             {isSideMenuVisible && <SideMenuAdmin onClose={toggleSideMenu} navigation={navigation} />}
@@ -299,14 +300,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     pageButton: {
-        paddingVertical: 10,
+        paddingVertical: 8,
         paddingHorizontal: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: '#C74634',
         borderRadius: 5,
     },
-    buttonText: {
+    pagebuttonText: {
+        fontSize: 15,
         color: 'white',
-        fontSize: 16,
         fontWeight: 'bold',
     },
     headerRow: {

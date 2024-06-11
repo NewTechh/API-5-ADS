@@ -14,7 +14,7 @@ type RootStackParamList = {
     SignUpAdm: undefined;
     CadastroConsultor: undefined;
     EditarConsultor: { consultor: Consultor };
-    
+
 }
 
 type Consultor = {
@@ -37,7 +37,7 @@ const ListConsultores = () => {
     const toggleSideMenu = () => {
         setIsSideMenuVisible(!isSideMenuVisible);
     };
-    
+
     const handleEditClick = (consultor: Consultor) => {
         navigation.navigate('EditarConsultor', { consultor });
     };
@@ -69,7 +69,7 @@ const ListConsultores = () => {
             setCurrentPage(currentPage - 1);
         }
     };
-    
+
 
     const fetchConsultores = async (page = 1) => {
         try {
@@ -117,17 +117,17 @@ const ListConsultores = () => {
                 const adminId = await AsyncStorage.getItem('usuario_id');
                 const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
                 const adminData = await adminResponse.json();
-    
+
                 // Encontrar o consultor com o CPF correspondente
                 const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_id === consultorIP);
-    
+
                 if (!consultorExcluido) {
                     throw new Error('Consultor não encontrado');
                 }
-    
+
                 const registroLogAcao = `Administrador ${adminData.administrador_nome} realizou a exclusão definitiva do consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
                 const registroLogAlteracao = `Exclusão Definitiva do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/DeleteConsultorLog`, {
                     method: 'POST',
@@ -141,19 +141,19 @@ const ListConsultores = () => {
                         id_administrador: adminId
                     })
                 });
-    
+
                 fetchConsultores();
                 console.log('Consultor excluído com sucesso');
             }
-    
+
         } catch (error) {
             console.error('Erro ao excluir consultor:', error);
             Alert.alert('Erro', 'Erro ao excluir consultor. Por favor, tente novamente.');
         }
     };
-    
 
-    const logicalDeleteConsul= async (consultorIP: string) => {
+
+    const logicalDeleteConsul = async (consultorIP: string) => {
         try {
             const response = await fetch(`http://${getIpAddress()}:3001/DeleteConsultor/ExclusaoConsultor/${consultorIP}`, {
                 method: 'PUT'
@@ -164,17 +164,17 @@ const ListConsultores = () => {
                 const adminId = await AsyncStorage.getItem('usuario_id');
                 const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
                 const adminData = await adminResponse.json();
-    
+
                 // Encontrar o consultor com o CPF correspondente
                 const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_id === consultorIP);
-    
+
                 if (!consultorExcluido) {
                     throw new Error('Consultor não encontrado');
                 }
-    
+
                 const registroLogAcao = `Administrador ${adminData.administrador_nome} realizou a exclusão lógica do consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
                 const registroLogAlteracao = `Exclusão Lógica do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/DeleteLogicalConsultorLog`, {
                     method: 'POST',
@@ -190,7 +190,7 @@ const ListConsultores = () => {
                     })
                 });
 
-                Alert.alert('Sucesso','Exclusão Lógica realizada.')
+                Alert.alert('Sucesso', 'Exclusão Lógica realizada.')
                 console.log('Consultor excluído logicamente com sucesso');
                 fetchConsultores();
             }
@@ -211,17 +211,17 @@ const ListConsultores = () => {
                 const adminId = await AsyncStorage.getItem('usuario_id');
                 const adminResponse = await fetch(`http://${getIpAddress()}:3001/GetAdmin/Administradores/${adminId}`);
                 const adminData = await adminResponse.json();
-    
+
                 // Encontrar o consultor com o CPF correspondente
                 const consultorExcluido = consultorData.find(consultor => consultor.consultor_alianca_id === consultorIP);
-    
+
                 if (!consultorExcluido) {
                     throw new Error('Consultor não encontrado');
                 }
-    
+
                 const registroLogAcao = `Administrador ${adminData.administrador_nome} reativou o consultor de alianças ${consultorExcluido.consultor_alianca_nome}`;
                 const registroLogAlteracao = `Reativação do consultor de alianças ${consultorExcluido.consultor_alianca_nome} pelo administrador ${adminData.administrador_nome}`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/DeleteLogicalConsultorLog`, {
                     method: 'POST',
@@ -239,7 +239,7 @@ const ListConsultores = () => {
 
                 Alert.alert('Sucesso', 'Reativação realizada.')
                 console.log('Consultor reativado')
-                fetchConsultores();     
+                fetchConsultores();
             }
         } catch (error) {
             console.error('Erro ao reativar consultor:', error);
@@ -263,7 +263,7 @@ const ListConsultores = () => {
             Alert.alert('Erro', 'Erro ao buscar dados do consultor. Por favor, tente novamente.');
         }
     };
-    
+
     const formatConsultorData = (consultorData: any) => {
         return (
             `Email: ${consultorData.consultor_alianca_email}`
@@ -297,72 +297,71 @@ const ListConsultores = () => {
                                 <Text style={styles.data}>{consultor.consultor_alianca_nome}</Text>
                                 <Text style={styles.data}>{consultor.consultor_alianca_cpf}</Text>
                                 <View style={styles.actionButtons}>
-                                <Ionicons
-                                    style={styles.icon}
-                                    name="create"
-                                    size={24}
-                                    color="black"
-                                    onPress={() => {handleEditClick(consultor)}}
-                                />
-                                <Ionicons
-                                    style={styles.icon}
-                                    name={consultor.consultor_alianca_status ? "trash-bin" : "power"}
-                                    size={24}
-                                    color="black"
-                                    onPress={() => {
-                                        Alert.alert(
-                                            'Selecione o tipo de operação:',
-                                            'Esta ação pode ser irreversível, escolha com cuidado',
-                                            [
-                                                {
-                                                    text: 'Cancelar',
-                                                    onPress: () => {
-                                                        return
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name="create"
+                                        size={24}
+                                        color="black"
+                                        onPress={() => { handleEditClick(consultor) }}
+                                    />
+                                    <Ionicons
+                                        style={styles.icon}
+                                        name={consultor.consultor_alianca_status ? "trash-bin" : "power"}
+                                        size={24}
+                                        color="black"
+                                        onPress={() => {
+                                            Alert.alert(
+                                                'Selecione o tipo de operação:',
+                                                'Esta ação pode ser irreversível, escolha com cuidado',
+                                                [
+                                                    {
+                                                        text: 'Cancelar',
+                                                        onPress: () => {
+                                                            return
+                                                        },
                                                     },
-                                                },
 
-                                                {
-                                                    text: 'Exclusão Definitiva',
-                                                    onPress: () => {
-                                                        handleDelete(consultor.consultor_alianca_id)
+                                                    {
+                                                        text: 'Exclusão Definitiva',
+                                                        onPress: () => {
+                                                            handleDelete(consultor.consultor_alianca_id)
+                                                        },
                                                     },
-                                                },
 
-                                                {
-                                                    text: consultor.consultor_alianca_status ? 'Exclusão Lógica' : 'Reativar',
-                                                    onPress: () => {
-                                                        if (consultor.consultor_alianca_status) {
-                                                            logicalDeleteConsul(consultor.consultor_alianca_id);
-                                                        } else {
-                                                            reactivateConsul(consultor.consultor_alianca_id);
-                                                        }
+                                                    {
+                                                        text: consultor.consultor_alianca_status ? 'Exclusão Lógica' : 'Reativar',
+                                                        onPress: () => {
+                                                            if (consultor.consultor_alianca_status) {
+                                                                logicalDeleteConsul(consultor.consultor_alianca_id);
+                                                            } else {
+                                                                reactivateConsul(consultor.consultor_alianca_id);
+                                                            }
+                                                        },
                                                     },
-                                                },
-                                            ]
-                                        );
-                                    }}
-                                />
+                                                ]
+                                            );
+                                        }}
+                                    />
                                 </View>
                             </Pressable>
                         ))}
                     </View>
-                    <View style={styles.pagination}>
-                <Pressable
-                    style={[styles.pageButton, { marginRight: 10 }]}
-                    disabled={currentPage === 1}
-                    onPress={handlePrevPage}
-                >
-                    <Text style={styles.buttonText}>Anterior</Text>
-                </Pressable>
-                <Pressable
-                    style={styles.pageButton}
-                    disabled={consultorData.length < pageSize}
-                    onPress={handleNextPage}
-                >
-                    <Text style={styles.buttonText}>Próxima</Text>
-                </Pressable>
-            </View>
-                    <View style={styles.separator} />
+                </View>
+                <View style={styles.pagination}>
+                    <Pressable
+                        style={[styles.pageButton, { marginRight: 10 }]}
+                        disabled={currentPage === 1}
+                        onPress={handlePrevPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Anterior</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.pageButton}
+                        disabled={consultorData.length < pageSize}
+                        onPress={handleNextPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Próxima</Text>
+                    </Pressable>
                 </View>
             </View>
             <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
@@ -383,14 +382,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     pageButton: {
-        paddingVertical: 10,
+        paddingVertical: 8,
         paddingHorizontal: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: '#C74634',
         borderRadius: 5,
     },
-    buttonText: {
+    pagebuttonText: {
+        fontSize: 15,
         color: 'white',
-        fontSize: 16,
         fontWeight: 'bold',
     },
     title: {

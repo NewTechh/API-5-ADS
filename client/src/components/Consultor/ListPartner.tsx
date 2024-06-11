@@ -311,11 +311,11 @@ const ListPartner = () => {
             }
 
             const parceiroProgressTrilha = await response2.json();
-            
+
             const response3 = await fetch(`http://${getIpAddress()}:3001/Tracks/Progress/${parceiroProgressTrilha[0].trilha_id}/${parceiroData.parceiro_id}`);
 
             if (!response3.ok) {
-              throw new Error('Erro ao carregar especializações da trilha');
+                throw new Error('Erro ao carregar especializações da trilha');
             }
 
             const especializacao = await response3.json();
@@ -334,13 +334,13 @@ const ListPartner = () => {
                     especializacao: especializacao
                 })
             });
-    
+
             if (!insercaoResponse.ok) {
                 throw new Error('Erro ao inserir dados do parceiro no banco');
             } else {
                 Alert.alert('Sucesso', 'Relatório enviado no email.')
             }
-    
+
         } catch (error) {
             console.error('Erro ao buscar parceiro:', error);
             Alert.alert('Erro', 'Erro ao buscar dados do parceiro. Por favor, tente novamente.');
@@ -357,7 +357,7 @@ const ListPartner = () => {
             }
             const parceiroData = await response.json();
             const formattedData = formatParceiroData(parceiroData);
-    
+
             Alert.alert(`Dados Adicionais do Parceiro:\n\n`, formattedData);
         } catch (error) {
             console.error('Erro ao buscar parceiro:', error);
@@ -520,26 +520,24 @@ const ListPartner = () => {
                             </View>
                         </View>
                     </Modal>
-                                {/* Adicione os botões de próxima página e anterior */}
-            <View style={styles.pagination}>
-                <Pressable
-                    style={[styles.pageButton, { marginRight: 10 }]}
-                    disabled={currentPage === 1}
-                    onPress={handlePrevPage}
-                >
-                    <Text style={styles.buttonText}>Anterior</Text>
-                </Pressable>
-                <Pressable
-                    style={styles.pageButton}
-                    disabled={parceiros.length < pageSize}
-                    onPress={handleNextPage}
-                >
-                    <Text style={styles.buttonText}>Próxima</Text>
-                </Pressable>
-            </View>
-                    <View style={styles.separator} />
                 </View>
-
+                {/* Adicione os botões de próxima página e anterior */}
+                <View style={styles.pagination}>
+                    <Pressable
+                        style={[styles.pageButton, { marginRight: 10 }]}
+                        disabled={currentPage === 1}
+                        onPress={handlePrevPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Anterior</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.pageButton}
+                        disabled={parceiros.length < pageSize}
+                        onPress={handleNextPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Próxima</Text>
+                    </Pressable>
+                </View>
 
             </ScrollView>
             <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />

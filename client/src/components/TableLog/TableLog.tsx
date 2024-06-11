@@ -86,24 +86,24 @@ const TableLog = () => {
                             </View>
                         ))}
                     </View>
-                    <View style={styles.pagination}>
-                <Pressable
-                    style={[styles.pageButton, { marginRight: 10 }]}
-                    disabled={currentPage === 1}
-                    onPress={handlePrevPage}
-                >
-                    <Text style={styles.buttonText}>Anterior</Text>
-                </Pressable>
-                <Pressable
-                    style={styles.pageButton}
-                    disabled={registrosLogs.length < pageSize}
-                    onPress={handleNextPage}
-                >
-                    <Text style={styles.buttonText}>Próxima</Text>
-                </Pressable>
-            </View>
-                    <View style={styles.separator} />
                 </View>
+                <View style={styles.pagination}>
+                    <Pressable
+                        style={[styles.pageButton, { marginRight: 10 }]}
+                        disabled={currentPage === 1}
+                        onPress={handlePrevPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Anterior</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.pageButton}
+                        disabled={registrosLogs.length < pageSize}
+                        onPress={handleNextPage}
+                    >
+                        <Text style={styles.pagebuttonText}>Próxima</Text>
+                    </Pressable>
+                </View>
+
             </ScrollView>
             <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
             {isSideMenuVisible && <SideMenuAdmin onClose={toggleSideMenu} navigation={navigation} />}
@@ -131,14 +131,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     pageButton: {
-        paddingVertical: 10,
+        paddingVertical: 8,
         paddingHorizontal: 20,
-        backgroundColor: '#007bff',
+        backgroundColor: '#C74634',
         borderRadius: 5,
     },
-    buttonText: {
+    pagebuttonText: {
+        fontSize: 15,
         color: 'white',
-        fontSize: 16,
         fontWeight: 'bold',
     },
     tableContainer: {
