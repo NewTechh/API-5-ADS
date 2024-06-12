@@ -6,9 +6,9 @@ import FooterConsultor from './Consultor/FooterConsultor';
 import SideMenuConsultor from './Consultor/SideMenuConsultor';
 import getIpAddress from '../../services/IPAddress';
 import * as Progress from 'react-native-progress';
-import { PieChart, } from 'react-native-svg-charts';
+import { PieChart } from 'react-native-svg-charts';
 import { Text as SvgText } from 'react-native-svg';
-import { BarChart } from 'react-native-gifted-charts';
+import { BarChart, LineChart } from 'react-native-gifted-charts';
 
 type TempoMedioConclusaoTrilha = {
   trilha_id: string;
@@ -276,6 +276,11 @@ const DashboardPartner = () => {
     fetchData();
   }, []);
 
+  const tempoMedioConclusaoTrilhaFormatada = tempoMedioConclusaoTrilha.map((item) => ({
+    value: item.media,
+    label: item.trilha_nome,
+  }));
+
   // Função para determinar a cor de cada barra com base no índice
   const getColorForBar = (index: number): string => {
     const colors = ['#ff6347', '#3cb371', '#1e90ff', '#ff69b4', '#ffa500'];
@@ -291,6 +296,7 @@ const DashboardPartner = () => {
         alignItems: 'center',
       }}>
         <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Carregando...</Text>
       </View>
     );
   }
@@ -306,34 +312,17 @@ const DashboardPartner = () => {
       </View>
     );
   }
-
-
   return (
     <>
 
       <ScrollView style={styles.scrollView}>
-
-        {/* <Text style={styles.title}>Dados das trilhas</Text>
-          {dadosTrilha.map((data) => (
-            <View>
-              <Text>{data.trilha_nome}: {data.qtotal}</Text>
-            </View>
-          ))} */}
-
-        {/* <Text style={styles.title}>Tempo medio conclusao</Text>
-          {tempoMedioConclusaoTrilha.map((data) => (
-            <View>
-              <Text>{data.trilha_nome}: {data.media ? data.media : 'Dados insuficiente'}</Text>
-            </View>
-            ))} */}
-
         <Text style={styles.title}>Progresso de Parceiros</Text>
 
         <View style={styles.card2}>
           <Text style={{ fontSize: 11, color: 'red', margin: 2, }}>Não iniciaram: {progressoGeralParceiros?.nao_iniciado}</Text>
           <Text style={{ fontSize: 11, color: 'blue', margin: 2, }}>Em andamento: {progressoGeralParceiros?.em_andamento}</Text>
           <Text style={{ fontSize: 11, color: 'green', margin: 2, }}>Concluído: {progressoGeralParceiros?.concluido}</Text>
-          <Text style={{ fontSize: 11, color: 'black', margin: 2, fontWeight: 'bold',}}>Total: {progressoGeralParceiros?.total}</Text>
+          <Text style={{ fontSize: 11, color: 'black', margin: 2, fontWeight: 'bold', }}>Total: {progressoGeralParceiros?.total}</Text>
         </View>
 
         <View style={styles.card}>
@@ -484,7 +473,7 @@ const DashboardPartner = () => {
             renderTooltip={(item: any, index: number) => {
               return (
                 <View
-                  style={{marginBottom: 20,marginLeft: -6,backgroundColor: '#ffcefe',paddingHorizontal: 6,paddingVertical: 4, borderRadius: 4,}}>
+                  style={{ marginBottom: 20, marginLeft: -6, backgroundColor: '#ffcefe', paddingHorizontal: 6, paddingVertical: 4, borderRadius: 4, }}>
                   <Text> {`${item.value.toFixed(1)}%`}</Text>
                 </View>
               );
@@ -492,6 +481,54 @@ const DashboardPartner = () => {
           />
 
         </View>
+        <View style={styles.card}>
+          <Text style={styles.title2}>Tempo Médio de Conclusão de Trilhas:</Text>
+          <LineChart
+            data={tempoMedioConclusaoTrilhaFormatada}
+            width={chartWidth}
+            height={300}
+            yAxisTextStyle={{ color: 'black', fontSize: 11, marginLeft: -2, }}
+            formatYLabel={(value) => `${value} dias`}
+            xAxisLabelTextStyle={{
+              color: 'black',
+              fontSize: 7,
+              fontWeight: 'bold',
+              flexDirection: 'row',
+              justifyContent: 'space-between', marginLeft: 8
+            }}
+            curved
+            areaChart
+            color={'#1e90ff'}
+            startFillColor="rgb(46, 217, 255)"
+            startOpacity={0.8}
+            endFillColor="rgb(203, 241, 250)"
+            endOpacity={0.3}
+            spacing={85}
+            rulesColor={'#000'}
+            initialSpacing={5}
+            pointerConfig={{
+              pointerStripUptoDataPoint: true,
+              pointerStripColor: 'lightgray',
+              pointerStripWidth: 2,
+              strokeDashArray: [2, 5],
+              pointerColor: 'lightgray',
+              radius: 4,
+              pointerLabelWidth: 100,
+              pointerLabelHeight: 120,
+              pointerLabelComponent: (items: {
+                label: string; value: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined;
+              }[]) => {
+                const tempoMedioItem = tempoMedioConclusaoTrilhaFormatada.find(item => item.label === items[0].label);
+                return (
+                  <View style={{ height: 100, width: 100, backgroundColor: '#282C3E', borderRadius: 4, justifyContent: 'center', paddingLeft: 16, }}>
+                    {tempoMedioItem && <Text style={{ color: 'lightgray', fontSize: 12, marginTop: 5 }}>Tempo Médio: {tempoMedioItem.value} dias</Text>}
+                  </View>
+                );
+              },
+            }}
+          />
+        </View>
+
       </ScrollView>
       <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
       {isSideMenuVisible && <SideMenuConsultor onClose={toggleSideMenu} navigation={navigation} />}
