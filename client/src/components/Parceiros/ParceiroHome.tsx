@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
-import Footer from './Footer';
-import SideMenu from './SideMenu';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import FooterAdmin from '../Admin/FooterAdmin';
-import SideMenuAdmin from '../Admin/SideMenuAdmin';
+import Footer from './Footer';
+import SideMenu from './SideMenu';
 
 type RootStackParamList = {
     SignUpAdm: undefined;
@@ -45,8 +43,8 @@ const ParceiroHome = () => {
                 <View style={styles.footerContainer}>
                 </View>
             </ScrollView>
-            <FooterAdmin onPressMenu={toggleSideMenu} navigation={navigation} />
-            {isSideMenuVisible && <SideMenuAdmin onClose={toggleSideMenu} navigation={navigation} />}
+            <Footer onPressMenu={toggleSideMenu} navigation={navigation} />
+            {isSideMenuVisible && <SideMenu onClose={toggleSideMenu} navigation={navigation} />}
         </>
     );
 };
