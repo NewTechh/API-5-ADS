@@ -47,6 +47,7 @@
     "react-native-svg-charts": "^5.4.0",
     "react-native-web": "~0.19.6",
     "react-router-dom": "^6.22.3",
+    "rn-inkpad": "^1.0.0",
     "victory-native": "^40.1.0",
     "yarn": "^1.22.22",
     "yup": "^1.4.0"

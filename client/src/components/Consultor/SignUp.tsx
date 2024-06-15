@@ -8,11 +8,12 @@ import { TextInputMask } from "react-native-masked-text";
 import getIpAddress from '../../../services/IPAddress';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import { Picker } from '@react-native-picker/picker';
+import { CheckBox } from 'rn-inkpad';
+import { AntDesign } from '@expo/vector-icons';
 
 
-type FormDataProps = {
-    trilha_id: string;
+
+interface FormDataProps {
     parceiro_nome: string;
     parceiro_email: string;
     parceiro_cnpj_cpf: string;
@@ -24,6 +25,7 @@ type FormDataProps = {
     parceiro_cidade: string;
     parceiro_estado: string;
     parceiro_senha: string;
+    trilha_id: string[];
 }
 interface Trilha {
     trilha_id: string;
@@ -47,7 +49,7 @@ const signUpSchema = yup.object().shape({
     parceiro_cidade: yup.string().required("Informe a cidade"),
     parceiro_estado: yup.string().required("Informe o estado"),
     parceiro_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
-    trilha_id: yup.string().required("Informe a trilha")
+    trilha_id: yup.array().of(yup.string().required()).min(1, "Informe ao menos uma trilha").default([]),
 });
 
 type RootStackParamList = {
@@ -76,8 +78,10 @@ export function SignUp() {
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [trilhas, setTrilhas] = useState<Trilha[]>([]);
-    const [selectedTrilhaId, setSelectedTrilhaId] = useState<string>('');
+    const [selectedTrilhaId, setSelectedTrilhaId] = useState<string[]>([]);
     const navigation = useNavigation<ListPartnerScreenNavigationProp>();
+    const [checked, setIsChecked] = useState(false);
+    const [showTrilhas, setShowTrilhas] = useState<boolean>(false);
 
     async function handleSignDados(data: FormDataProps) {
         console.log('Dados do formulário:', data);
@@ -93,7 +97,7 @@ export function SignUp() {
             setCidade('');
             setEstado('');
             setSenha('');
-            setSelectedTrilhaId('');
+            setSelectedTrilhaId(['']);
             reset();
         }
 
@@ -405,26 +409,51 @@ export function SignUp() {
             />
             {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}
 
-            <Controller 
+            <Controller
                 control={control}
-                render={({ field: { onChange, value } }) => (
-                    <View style={styles.select}>
-                    <Picker 
-                        selectedValue={value}
-                        onValueChange={(itemValue) => onChange(itemValue)}
-                        onFocus={() => fetchTrilhas()}
-                    >
-                        <Picker.Item style={styles.text} label="Escolha a trilha adquirida pelo parceiro" value="" />
-
-                        {trilhas.map((trilha) => (
-                            <Picker.Item key={trilha.trilha_id} label={trilha.trilha_nome} value={trilha.trilha_id} />
-                        ))}
-                    </Picker>
-                </View>
-                )}
                 name="trilha_id"
                 rules={{ required: true }}
+                render={({ field: { onChange, value } }) => {
+                    value = value || [];
+                    return (
+                        <>
+                            <TouchableOpacity
+                                onPress={() => setShowTrilhas(!showTrilhas)}
+                                style={[styles.input, { flexDirection: 'row', alignItems: 'center' }]}
+                            >
+                                <AntDesign
+                                    name={showTrilhas ? "upcircleo" : "downcircleo"}
+                                    size={24}
+                                    color="black"
+                                />
+                                <Text
+                                    style={{ flex: 1, textAlignVertical: 'center', fontWeight: 'bold', paddingLeft: 10 }}
+                                >
+                                    {showTrilhas ? 'Esconder Trilhas' : 'Escolha a trilha adquirida pelo parceiro'}
+                                </Text>
+                            </TouchableOpacity>
+
+                            {showTrilhas && trilhas.map((trilha) => (
+                                <CheckBox
+                                    key={trilha.trilha_id}
+                                    checked={value.includes(trilha.trilha_id)}
+                                    iconColor={'#C74634'}
+                                    style={styles.input}
+                                    title={trilha.trilha_nome}
+                                    onChange={() => {
+                                        if (value.includes(trilha.trilha_id)) {
+                                            onChange(value.filter((id: string) => id !== trilha.trilha_id));
+                                        } else {
+                                            onChange([...value, trilha.trilha_id]);
+                                        }
+                                    }}
+                                />
+                            ))}
+                        </>
+                    )
+                }}
             />
+            {errors.trilha_id && <Text style={styles.labelError}>{errors.trilha_id?.message}</Text>}
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ListPartner')}>
