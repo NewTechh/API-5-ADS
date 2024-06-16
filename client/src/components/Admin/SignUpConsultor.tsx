@@ -157,7 +157,7 @@ export function SignUpConsultor() {
                         }}
                         value={cpf}
                         placeholder="CNPJ"
-                        type={"cpf"}
+                        type={"cnpj"}
                     />
                 )}
             />
