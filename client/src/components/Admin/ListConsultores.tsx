@@ -274,16 +274,17 @@ const ListConsultores = () => {
         <>
             <View style={styles.container}>
                 <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-                <Text style={styles.title}>Consultores Cadastrados</Text>
 
-                <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
-                    <AntDesign
-                        name={'adduser'}
-                        size={35}
-                        color='white'
-                    // onPress={}
-                    />
-                </Pressable>
+                <View style={styles.joinFields}>
+                    <Text style={styles.title}>Consultores{'\n'}Cadastrados</Text>
+                    <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
+                        <AntDesign
+                            name={'adduser'}
+                            size={35}
+                            color='white'
+                        />
+                    </Pressable>
+                </View>
 
                 <View style={styles.tableContainer}>
                     <View style={styles.headerRow}>
@@ -296,7 +297,7 @@ const ListConsultores = () => {
                             <Pressable style={styles.row} key={index} onPress={() => handleConsultorClick(consultor.consultor_alianca_cpf)}>
                                 <Text style={styles.data}>{consultor.consultor_alianca_nome}</Text>
                                 <Text style={styles.data}>{consultor.consultor_alianca_cpf}</Text>
-                                <View style={styles.actionButtons}>
+                                <View style={[styles.data, {flexDirection: 'row', justifyContent: 'center'}]}>
                                     <Ionicons
                                         style={styles.icon}
                                         name="create"
@@ -392,11 +393,17 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    joinFields: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        marginTop: 30,
-        marginBottom: 20,
+        marginTop: 20,
+        marginBottom: 10,
         textAlign: 'center',
         color: 'white'
     },
@@ -442,11 +449,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     icon: {
-        marginRight: 10,
+        marginLeft: 10,
     },
     iconPlus: {
-        marginLeft: 300, // Ajuste a margem esquerda conforme necessário
-        marginBottom: 10,
+        right: 5,
+        position: 'absolute',
     },
 });
 
