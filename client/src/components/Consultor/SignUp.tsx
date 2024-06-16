@@ -9,9 +9,7 @@ import getIpAddress from '../../../services/IPAddress';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'rn-inkpad';
-import { AntDesign } from '@expo/vector-icons';
-
-
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface FormDataProps {
     parceiro_nome: string;
@@ -82,6 +80,7 @@ export function SignUp() {
     const navigation = useNavigation<ListPartnerScreenNavigationProp>();
     const [checked, setIsChecked] = useState(false);
     const [showTrilhas, setShowTrilhas] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     async function handleSignDados(data: FormDataProps) {
         console.log('Dados do formulário:', data);
@@ -394,17 +393,28 @@ export function SignUp() {
                 control={control}
                 name='parceiro_senha'
                 render={({ field: { onChange } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setSenha(text);
-                            onChange(text)
-                        }}
-                        secureTextEntry
-                        value={senha}
-                        placeholder="Senha"
+                    <View style={{width: '100%', height: 40, marginBottom: 8, flexDirection: 'row'}}>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setSenha(text);
+                                onChange(text)
+                            }}
+                            secureTextEntry
+                            value={senha}
+                            placeholder="Senha"
 
-                    />
+                        />
+                        {senha !== '' && senha !== undefined && (
+                            <MaterialCommunityIcons
+                                name={showPassword ? 'eye-off' : 'eye'}
+                                size={24}
+                                color='#000000'
+                                style={styles.iconEye}
+                                onPress={() => setShowPassword(!showPassword)}
+                            />
+                        )}
+                    </View>
                 )}
             />
             {errors.parceiro_senha && <Text style={styles.labelError}>{errors.parceiro_senha?.message}</Text>}

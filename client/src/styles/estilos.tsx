@@ -86,6 +86,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 40,
     },
+    iconEye: {
+        position: 'absolute',
+        right: 7,
+        bottom: 7,
+      },
 })
 
 export { styles }
