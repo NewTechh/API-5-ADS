@@ -84,7 +84,7 @@ const UserScreenConsultor = () => {
                                 <View>
                                     <Text style={styles.cardText}>Nome: {consultorData.consultor_alianca_nome}</Text>
                                     <Text style={styles.cardText}>E-mail: {consultorData.consultor_alianca_email}</Text>
-                                    <Text style={styles.cardText}>CPF/CNPJ: {consultorData.consultor_alianca_cpf}</Text>
+                                    <Text style={styles.cardText}>CNPJ: {consultorData.consultor_alianca_cpf}</Text>
                                 </View>
                             </View>
                             <View style={styles.passwordInfo}>
