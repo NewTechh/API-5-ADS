@@ -36,14 +36,6 @@ export function NewPassword() {
     const [showPasswordRep, setShowPasswordRep] = useState(false);
     const navigation = useNavigation<CursosScreenNavigationProp>();
 
-    const toggleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const toggleShowPasswordRep = () => {
-        setShowPasswordRep(!showPasswordRep);
-    };
-
     const { control, handleSubmit, reset, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(Schema)
     });
@@ -77,7 +69,7 @@ export function NewPassword() {
             } else {
                 const registroLogAcao = `Recuperação de senha`;
                 const registroLogAlteracao = `Realizado a recuperação da senha do usuário por meio de token`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
                     method: 'POST',
@@ -112,21 +104,25 @@ export function NewPassword() {
                     control={control}
                     name='senha'
                     render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputPass}
-                            onChangeText={onChange}
-                            value={value}
-                            placeholder="Senha"
-                            secureTextEntry={!showPassword}
-                        />
+                        <>
+                            <TextInput
+                                style={styles.inputPass}
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="Senha"
+                                secureTextEntry={!showPassword}
+                            />
+                            {value !== '' && value !== undefined && (
+                                <MaterialCommunityIcons
+                                    name={showPassword ? 'eye-off' : 'eye'}
+                                    size={24}
+                                    color='#000000'
+                                    style={styles.iconEye}
+                                    onPress={() => setShowPassword(!showPassword)}
+                                />
+                            )}
+                        </>
                     )}
-                />
-                <MaterialCommunityIcons
-                    name={showPassword ? 'eye-off' : 'eye'}
-                    size={24}
-                    color='#000000'
-                    style={styles.iconEye}
-                    onPress={toggleShowPassword}
                 />
             </View>
 
@@ -137,21 +133,25 @@ export function NewPassword() {
                     control={control}
                     name='senhaRep'
                     render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputPass}
-                            onChangeText={onChange}
-                            value={value}
-                            placeholder="Repita a senha"
-                            secureTextEntry={!showPasswordRep}
-                        />
+                        <>
+                            <TextInput
+                                style={styles.inputPass}
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="Repita a senha"
+                                secureTextEntry={!showPasswordRep}
+                            />
+                            {value !== '' && value !== undefined && (
+                                <MaterialCommunityIcons
+                                    name={showPasswordRep ? 'eye-off' : 'eye'}
+                                    size={24}
+                                    color='#000000'
+                                    style={styles.iconEye}
+                                    onPress={() => setShowPasswordRep(!showPasswordRep)}
+                                />
+                            )}
+                        </>
                     )}
-                />
-                <MaterialCommunityIcons
-                    name={showPasswordRep ? 'eye-off' : 'eye'}
-                    size={24}
-                    color='#000000'
-                    style={styles.iconEye}
-                    onPress={toggleShowPasswordRep}
                 />
             </View>
 
