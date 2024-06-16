@@ -38,6 +38,7 @@ const Schema = yup.object().shape({
 });
 
 export function NewPassSelf() {
+    const [showPasswordActual, setShowPasswordActual] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordRep, setShowPasswordRep] = useState(false);
     const navigation = useNavigation<CursosScreenNavigationProp>();
@@ -124,21 +125,25 @@ export function NewPassSelf() {
                     control={control}
                     name='senhaAtual'
                     render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputPass}
-                            onChangeText={onChange}
-                            value={value}
-                            placeholder="Senha Atual"
-                            secureTextEntry={!showPassword}
-                        />
+                        <>
+                            <TextInput
+                                style={styles.inputPass}
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="Senha Atual"
+                                secureTextEntry={!showPasswordActual}
+                            />
+                            {value !== '' && value !== undefined && (
+                                <MaterialCommunityIcons
+                                    name={showPasswordActual ? 'eye-off' : 'eye'}
+                                    size={24}
+                                    color='#000000'
+                                    style={styles.iconEye}
+                                    onPress={() => setShowPasswordActual(!showPasswordActual)}
+                                />
+                            )}
+                        </>
                     )}
-                />
-                <MaterialCommunityIcons
-                    name={showPassword ? 'eye-off' : 'eye'}
-                    size={24}
-                    color='#000000'
-                    style={styles.iconEye}
-                    onPress={toggleShowPassword}
                 />
             </View>
 
@@ -149,21 +154,25 @@ export function NewPassSelf() {
                     control={control}
                     name='senha'
                     render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputPass}
-                            onChangeText={onChange}
-                            value={value}
-                            placeholder="Senha"
-                            secureTextEntry={!showPassword}
-                        />
+                        <>
+                            <TextInput
+                                style={styles.inputPass}
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="Senha"
+                                secureTextEntry={!showPassword}
+                            />
+                            {value !== '' && value !== undefined && (
+                                <MaterialCommunityIcons
+                                    name={showPassword ? 'eye-off' : 'eye'}
+                                    size={24}
+                                    color='#000000'
+                                    style={styles.iconEye}
+                                    onPress={() => setShowPassword(!showPassword)}
+                                />
+                            )}
+                        </>
                     )}
-                />
-                <MaterialCommunityIcons
-                    name={showPassword ? 'eye-off' : 'eye'}
-                    size={24}
-                    color='#000000'
-                    style={styles.iconEye}
-                    onPress={toggleShowPassword}
                 />
             </View>
 
@@ -174,21 +183,25 @@ export function NewPassSelf() {
                     control={control}
                     name='senhaRep'
                     render={({ field: { onChange, value } }) => (
-                        <TextInput
-                            style={styles.inputPass}
-                            onChangeText={onChange}
-                            value={value}
-                            placeholder="Repita a senha"
-                            secureTextEntry={!showPasswordRep}
-                        />
+                        <>
+                            <TextInput
+                                style={styles.inputPass}
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="Repita a senha"
+                                secureTextEntry={!showPasswordRep}
+                            />
+                            {value !== '' && value !== undefined && (
+                                <MaterialCommunityIcons
+                                    name={showPasswordRep ? 'eye-off' : 'eye'}
+                                    size={24}
+                                    color='#000000'
+                                    style={styles.iconEye}
+                                    onPress={() => setShowPasswordRep(!showPasswordRep)}
+                                />
+                            )}
+                        </>
                     )}
-                />
-                <MaterialCommunityIcons
-                    name={showPasswordRep ? 'eye-off' : 'eye'}
-                    size={24}
-                    color='#000000'
-                    style={styles.iconEye}
-                    onPress={toggleShowPasswordRep}
                 />
             </View>
 
