@@ -178,30 +178,30 @@ const ListAdministradores = () => {
         <>
             <View style={styles.container}>
                 <StatusBar backgroundColor="#312D2A" barStyle="light-content" />
-                <Text style={styles.title}>Administradores Cadastrados</Text>
 
-                <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
-                    <AntDesign
-                        name={'pluscircleo'}
-                        size={35}
-                        color='white'
-                    // onPress={}
-                    />
-                </Pressable>
+                <View style={styles.joinFields}>
+                    <Text style={styles.title}>Administradores{'\n'}Cadastrados</Text>
+                    <Pressable style={styles.iconPlus} onPress={() => handleSignUp()}>
+                        <AntDesign
+                            name={'adduser'}
+                            size={35}
+                            color='white'
+                        />
+                    </Pressable>
+                </View>
 
                 <View style={styles.tableContainer}>
                     <View style={styles.headerRow}>
                         <Text style={styles.header}>Nome</Text>
                         <Text style={styles.header}>Matrícula</Text>
                         <Text style={styles.header}>Ações</Text>
-                        {/* <Text style={styles.header}>Ações</Text> */}
                     </View>
                     <View>
                         {administradorData && administradorData.map && administradorData.map((administrador, index) => (
                             <Pressable style={styles.row} key={index} onPress={() => handleAdministradorClick(administrador.administrador_id)}>
                                 <Text style={styles.data}>{administrador.administrador_nome}</Text>
                                 <Text style={styles.data}>{administrador.administrador_matricula}</Text>
-                                <View style={styles.actionButtons}>
+                                <View style={[styles.data, { flexDirection: 'row', justifyContent: 'center' }]}>
                                     <Ionicons
                                         style={styles.icon}
                                         name="create"
@@ -283,11 +283,17 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#312D2A',
     },
+    joinFields: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 20,
+    },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
-        marginTop: 30,
-        marginBottom: 20,
+        marginTop: 20,
+        marginBottom: 10,
         textAlign: 'center',
         color: 'white'
     },
@@ -344,16 +350,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         textAlign: 'center',
     },
-    actionButtons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     icon: {
-        marginRight: 10,
+        marginLeft: 10,
     },
     iconPlus: {
-        marginLeft: 300, // Ajuste a margem esquerda conforme necessário
-        marginBottom: 7,
+        right: 5,
+        position: 'absolute',
     },
 });
 
