@@ -3,13 +3,9 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ImageBackg
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Network from "expo-network"
-import axios from "axios"
-import Constants from 'expo-constants';
 import getIpAddress from '../../services/IPAddress';
-import { err } from 'react-native-svg';
-
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { width } from 'pdfkit/js/page';
 
 type FormDataPropsLogin = {
   parceiro_email: string,
@@ -30,11 +26,10 @@ type RootStackParamList = {
 
 type CursosScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Cursos'>;
 
-
-
 const LoginScreen = () => {
   const [parceiro_email, setParceiroEmail] = useState('');
   const [parceiro_senha, setParceiroSenha] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation<CursosScreenNavigationProp>();
 
   const handleCadastroPress = () => {
@@ -46,10 +41,10 @@ const LoginScreen = () => {
   };
 
   useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        AsyncStorage.clear();
-      });
-      return unsubscribe;
+    const unsubscribe = navigation.addListener('focus', () => {
+      AsyncStorage.clear();
+    });
+    return unsubscribe;
   }, [navigation]);
 
   async function handleLogin() {
@@ -123,13 +118,25 @@ const LoginScreen = () => {
         placeholder="Digite seu email"
       />
 
-      <TextInput
-        style={styles.input}
-        value={parceiro_senha}
-        onChangeText={setParceiroSenha}
-        placeholder="Digite sua senha"
-        secureTextEntry={true}
-      />
+      <View style={styles.divSenha}>
+        <TextInput
+          style={styles.input}
+          value={parceiro_senha}
+          onChangeText={setParceiroSenha}
+          placeholder="Digite sua senha"
+          secureTextEntry={true}
+        />
+
+        {parceiro_senha !== '' && parceiro_senha !== undefined && (
+          <MaterialCommunityIcons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color='#000000'
+            style={styles.iconEye}
+            onPress={() => setShowPassword(!showPassword)}
+          />
+        )}
+      </View>
 
       <TouchableOpacity onPress={handleLogin} style={styles.button} >
         <Text style={styles.buttonText}>Entrar</Text>
@@ -175,6 +182,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
+  divSenha: {
+    width: '100%',
+    height: 40,
+    marginBottom: 20,
+  },
+
   input: {
     width: '100%',
     height: 40,
@@ -205,6 +218,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+
+  iconEye: {
+    position: 'absolute',
+    right: 7,
+    bottom: 7,
   },
 
 })
