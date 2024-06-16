@@ -8,8 +8,7 @@ import { TextInputMask } from "react-native-masked-text";
 import getIpAddress from '../../../services/IPAddress';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type FormDataProps = {
     consultor_alianca_nome: string;
@@ -18,12 +17,12 @@ type FormDataProps = {
     consultor_alianca_senha: string;
 }
 
-const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
 
 const signUpSchema = yup.object().shape({
     consultor_alianca_nome: yup.string().required("Informe o Nome"),
     consultor_alianca_email: yup.string().required("Informe o E-mail").email("Informe um email válido"),
-    consultor_alianca_cpf: yup.string().matches(cpfRegex, "CPF inválido").required("Informe o CPF/CNPJ"),
+    consultor_alianca_cpf: yup.string().matches(cnpjRegex, "CNPJ inválido").required("Informe o CNPJ"),
     consultor_alianca_senha: yup.string().required("Informe a Senha").min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
 
@@ -46,6 +45,7 @@ export function SignUpConsultor() {
     const [senha, setSenha] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigation = useNavigation<ListPartnerScreenNavigationProp>();
+    const [showPassword, setShowPassword] = useState(false);
 
     async function handleSignDados(data: FormDataProps) {
 
@@ -70,7 +70,7 @@ export function SignUpConsultor() {
 
                 const registroLogAcao = `Novo Consultor de Aliança Cadastrado`;
                 const registroLogAlteracao = `Cadastro realizado de um novo Consultor de Alianças`;
-                
+
                 // Enviar o registro de log para o backend
                 await fetch(`http://${getIpAddress()}:3001/Log/SignUpLog`, {
                     method: 'POST',
@@ -156,30 +156,41 @@ export function SignUpConsultor() {
                             onChange(text)
                         }}
                         value={cpf}
-                        placeholder="CPF/CNPJ"
+                        placeholder="CNPJ"
                         type={"cpf"}
                     />
                 )}
             />
             {errors.consultor_alianca_cpf && <Text style={styles.labelError}>{errors.consultor_alianca_cpf?.message}</Text>}
 
-            <Controller
-                control={control}
-                name='consultor_alianca_senha'
-                render={({ field: { onChange } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={(text) => {
-                            setSenha(text);
-                            onChange(text)
-                        }}
-                        secureTextEntry
-                        value={senha}
-                        placeholder="Senha"
+            <View style={styles.passwordInputContainer}>
+                <Controller
+                    control={control}
+                    name='consultor_alianca_senha'
+                    render={({ field: { onChange } }) => (
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(text) => {
+                                setSenha(text);
+                                onChange(text)
+                            }}
+                            secureTextEntry={!showPassword}
+                            value={senha}
+                            placeholder="Senha"
 
+                        />
+                    )}
+                />
+                {senha !== '' && (
+                    <MaterialCommunityIcons
+                        name={showPassword ? 'eye-off' : 'eye'}
+                        size={24}
+                        color='#000'
+                        style={{position: 'absolute', right: 7, top: 7}}
+                        onPress={() => setShowPassword(!showPassword)}
                     />
                 )}
-            />
+            </View>
             {errors.consultor_alianca_senha && <Text style={styles.labelError}>{errors.consultor_alianca_senha?.message}</Text>}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('ListConsultores')}>

@@ -82,6 +82,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
     },
+    passwordInputContainer: {
+        width: '100%',
+        height: 40,
+    },
 })
 
 export { styles }
