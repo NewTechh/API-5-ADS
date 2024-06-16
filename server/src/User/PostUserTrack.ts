@@ -35,10 +35,13 @@ function CadastroDeParceirosTrilha(): express.Router {
 
       const idParceiro = queryIdParceiro.rows[0].parceiro_id
 
-      await DB.query(
-        `INSERT INTO ParceiroTrilha( id_parceiro, id_trilha )
-        VALUES ('${idParceiro}', '${trilha_id}' )`
-      )
+      for(let i = 0; i< Number(trilha_id.length) ; i++){
+        await DB.query(
+          `INSERT INTO ParceiroTrilha( id_parceiro, id_trilha )
+          VALUES ('${idParceiro}', '${trilha_id[i]}' )`
+        )
+      };
+      
   
       res.status(201).json({ message: 'Parceiro criado com sucesso' });
     } catch (error: any) {
