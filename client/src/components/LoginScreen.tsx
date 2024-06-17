@@ -124,7 +124,7 @@ const LoginScreen = () => {
           value={parceiro_senha}
           onChangeText={setParceiroSenha}
           placeholder="Digite sua senha"
-          secureTextEntry={true}
+          secureTextEntry={!showPassword}
         />
 
         {parceiro_senha !== '' && parceiro_senha !== undefined && (
