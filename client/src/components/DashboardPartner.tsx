@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, Pressable, TouchableOpacity, GestureResponderEvent, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, TouchableOpacity, GestureResponderEvent, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FooterConsultor from './Consultor/FooterConsultor';
@@ -286,7 +286,21 @@ const DashboardPartner = () => {
     const colors = ['#ff6347', '#3cb371', '#1e90ff', '#ff69b4', '#ffa500'];
     return colors[index % colors.length]; // Cicla pelas cores se houver mais barras que cores
   };
+  const [selectedPoint, setSelectedPoint] = useState<{ value: number; label: string } | null>(null);
 
+  const handleChartPress = (event: any) => {
+    const { locationX } = event.nativeEvent;
+
+    // Lógica para determinar o ponto clicado
+  
+    const chartWidth = screenWidth - 40;
+    const numberOfPoints = tempoMedioConclusaoTrilhaFormatada.length;
+    const pointWidth = chartWidth / numberOfPoints;
+    const selectedIndex = Math.floor(locationX / pointWidth);
+  if (tempoMedioConclusaoTrilhaFormatada[selectedIndex]) {
+    setSelectedPoint(tempoMedioConclusaoTrilhaFormatada[selectedIndex]);
+  }
+};
 
   if (loading) {
     return (
@@ -481,53 +495,50 @@ const DashboardPartner = () => {
           />
 
         </View>
+        
         <View style={styles.card}>
-          <Text style={styles.title2}>Tempo Médio de Conclusão de Trilhas:</Text>
-          <LineChart
-            data={tempoMedioConclusaoTrilhaFormatada}
-            width={chartWidth}
-            height={300}
-            yAxisTextStyle={{ color: 'black', fontSize: 11, marginLeft: -2, }}
-            formatYLabel={(value) => `${value} dias`}
-            xAxisLabelTextStyle={{
-              color: 'black',
-              fontSize: 7,
-              fontWeight: 'bold',
-              flexDirection: 'row',
-              justifyContent: 'space-between', marginLeft: 8
+  <Text style={styles.title2}>Tempo Médio de Conclusão de Trilhas:</Text>
+<TouchableOpacity onPress={handleChartPress}>
+        <LineChart
+          data={tempoMedioConclusaoTrilhaFormatada}
+          height={400}
+          yAxisTextStyle={{ color: 'black', fontSize: 11 }}
+          formatYLabel={(value) => `${value} dias`}
+          xAxisLabelTextStyle={{
+            color: 'black',
+            fontSize: 7,
+            fontWeight: 'bold',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginLeft: 8
             }}
-            curved
-            areaChart
-            color={'#1e90ff'}
-            startFillColor="rgb(46, 217, 255)"
-            startOpacity={0.8}
-            endFillColor="rgb(203, 241, 250)"
-            endOpacity={0.3}
-            spacing={85}
-            rulesColor={'#000'}
-            initialSpacing={5}
-            pointerConfig={{
-              pointerStripUptoDataPoint: true,
-              pointerStripColor: 'lightgray',
-              pointerStripWidth: 2,
-              strokeDashArray: [2, 5],
-              pointerColor: 'lightgray',
-              radius: 4,
-              pointerLabelWidth: 100,
-              pointerLabelHeight: 120,
-              pointerLabelComponent: (items: {
-                label: string; value: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined;
-              }[]) => {
-                const tempoMedioItem = tempoMedioConclusaoTrilhaFormatada.find(item => item.label === items[0].label);
-                return (
-                  <View style={{ height: 100, width: 100, backgroundColor: '#282C3E', borderRadius: 4, justifyContent: 'center', paddingLeft: 16, }}>
-                    {tempoMedioItem && <Text style={{ color: 'lightgray', fontSize: 12, marginTop: 5 }}>Tempo Médio: {tempoMedioItem.value} dias</Text>}
-                  </View>
-                );
-              },
-            }}
-          />
+          curved
+          adjustToWidth
+          areaChart
+          color={'#1e90ff'}
+          startFillColor="rgb(46, 217, 255)"
+          startOpacity={0.8}
+          endFillColor="rgb(203, 241, 250)"
+          endOpacity={0.3}
+          spacing={85}
+          initialSpacing={5}
+          rulesColor={'#000'}
+         
+        />
+      </TouchableOpacity>
+
+      {selectedPoint && (
+        <View >
+          <Text style={styles.selectedPointText}>
+            {`Valor: ${Math.round(selectedPoint.value)} dias - Trilha: ${selectedPoint.label}`}
+          </Text>
         </View>
+      )}
+    </View>
+
+
+
+
 
       </ScrollView>
       <FooterConsultor onPressMenu={toggleSideMenu} navigation={navigation} />
@@ -648,6 +659,17 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     elevation: 4,
+  }, 
+   
+  selectedPointContainer: {
+    marginTop: 20,
+    backgroundColor: '#ccc',
+    padding: 50,
+  },
+  
+  selectedPointText: {
+    fontSize: 16,
+    color: 'red',
   },
   title2: {
     flex: 1,
@@ -686,3 +708,4 @@ const styles = StyleSheet.create({
 });
 
 export default DashboardPartner;
+
