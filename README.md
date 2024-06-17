@@ -32,9 +32,9 @@ do relacionamento com os parceiros.</p> </b>
 
 <h3> Requisitos Não Funcionais: </h3> 
 
- <p> :hourglass: Manual do Usuário; </p>
+ <p> :heavy_check_mark: Manual do Usuário; </p>
  <p> :hourglass: Documentação técnica da estruturação do sistema; </p>
- <p> :hourglass: Documentação API – Application Programming Interface; </p>
+ <p> :heavy_check_mark: Documentação API – Application Programming Interface; </p>
  <p> :heavy_check_mark: Modelagem de Banco de Dados ou Arquivo de dados. </p>
 
  <br>
